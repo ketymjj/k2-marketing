@@ -1,0 +1,31 @@
+@if (tour.active()) {
+  @if (box(); as b) {
+    <div class="tour-spot" [style.top.px]="b.top" [style.left.px]="b.left" [style.width.px]="b.width" [style.height.px]="b.height"></div>
+  } @else {
+    <div class="tour-dim"></div>
+  }
+
+  <section class="tour-card" role="dialog" aria-live="polite" [attr.aria-label]="'tour.title' | transloco"
+           [class.floating]="!!cardStyle()" [style.top.px]="cardStyle()?.top" [style.left.px]="cardStyle()?.left">
+    <header>
+      <span class="tour-step">{{ 'tour.stepOf' | transloco: { n: tour.index() + 1, total: tour.steps.length } }}</span>
+      <button mat-icon-button (click)="tour.skip()" [attr.aria-label]="'tour.skip' | transloco"><mat-icon>close</mat-icon></button>
+    </header>
+    <div class="tour-progress"><span [style.width.%]="(tour.index() + 1) / tour.steps.length * 100"></span></div>
+    <h3>{{ 'tour.steps.' + step().key + '.title' | transloco }}</h3>
+    <p>{{ 'tour.steps.' + step().key + '.text' | transloco }}</p>
+    @if (!tour.locating() && !box()) {
+      <p class="tour-missing"><mat-icon>info_outline</mat-icon>{{ 'tour.notAvailable' | transloco }}</p>
+    }
+    <footer>
+      <button mat-button (click)="tour.skip()">{{ 'tour.skip' | transloco }}</button>
+      <span class="spacer"></span>
+      <button mat-stroked-button (click)="tour.prev()" [disabled]="tour.index() === 0">{{ 'tour.prev' | transloco }}</button>
+      @if (isLast()) {
+        <button mat-flat-button (click)="tour.finish()"><mat-icon>check</mat-icon>{{ 'tour.finish' | transloco }}</button>
+      } @else {
+        <button mat-flat-button (click)="tour.next()">{{ 'tour.next' | transloco }}<mat-icon iconPositionEnd>arrow_forward</mat-icon></button>
+      }
+    </footer>
+  </section>
+}

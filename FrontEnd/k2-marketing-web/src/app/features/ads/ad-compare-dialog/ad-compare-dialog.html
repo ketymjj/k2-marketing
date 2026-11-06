@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ 'ads.compareTitle' | transloco }}</h2>
+<mat-dialog-content>
+  <div class="compare-cols" [style.grid-template-columns]="'repeat(' + data.length + ', minmax(220px, 1fr))'">
+    @for (a of data; track a.id) {
+      <div><k2-ad-preview [clientName]="a.clientName" [headline]="a.headline" [primaryText]="a.primaryText" [description]="a.description"
+        [callToAction]="a.callToAction" [destinationUrl]="a.destinationUrl" [creatives]="a.creatives" /><strong class="compare-name">{{ a.name }}</strong></div>
+    }
+  </div>
+  <div class="table-wrap"><table class="data-table compare-table">
+    <thead><tr><th></th>@for (a of data; track a.id) { <th class="num">{{ a.name }}</th> }</tr></thead>
+    <tbody>
+      @for (m of metrics; track m.key) {
+        <tr><td>{{ 'kpi.' + m.key | transloco }}</td>
+          @for (a of data; track a.id) {
+            <td class="num" [class.best]="isBest(m.key, a)">
+              @switch (m.fmt) { @case ('money') { {{ val(a, m.key) | money }} } @case ('pct') { {{ val(a, m.key) | pct }} } @case ('roas') { {{ val(a, m.key) | roas }} } @default { {{ val(a, m.key) | num }} } }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table></div>
+  <p class="note"><mat-icon>info_outline</mat-icon>{{ 'ads.compareNote' | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ 'common.close' | transloco }}</button></mat-dialog-actions>

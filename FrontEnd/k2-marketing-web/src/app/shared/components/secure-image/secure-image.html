@@ -1,0 +1,2 @@
+@if (url()) { <img [src]="url()" [alt]="alt()" loading="lazy" /> }
+@else { <div class="img-placeholder"><mat-icon>{{ failed() ? 'broken_image' : icon() }}</mat-icon></div> }

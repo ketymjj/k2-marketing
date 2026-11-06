@@ -1,0 +1,31 @@
+.login-page { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; background: var(--bg); }
+
+.login-hero {
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(105, 65, 198, .55), transparent 60%), radial-gradient(900px 500px at 90% 90%, rgba(46, 144, 250, .45), transparent 60%), #101828;
+  color: #fff; display: flex; align-items: center; justify-content: center; padding: 48px;
+}
+.hero-inner { max-width: 460px; }
+.hero-inner h1 { color: #fff; font-size: 38px; margin: 20px 0 10px; letter-spacing: -.03em; }
+.hero-inner p { color: #CECFD2; font-size: 16px; line-height: 1.6; }
+.hero-list { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-direction: column; gap: 14px; }
+.hero-list li { display: flex; gap: 12px; align-items: center; color: #E4E7EC; }
+.hero-list mat-icon { color: #B692F6; background: rgba(255, 255, 255, .08); border-radius: 10px; padding: 8px; box-sizing: content-box; }
+
+.login-form-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; position: relative; }
+.login-tools { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; align-items: center; }
+.login-card { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 4px; }
+.login-card h2 { font-size: 26px; }
+.login-card .muted { margin: 4px 0 18px; }
+
+.demo-box { margin-top: 22px; border: 1px solid var(--border); border-radius: 14px; padding: 14px; background: var(--surface); display: flex; flex-direction: column; gap: 6px; }
+.demo-box strong { font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+.demo-user { display: flex; justify-content: space-between; gap: 10px; border: 0; background: var(--surface-2); border-radius: 10px; padding: 9px 12px; cursor: pointer; font: inherit; color: var(--text); }
+.demo-user span { font-weight: 600; font-size: 13px; }
+.demo-user small { color: var(--muted); font-size: 12px; }
+.demo-user:hover { background: var(--purple-soft); }
+
+@media (max-width: 960px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-hero { display: none; }
+  .lang-switch span { display: none; }
+}

@@ -1,0 +1,33 @@
+<k2-page-header title="users.title" subtitle="users.subtitle" icon="manage_accounts">
+  <button mat-flat-button (click)="openForm()"><mat-icon>person_add</mat-icon>{{ 'users.new' | transloco }}</button>
+</k2-page-header>
+<div class="roles-info">
+  @for (r of roles; track r) { <div class="role-card"><strong>{{ 'enums.role.' + r | transloco }}</strong><small>{{ 'users.roleDesc.' + r | transloco }}</small></div> }
+</div>
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label><input matInput [(ngModel)]="search" (ngModelChange)="searchChanged()" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'users.role' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="role" (selectionChange)="list.load(true)"><mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+        @for (r of roles; track r) { <mat-option [value]="r">{{ 'enums.role.' + r | transloco }}</mat-option> }</mat-select></mat-form-field>
+  </div>
+  <div class="table-wrap">
+    <table mat-table [dataSource]="list.items()" matSort (matSortChange)="list.onSort($event)" class="data-table">
+      <ng-container matColumnDef="fullName"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.name' | transloco }}</th>
+        <td mat-cell *matCellDef="let u"><span class="cell-title">{{ u.fullName }}</span><small class="cell-sub">{{ u.email }}</small></td></ng-container>
+      <ng-container matColumnDef="role"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.role' | transloco }}</th>
+        <td mat-cell *matCellDef="let u"><span class="chip chip-role" [attr.data-r]="u.role">{{ 'enums.role.' + u.role | transloco }}</span>@if (u.clientName) { <small class="cell-sub">{{ u.clientName }}</small> }</td></ng-container>
+      <ng-container matColumnDef="active"><th mat-header-cell *matHeaderCellDef>{{ 'common.status' | transloco }}</th>
+        <td mat-cell *matCellDef="let u"><span class="chip" [class.chip-ok]="u.active" [class.chip-off]="!u.active">{{ (u.active ? 'users.active' : 'users.inactive') | transloco }}</span></td></ng-container>
+      <ng-container matColumnDef="lastLoginAt"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.lastLogin' | transloco }}</th><td mat-cell *matCellDef="let u">{{ u.lastLoginAt | dt: 'datetime' }}</td></ng-container>
+      <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let u" class="actions">
+          <button mat-icon-button (click)="openForm(u)" [matTooltip]="'common.edit' | transloco"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button (click)="reset(u)" [matTooltip]="'users.resetPassword' | transloco"><mat-icon>lock_reset</mat-icon></button>
+        </td></ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+  </div>
+  <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" (page)="list.onPage($event)" />
+</section>

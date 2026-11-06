@@ -1,0 +1,66 @@
+<k2-page-header title="compare.title" subtitle="compare.subtitle" icon="compare_arrows" />
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="grow"><mat-label>{{ 'compare.select' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="selected" multiple (selectionChange)="limit()">
+        @for (c of campaigns(); track c.id) {
+          <mat-option [value]="c.id" [disabled]="!selected.includes(c.id) && selected.length >= 4">{{ c.name }} · {{ 'enums.platform.' + c.platform | transloco }}</mat-option>
+        }
+      </mat-select>
+      <mat-hint>{{ 'compare.hint' | transloco: { n: selected.length } }}</mat-hint></mat-form-field>
+    <mat-form-field class="f-range"><mat-label>{{ 'filters.period' | transloco }}</mat-label>
+      <mat-date-range-input [rangePicker]="rp"><input matStartDate [(ngModel)]="from"><input matEndDate [(ngModel)]="to"></mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="rp" /><mat-date-range-picker #rp /><mat-hint>{{ 'compare.periodHint' | transloco }}</mat-hint></mat-form-field>
+    <button mat-flat-button (click)="run()" [disabled]="selected.length < 2"><mat-icon>compare_arrows</mat-icon>{{ 'compare.run' | transloco }}</button>
+  </div>
+</section>
+
+@if (r(); as res) {
+  <p class="period-note">{{ 'compare.period' | transloco: { from: (res.from | dt), to: (res.to | dt) } }}</p>
+  @if (res.warnings.length) {
+    <div class="alert alert-warn">
+      <mat-icon>warning_amber</mat-icon>
+      <ul>@for (w of res.warnings; track $index) { <li>{{ 'compare.warnings.' + w.code | transloco: { campaign: w.campaign } }}</li> }</ul>
+    </div>
+  }
+  <div class="compare-grid" [style.grid-template-columns]="'repeat(' + res.items.length + ', minmax(220px, 1fr))'">
+    @for (it of res.items; track it.campaignId; let i = $index) {
+      <article class="compare-card" [style.border-top-color]="color(i)">
+        <a class="cell-title" [routerLink]="['/campaigns', it.campaignId]">{{ it.name }}</a>
+        <small class="muted">{{ it.clientName }} · {{ 'enums.platform.' + it.platform | transloco }}</small>
+        <div class="tags"><span class="chip">{{ 'enums.objective.' + it.objective | transloco }}</span><k2-status kind="campaignStatus" [value]="it.status" /></div>
+        <small class="muted">{{ 'compare.daysWithData' | transloco: { n: it.daysWithData } }}</small>
+        @if (!it.sufficientVolume) { <span class="chip chip-warn"><mat-icon>science</mat-icon>{{ 'compare.lowVolume' | transloco }}</span> }
+        @for (f of it.qualityFlags; track f) { <small class="flag">• {{ 'compare.flags.' + f | transloco }}</small> }
+      </article>
+    }
+  </div>
+
+  <section class="card">
+    <div class="table-wrap"><table class="data-table compare-table">
+      <thead><tr><th>{{ 'compare.metric' | transloco }}</th>@for (it of res.items; track it.campaignId; let i = $index) { <th class="num"><span class="dot" [style.background]="color(i)"></span>{{ it.name }}</th> }</tr></thead>
+      <tbody>
+        @for (row of rows; track row.key) {
+          <tr><td>{{ 'kpi.' + label(row.key) | transloco }}</td>
+            @for (it of res.items; track it.campaignId) {
+              <td class="num" [class.best]="isBest(res, row.key, it)">
+                @switch (row.fmt) { @case ('money') { {{ it.metrics[row.key] | money }} } @case ('pct') { {{ it.metrics[row.key] | pct }} } @case ('roas') { {{ it.metrics[row.key] | roas }} } @default { {{ it.metrics[row.key] | num }} } }
+                @if (isBest(res, row.key, it)) { <mat-icon class="best-ic" [matTooltip]="'compare.bestTip' | transloco">emoji_events</mat-icon> }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table></div>
+    <p class="note"><mat-icon>balance</mat-icon>{{ 'compare.methodNote' | transloco }}</p>
+  </section>
+
+  <div class="grid-2">
+    <section class="card"><header class="card-head"><h3>{{ 'compare.charts.spendRevenue' | transloco }}</h3></header><k2-chart [config]="spendChart()" /></section>
+    <section class="card"><header class="card-head"><h3>{{ 'compare.charts.efficiency' | transloco }}</h3></header><k2-chart [config]="effChart()" /></section>
+    <section class="card"><header class="card-head"><h3>{{ 'compare.charts.roas' | transloco }}</h3></header><k2-chart [config]="roasChart()" /></section>
+    <section class="card"><header class="card-head"><h3>{{ 'compare.charts.dailySpend' | transloco }}</h3></header><k2-chart [config]="dailyChart()" /></section>
+  </div>
+} @else {
+  <k2-empty icon="compare_arrows" title="compare.emptyTitle" message="compare.emptyText" />
+}

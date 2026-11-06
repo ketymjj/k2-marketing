@@ -1,0 +1,26 @@
+# Ambiente
+.env
+*.env.local
+
+# .NET
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+coverage/
+
+# IDE / SO
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Arquivos enviados (criativos)
+storage/

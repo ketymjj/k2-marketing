@@ -1,0 +1,16 @@
+:host { display: block; }
+
+.calc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.calc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); animation: card-in .25s ease; }
+.calc-card header { display: flex; justify-content: space-between; align-items: center; }
+.calc-card header strong { font-size: 13px; color: var(--muted); font-weight: 600; }
+.help { border: 0; background: transparent; padding: 0; cursor: pointer; color: var(--muted); display: inline-flex; }
+.help mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.help:hover { color: var(--purple); }
+.calc-value { font-size: 24px; font-weight: 700; letter-spacing: -.02em; color: var(--purple); }
+.calc-formula { font-size: 11.5px; align-self: flex-start; }
+.calc-expr { font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.calc-card small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.calc-card small.calc-empty { color: var(--orange); }
+
+@keyframes card-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }

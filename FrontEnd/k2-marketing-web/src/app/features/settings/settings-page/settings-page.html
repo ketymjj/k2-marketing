@@ -1,0 +1,86 @@
+<k2-page-header title="settings.title" subtitle="settings.subtitle" icon="settings" />
+<mat-tab-group class="tabs" animationDuration="120ms" (selectedIndexChange)="onTab($event)">
+  <mat-tab [label]="'settings.profile' | transloco">
+    <div class="tab-body grid-2">
+      <section class="card">
+        <header class="card-head"><h3>{{ 'settings.preferences' | transloco }}</h3></header>
+        <dl class="info-list"><dt>{{ 'users.name' | transloco }}</dt><dd>{{ auth.user()?.fullName }}</dd><dt>{{ 'common.email' | transloco }}</dt><dd>{{ auth.user()?.email }}</dd>
+          <dt>{{ 'users.role' | transloco }}</dt><dd>{{ 'enums.role.' + auth.user()?.role | transloco }}</dd></dl>
+        <h4 class="sub-title">{{ 'settings.language' | transloco }}</h4>
+        <mat-button-toggle-group [value]="lang.lang()" (change)="setLang($event.value)" [hideSingleSelectionIndicator]="true">
+          <mat-button-toggle value="pt-BR">🇧🇷 Português</mat-button-toggle><mat-button-toggle value="en-US">🇺🇸 English</mat-button-toggle>
+        </mat-button-toggle-group>
+        <p class="muted small">{{ 'settings.languageNote' | transloco }}</p>
+        <h4 class="sub-title">{{ 'settings.theme' | transloco }}</h4>
+        <mat-button-toggle-group [value]="theme.theme()" (change)="theme.set($event.value)" [hideSingleSelectionIndicator]="true">
+          <mat-button-toggle value="light"><mat-icon>light_mode</mat-icon> {{ 'theme.light' | transloco }}</mat-button-toggle>
+          <mat-button-toggle value="dark"><mat-icon>dark_mode</mat-icon> {{ 'theme.dark' | transloco }}</mat-button-toggle>
+        </mat-button-toggle-group>
+      </section>
+      <section class="card">
+        <header class="card-head"><h3>{{ 'settings.changePassword' | transloco }}</h3></header>
+        <form [formGroup]="pwd" class="form-grid" (ngSubmit)="changePassword()">
+          <mat-form-field class="span-2"><mat-label>{{ 'settings.currentPassword' | transloco }}</mat-label><input matInput type="password" formControlName="currentPassword" autocomplete="current-password" /></mat-form-field>
+          <mat-form-field class="span-2"><mat-label>{{ 'users.newPassword' | transloco }}</mat-label><input matInput type="password" formControlName="newPassword" autocomplete="new-password" />
+            <mat-hint>{{ 'users.passwordPolicy' | transloco }}</mat-hint></mat-form-field>
+          <button mat-flat-button type="submit" [disabled]="pwd.invalid">{{ 'settings.updatePassword' | transloco }}</button>
+        </form>
+      </section>
+    </div>
+  </mat-tab>
+
+  <mat-tab [label]="'settings.agency' | transloco">
+    <div class="tab-body card">
+      <p class="muted">{{ 'settings.agencyText' | transloco }}</p>
+      <form [formGroup]="agencyForm" class="form-grid">
+        <mat-form-field><mat-label>{{ 'settings.agencyName' | transloco }}</mat-label><input matInput formControlName="agencyName" maxlength="150" /></mat-form-field>
+        <mat-form-field><mat-label>{{ 'settings.primaryColor' | transloco }}</mat-label><input matInput formControlName="primaryColor" maxlength="7" />
+          <input matSuffix type="color" class="color-input" [value]="agencyForm.value.primaryColor" (input)="agencyForm.patchValue({ primaryColor: $any($event.target).value })" [disabled]="!auth.isAdmin()" /></mat-form-field>
+        <mat-form-field><mat-label>{{ 'common.email' | transloco }}</mat-label><input matInput formControlName="contactEmail" /></mat-form-field>
+        <mat-form-field><mat-label>{{ 'clients.website' | transloco }}</mat-label><input matInput formControlName="website" /></mat-form-field>
+        <mat-form-field class="span-2"><mat-label>{{ 'settings.reportFooter' | transloco }}</mat-label><input matInput formControlName="reportFooter" maxlength="500" /></mat-form-field>
+      </form>
+      <div class="brand-preview" [style.--brand]="agencyForm.value.primaryColor"><span class="brand-logo">K2</span><strong>{{ agencyForm.value.agencyName }}</strong><small>{{ agencyForm.value.reportFooter }}</small></div>
+      @if (auth.isAdmin()) { <button mat-flat-button (click)="saveAgency()" [disabled]="agencyForm.invalid">{{ 'common.save' | transloco }}</button> }
+      @else { <p class="muted small">{{ 'settings.adminOnly' | transloco }}</p> }
+    </div>
+  </mat-tab>
+
+  @if (auth.canOperate()) {
+    <mat-tab [label]="'settings.integrations' | transloco">
+      <div class="tab-body">
+        <p class="note"><mat-icon>info_outline</mat-icon>{{ 'settings.integrationsNote' | transloco }}</p>
+        <div class="integration-grid">
+          @for (i of integrations(); track i.key) {
+            <article class="integration-card">
+              <span class="int-ic" [attr.data-k]="i.key"><mat-icon>{{ i.category === 'ads' ? 'campaign' : i.category === 'analytics' ? 'analytics' : i.category === 'ai' ? 'auto_awesome' : 'webhook' }}</mat-icon></span>
+              <div><strong>{{ i.name }}</strong><small>{{ i.description | transloco }}</small></div>
+              <span class="chip chip-off">{{ 'settings.integrationStatus.' + i.status | transloco }}</span>
+            </article>
+          }
+        </div>
+      </div>
+    </mat-tab>
+  }
+
+  @if (auth.isAdmin()) {
+    <mat-tab [label]="'settings.audit' | transloco">
+      <div class="tab-body card">
+        <div class="toolbar">
+          <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label><input matInput [(ngModel)]="auditSearch" (ngModelChange)="auditChanged()" /></mat-form-field>
+          <mat-form-field><mat-label>{{ 'settings.entity' | transloco }}</mat-label>
+            <mat-select [(ngModel)]="auditEntity" (selectionChange)="audit.load(true)"><mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+              @for (e of entities; track e) { <mat-option [value]="e">{{ 'audit.entities.' + e | transloco }}</mat-option> }</mat-select></mat-form-field>
+        </div>
+        <div class="table-wrap"><table class="data-table dense">
+          <thead><tr><th>{{ 'common.date' | transloco }}</th><th>{{ 'settings.user' | transloco }}</th><th>{{ 'settings.action' | transloco }}</th><th>{{ 'settings.entity' | transloco }}</th><th>{{ 'settings.details' | transloco }}</th></tr></thead>
+          <tbody>@for (a of audit.items(); track a.id) {
+            <tr><td>{{ a.createdAt | dt: 'datetime' }}</td><td>{{ a.userEmail }}</td><td>{{ 'audit.actions.' + a.action | transloco }}</td><td>{{ 'audit.entities.' + a.entity | transloco }}</td><td class="muted">{{ a.details }}</td></tr>
+          }</tbody>
+        </table></div>
+        <mat-paginator [length]="audit.total()" [pageSize]="audit.pageSize" [pageIndex]="audit.page" [pageSizeOptions]="[20, 50, 100]" (page)="audit.onPage($event)" />
+        <p class="muted small">{{ 'settings.lgpdNote' | transloco }}</p>
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>

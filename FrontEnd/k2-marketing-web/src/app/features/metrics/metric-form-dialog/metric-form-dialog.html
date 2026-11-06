@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{ (data.row ? 'metrics.edit' : 'metrics.new') | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.metric.intro" [items]="[{ label: 'kpi.impressions', text: 'learn.forms.metric.impressions' }, { label: 'kpi.reach', text: 'learn.forms.metric.reach' }, { label: 'kpi.clicks', text: 'learn.forms.metric.clicks' }, { label: 'kpi.leads', text: 'learn.forms.metric.leads' }, { label: 'kpi.conversions', text: 'learn.forms.metric.conversions' }, { label: 'kpi.revenue', text: 'learn.forms.metric.revenue' }]" />
+  <form [formGroup]="form" class="form-grid three">
+    <mat-form-field class="span-2"><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select formControlName="campaignId" required (selectionChange)="loadAds(true)">@for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.date' | transloco }}</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="date" [max]="today" required /><mat-datepicker-toggle matIconSuffix [for]="dp" /><mat-datepicker #dp /></mat-form-field>
+    <mat-form-field class="span-3"><mat-label>{{ 'metrics.ad' | transloco }}</mat-label>
+      <mat-select formControlName="advertisementId"><mat-option [value]="null">{{ 'metrics.campaignLevel' | transloco }}</mat-option>@for (a of ads(); track a.id) { <mat-option [value]="a.id">{{ a.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'kpi.impressions' | transloco }}</mat-label><input matInput type="number" min="0" formControlName="impressions" /><k2-field-help matSuffix text="learn.forms.metric.impressions" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'kpi.reach' | transloco }}</mat-label><input matInput type="number" min="0" formControlName="reach" /><k2-field-help matSuffix text="learn.forms.metric.reach" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'kpi.clicks' | transloco }}</mat-label><input matInput type="number" min="0" formControlName="clicks" /><k2-field-help matSuffix text="learn.forms.metric.clicks" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'kpi.spend' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span><input matInput type="number" min="0" step="0.01" formControlName="spend" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'kpi.leads' | transloco }}</mat-label><input matInput type="number" min="0" formControlName="leads" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'kpi.conversions' | transloco }}</mat-label><input matInput type="number" min="0" formControlName="conversions" /></mat-form-field>
+    <mat-form-field class="span-3"><mat-label>{{ 'kpi.revenue' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span><input matInput type="number" min="0" step="0.01" formControlName="attributedRevenue" /></mat-form-field>
+  </form>
+  @if (inconsistent()) { <div class="form-error"><mat-icon>error_outline</mat-icon>{{ 'metrics.inconsistent' | transloco }}</div> }
+  <div class="calc-preview">
+    <span class="muted">{{ 'metrics.calculated' | transloco }}:</span>
+    <span>CTR <strong>{{ calc().ctr | pct }}</strong></span><span>CPC <strong>{{ calc().cpc | money }}</strong></span><span>CPM <strong>{{ calc().cpm | money }}</strong></span>
+    <span>CPL <strong>{{ calc().cpl | money }}</strong></span><span>CPA <strong>{{ calc().cpa | money }}</strong></span><span>ROAS <strong>{{ calc().roas | roas }}</strong></span>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid || inconsistent()">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

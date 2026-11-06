@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ (data.lead ? 'leads.edit' : 'leads.new') | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.lead.intro" [items]="[{ label: 'leads.source', text: 'learn.forms.lead.source' }, { label: 'leads.consentShort', text: 'learn.forms.lead.consent' }]" />
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field class="span-2"><mat-label>{{ 'leads.name' | transloco }}</mat-label><input matInput formControlName="name" maxlength="150" required /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.email' | transloco }}</mat-label><input matInput type="email" formControlName="email" maxlength="200" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.phone' | transloco }}</mat-label><input matInput formControlName="phone" maxlength="30" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+      <mat-select formControlName="clientId" required (selectionChange)="loadCampaigns()">@for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'leads.campaign' | transloco }}</mat-label>
+      <mat-select formControlName="campaignId"><mat-option [value]="null">—</mat-option>@for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'leads.source' | transloco }}</mat-label><input matInput formControlName="source" maxlength="80" [matAutocomplete]="src" /><k2-field-help matSuffix text="learn.forms.lead.source" />
+      <mat-autocomplete #src="matAutocomplete">@for (s of sources(); track s) { <mat-option [value]="s">{{ s }}</mat-option> }</mat-autocomplete></mat-form-field>
+    <mat-checkbox class="span-2" formControlName="consentGiven">{{ 'leads.consent' | transloco }}</mat-checkbox>
+  </form>
+  @if (!form.value.email && !form.value.phone) { <p class="muted small">{{ 'leads.contactRequired' | transloco }}</p> }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid || (!form.value.email && !form.value.phone)">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

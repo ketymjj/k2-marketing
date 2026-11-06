@@ -1,0 +1,11 @@
+.filter-bar {
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px 2px; box-shadow: var(--shadow); margin-bottom: 18px;
+}
+.filter-bar .mat-mdc-form-field { min-width: 170px; margin-bottom: 12px; }
+.f-range { min-width: 250px; }
+.f-campaign { min-width: 230px; }
+
+@media (max-width: 640px) {
+  .filter-bar .mat-mdc-form-field { min-width: 100%; flex: 1 1 100%; }
+}

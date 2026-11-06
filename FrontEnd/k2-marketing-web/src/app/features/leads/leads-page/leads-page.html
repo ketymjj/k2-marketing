@@ -1,0 +1,81 @@
+<k2-page-header title="leads.title" subtitle="leads.subtitle" icon="people_alt">
+  <mat-button-toggle-group [(ngModel)]="view" (change)="reload()" [hideSingleSelectionIndicator]="true">
+    <mat-button-toggle value="board"><mat-icon>view_kanban</mat-icon> {{ 'leads.kanban' | transloco }}</mat-button-toggle>
+    <mat-button-toggle value="table"><mat-icon>table_rows</mat-icon> {{ 'common.table' | transloco }}</mat-button-toggle>
+  </mat-button-toggle-group>
+  @if (auth.canOperate()) { <button mat-flat-button data-tour="new-lead" (click)="create()"><mat-icon>person_add</mat-icon>{{ 'leads.new' | transloco }}</button> }
+</k2-page-header>
+<k2-tip text="learn.tips.leads" />
+
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label>
+      <input matInput [(ngModel)]="search" (ngModelChange)="searchChanged()" [placeholder]="'leads.searchHint' | transloco" /></mat-form-field>
+    @if (!auth.isClientViewer()) {
+      <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+        <mat-select [(ngModel)]="clientId" (selectionChange)="onClient()">
+          <mat-option [value]="null">{{ 'filters.allClients' | transloco }}</mat-option>
+          @for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+        </mat-select></mat-form-field>
+    }
+    <mat-form-field><mat-label>{{ 'leads.campaign' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="campaignId" (selectionChange)="reload()">
+        <mat-option [value]="null">{{ 'filters.allCampaigns' | transloco }}</mat-option>
+        @for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+      </mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'leads.source' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="source" (selectionChange)="reload()">
+        <mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+        @for (s of sources(); track s) { <mat-option [value]="s">{{ s }}</mat-option> }
+      </mat-select></mat-form-field>
+    @if (view === 'table') {
+      <mat-form-field><mat-label>{{ 'common.status' | transloco }}</mat-label>
+        <mat-select [(ngModel)]="status" (selectionChange)="reload()">
+          <mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+          @for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.leadStatus.' + s | transloco }}</mat-option> }
+        </mat-select></mat-form-field>
+    }
+    <mat-form-field class="f-range"><mat-label>{{ 'leads.capturedBetween' | transloco }}</mat-label>
+      <mat-date-range-input [rangePicker]="rp"><input matStartDate [(ngModel)]="from"><input matEndDate [(ngModel)]="to" (dateChange)="reload()"></mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="rp" /><mat-date-range-picker #rp /></mat-form-field>
+    @if (from || to) { <button mat-icon-button (click)="from = null; to = null; reload()"><mat-icon>filter_alt_off</mat-icon></button> }
+  </div>
+
+  @if (view === 'board') {
+    @if (auth.canOperate()) { <p class="muted small">{{ 'leads.dragHint' | transloco }}</p> }
+    <div class="kanban" cdkDropListGroup>
+      @for (col of board(); track col.status) {
+        <div class="kanban-col" [attr.data-s]="col.status">
+          <header><span class="dot"></span><strong>{{ 'enums.leadStatus.' + col.status | transloco }}</strong><span class="count">{{ col.count }}</span></header>
+          <div class="kanban-list" cdkDropList [cdkDropListData]="col" (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!auth.canOperate()" [id]="'col-' + col.status">
+            @for (l of col.items; track l.id) {
+              <div class="kanban-card" cdkDrag [cdkDragData]="l" (click)="open(l.id)">
+                <strong>{{ l.name }}</strong>
+                <small>{{ l.campaignName ?? l.clientName }}</small>
+                <div class="kc-foot"><span class="chip chip-source">{{ l.source ?? '—' }}</span><small>{{ l.createdAt | dt: 'short' }}</small></div>
+              </div>
+            }
+            @if (col.count > col.items.length) { <small class="more">+{{ col.count - col.items.length }} {{ 'leads.more' | transloco }}</small> }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    @if (list.loading()) { <mat-progress-bar mode="indeterminate" /> }
+    <div class="table-wrap">
+      <table mat-table [dataSource]="list.items()" matSort (matSortChange)="list.onSort($event)" class="data-table">
+        <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'leads.name' | transloco }}</th>
+          <td mat-cell *matCellDef="let l"><a class="cell-title link" (click)="open(l.id)">{{ l.name }}</a><small class="cell-sub">{{ l.email ?? l.phone }}</small></td></ng-container>
+        <ng-container matColumnDef="client"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'filters.client' | transloco }}</th><td mat-cell *matCellDef="let l">{{ l.clientName }}</td></ng-container>
+        <ng-container matColumnDef="campaign"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'leads.campaign' | transloco }}</th><td mat-cell *matCellDef="let l">{{ l.campaignName ?? '—' }}</td></ng-container>
+        <ng-container matColumnDef="source"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'leads.source' | transloco }}</th><td mat-cell *matCellDef="let l">{{ l.source ?? '—' }}</td></ng-container>
+        <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'common.status' | transloco }}</th><td mat-cell *matCellDef="let l"><k2-status kind="leadStatus" [value]="l.status" /></td></ng-container>
+        <ng-container matColumnDef="createdAt"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'common.createdAt' | transloco }}</th><td mat-cell *matCellDef="let l">{{ l.createdAt | dt: 'datetime' }}</td></ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns" (click)="open(row.id)" class="clickable"></tr>
+      </table>
+    </div>
+    @if (list.loaded() && !list.items().length) { <k2-empty icon="people_alt" title="leads.empty" /> }
+    <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" [pageSizeOptions]="[20, 50, 100]" (page)="list.onPage($event)" />
+  }
+</section>

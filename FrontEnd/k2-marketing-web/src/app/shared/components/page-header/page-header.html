@@ -1,0 +1,10 @@
+<header class="page-header">
+  <div class="page-title">
+    @if (icon()) { <span class="page-icon"><mat-icon>{{ icon() }}</mat-icon></span> }
+    <div>
+      <h1>{{ raw() ? title() : (title() | transloco) }}</h1>
+      @if (subtitle()) { <p>{{ rawSubtitle() ? subtitle() : (subtitle()! | transloco) }}</p> }
+    </div>
+  </div>
+  <div class="page-actions"><ng-content /></div>
+</header>

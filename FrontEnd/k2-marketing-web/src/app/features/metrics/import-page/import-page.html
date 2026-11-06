@@ -1,0 +1,114 @@
+<k2-page-header title="imports.title" subtitle="imports.subtitle" icon="upload_file" />
+
+<div class="steps">
+  <div class="step" [class.done]="step() > 1" [class.active]="step() === 1"><span>1</span>{{ 'imports.step1' | transloco }}</div>
+  <div class="step" [class.done]="step() > 2" [class.active]="step() === 2"><span>2</span>{{ 'imports.step2' | transloco }}</div>
+  <div class="step" [class.active]="step() === 3"><span>3</span>{{ 'imports.step3' | transloco }}</div>
+</div>
+
+@if (step() === 1) {
+  <section class="card">
+    <h3>{{ 'imports.whatToImport' | transloco }}</h3>
+    <mat-button-toggle-group [(ngModel)]="kind" (change)="reset()" class="kind-toggle" [hideSingleSelectionIndicator]="true">
+      <mat-button-toggle value="metrics"><mat-icon>query_stats</mat-icon> {{ 'imports.metrics' | transloco }}</mat-button-toggle>
+      <mat-button-toggle value="conversions"><mat-icon>shopping_cart_checkout</mat-icon> {{ 'imports.conversions' | transloco }}</mat-button-toggle>
+    </mat-button-toggle-group>
+    <div class="grid-2">
+      <div>
+        <h4 class="sub-title">{{ 'imports.columns' | transloco }}</h4>
+        <ul class="column-list">
+          @for (c of columnsFor(); track c.name) { <li><code>{{ c.name }}</code>@if (c.required) { <span class="req">{{ 'imports.required' | transloco }}</span> }<small>{{ 'imports.cols.' + c.name | transloco }}</small></li> }
+        </ul>
+        <p class="muted small">{{ 'imports.formatNote' | transloco }}</p>
+      </div>
+      <div>
+        <h4 class="sub-title">{{ 'imports.template' | transloco }}</h4>
+        <p class="muted">{{ 'imports.templateText' | transloco }}</p>
+        <button mat-stroked-button (click)="template()"><mat-icon>download</mat-icon>{{ 'imports.downloadTemplate' | transloco }}</button>
+        <label class="dropzone" [class.has-file]="file()" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
+          <input type="file" accept=".csv,.txt" (change)="onFile($event)" hidden />
+          <mat-icon>{{ file() ? 'task' : 'upload_file' }}</mat-icon>
+          @if (file(); as f) { <strong>{{ f.name }}</strong><small>{{ f.size | fileSize }}</small> } @else { <strong>{{ 'imports.drop' | transloco }}</strong><small>CSV · {{ 'imports.max' | transloco }}</small> }
+        </label>
+        <button mat-flat-button class="full" (click)="preview()" [disabled]="!file() || busy()"><mat-icon>preview</mat-icon>{{ 'imports.preview' | transloco }}</button>
+      </div>
+    </div>
+  </section>
+}
+
+@if (step() === 2 && p(); as pv) {
+  <section class="card">
+    @if (pv.missingColumns.length) {
+      <div class="alert alert-error"><mat-icon>error</mat-icon>{{ 'imports.missing' | transloco: { cols: pv.missingColumns.join(', ') } }}</div>
+    } @else {
+      <div class="import-stats">
+        <div class="st new"><strong>{{ pv.newRows }}</strong><span>{{ 'imports.status.New' | transloco }}</span></div>
+        <div class="st dup"><strong>{{ pv.duplicates }}</strong><span>{{ 'imports.status.Duplicate' | transloco }}</span></div>
+        <div class="st dupf"><strong>{{ pv.duplicatesInFile }}</strong><span>{{ 'imports.status.DuplicateInFile' | transloco }}</span></div>
+        <div class="st inv"><strong>{{ pv.invalid }}</strong><span>{{ 'imports.status.Invalid' | transloco }}</span></div>
+        <div class="st tot"><strong>{{ pv.totalRows }}</strong><span>{{ 'imports.totalRows' | transloco }}</span></div>
+      </div>
+      @if (pv.ignoredColumns.length) { <p class="muted small">{{ 'imports.ignored' | transloco: { cols: pv.ignoredColumns.join(', ') } }}</p> }
+      @if (pv.validTotals; as t) {
+        <p class="calc-preview"><span class="muted">{{ 'imports.validTotals' | transloco }}:</span>
+          <span>{{ 'kpi.spend' | transloco }} <strong>{{ t.spend | money }}</strong></span><span>{{ 'kpi.clicks' | transloco }} <strong>{{ t.clicks | num }}</strong></span>
+          <span>{{ 'kpi.conversions' | transloco }} <strong>{{ t.conversions | num }}</strong></span><span>{{ 'kpi.revenue' | transloco }} <strong>{{ t.attributedRevenue | money }}</strong></span></p>
+      }
+      @if (pv.validRevenue !== null) { <p class="calc-preview"><span class="muted">{{ 'imports.newRevenue' | transloco }}:</span><strong>{{ pv.validRevenue | money }}</strong></p> }
+      @if (kind === 'metrics' && pv.duplicates > 0) {
+        <div class="dup-mode">
+          <strong>{{ 'imports.duplicateMode' | transloco }}</strong>
+          <mat-button-toggle-group [(ngModel)]="mode" [hideSingleSelectionIndicator]="true">
+            <mat-button-toggle value="Skip">{{ 'imports.skip' | transloco }}</mat-button-toggle>
+            <mat-button-toggle value="Overwrite">{{ 'imports.overwrite' | transloco }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      }
+      @if (kind === 'conversions' && pv.duplicates > 0) { <p class="note"><mat-icon>fingerprint</mat-icon>{{ 'imports.conversionDupNote' | transloco }}</p> }
+      <div class="toolbar">
+        <mat-form-field><mat-label>{{ 'imports.show' | transloco }}</mat-label>
+          <mat-select [(ngModel)]="statusFilter">
+            <mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+            @for (s of statuses; track s) { <mat-option [value]="s">{{ 'imports.status.' + s | transloco }}</mat-option> }
+          </mat-select></mat-form-field>
+        @if (pv.totalRows > pv.rows.length) { <small class="muted">{{ 'imports.previewLimit' | transloco: { n: pv.rows.length } }}</small> }
+      </div>
+      <div class="table-wrap max-h"><table class="data-table dense">
+        <thead><tr><th>{{ 'imports.line' | transloco }}</th><th>{{ 'common.status' | transloco }}</th><th>{{ 'filters.campaign' | transloco }}</th><th>{{ 'common.date' | transloco }}</th>
+          @for (c of valueCols(); track c) { <th class="num">{{ c }}</th> }<th>{{ 'imports.errors' | transloco }}</th></tr></thead>
+        <tbody>
+          @for (r of filteredRows(); track r.line) {
+            <tr [class]="'imp-' + r.status"><td>{{ r.line }}</td><td><span class="chip" [class]="'chip imp-chip-' + r.status">{{ 'imports.status.' + r.status | transloco }}</span></td>
+              <td>{{ r.campaign || r.values['campaign_name'] || r.values['campaign_id'] || '—' }}@if (r.advertisement) { <small class="cell-sub">{{ r.advertisement }}</small> }</td><td>{{ r.date ?? '—' }}</td>
+              @for (c of valueCols(); track c) { <td class="num">{{ r.values[c] }}</td> }
+              <td class="errors">@for (e of r.errors; track $index) { <div>{{ e }}</div> }</td></tr>
+          }
+        </tbody>
+      </table></div>
+    }
+    <div class="wizard-actions">
+      <button mat-button (click)="reset()"><mat-icon>arrow_back</mat-icon>{{ 'common.back' | transloco }}</button>
+      <span class="spacer"></span>
+      <button mat-flat-button (click)="confirmImport()" [disabled]="busy() || pv.missingColumns.length > 0 || !importable()">
+        <mat-icon>done_all</mat-icon>{{ 'imports.confirm' | transloco: { n: importable() } }}</button>
+    </div>
+  </section>
+}
+
+@if (step() === 3 && result(); as r) {
+  <section class="card result-card">
+    <mat-icon class="big-ok">check_circle</mat-icon>
+    <h3>{{ 'imports.done' | transloco }}</h3>
+    <div class="import-stats">
+      <div class="st new"><strong>{{ r.inserted }}</strong><span>{{ 'imports.inserted' | transloco }}</span></div>
+      <div class="st dup"><strong>{{ r.updated }}</strong><span>{{ 'imports.updated' | transloco }}</span></div>
+      <div class="st dupf"><strong>{{ r.skipped }}</strong><span>{{ 'imports.skipped' | transloco }}</span></div>
+      <div class="st inv"><strong>{{ r.invalid }}</strong><span>{{ 'imports.status.Invalid' | transloco }}</span></div>
+    </div>
+    <div class="wizard-actions center">
+      <button mat-stroked-button (click)="reset()"><mat-icon>upload_file</mat-icon>{{ 'imports.another' | transloco }}</button>
+      <a mat-flat-button [routerLink]="kind === 'metrics' ? '/metrics' : '/conversions'">{{ 'imports.viewData' | transloco }}</a>
+      <a mat-stroked-button routerLink="/dashboard">{{ 'nav.dashboard' | transloco }}</a>
+    </div>
+  </section>
+}

@@ -1,0 +1,73 @@
+<k2-page-header title="tasks.title" subtitle="tasks.subtitle" icon="event_note">
+  <mat-button-toggle-group [(ngModel)]="view" (change)="reload()" [hideSingleSelectionIndicator]="true">
+    <mat-button-toggle value="calendar"><mat-icon>calendar_month</mat-icon> {{ 'tasks.calendar' | transloco }}</mat-button-toggle>
+    <mat-button-toggle value="list"><mat-icon>checklist</mat-icon> {{ 'tasks.list' | transloco }}</mat-button-toggle>
+  </mat-button-toggle-group>
+  <button mat-flat-button (click)="openForm()"><mat-icon>add_task</mat-icon>{{ 'tasks.new' | transloco }}</button>
+</k2-page-header>
+
+@if (stats(); as s) {
+  <div class="kpi-grid compact four">
+    <k2-kpi label="tasks.open" [value]="s.open" icon="pending_actions" tone="blue" />
+    <k2-kpi label="tasks.overdue" [value]="s.overdue" icon="alarm" tone="red" />
+    <k2-kpi label="tasks.dueToday" [value]="s.dueToday" icon="today" tone="orange" />
+    <k2-kpi label="tasks.doneWeek" [value]="s.doneThisWeek" icon="task_alt" tone="green" />
+  </div>
+}
+
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label><input matInput [(ngModel)]="search" (ngModelChange)="searchChanged()" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="campaignId" (selectionChange)="reload()"><mat-option [value]="null">{{ 'filters.allCampaigns' | transloco }}</mat-option>
+        @for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'tasks.assignee' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="assignee" (selectionChange)="reload()"><mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option><mat-option value="mine">{{ 'tasks.mine' | transloco }}</mat-option>
+        @for (u of users(); track u.id) { <mat-option [value]="u.id">{{ u.fullName }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.status' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="status" (selectionChange)="reload()"><mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+        @for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.taskStatus.' + s | transloco }}</mat-option> }</mat-select></mat-form-field>
+    <mat-slide-toggle [(ngModel)]="overdueOnly" (change)="reload()">{{ 'tasks.overdueOnly' | transloco }}</mat-slide-toggle>
+  </div>
+
+  @if (view === 'calendar') {
+    <div class="cal-head">
+      <button mat-icon-button (click)="move(-1)"><mat-icon>chevron_left</mat-icon></button>
+      <h3>{{ monthLabel() }}</h3>
+      <button mat-icon-button (click)="move(1)"><mat-icon>chevron_right</mat-icon></button>
+      <button mat-stroked-button (click)="goToday()">{{ 'tasks.today' | transloco }}</button>
+    </div>
+    <div class="calendar">
+      @for (w of weekdays(); track $index) { <div class="cal-wd">{{ w }}</div> }
+      @for (d of days(); track d.iso) {
+        <div class="cal-day" [class.out]="!d.inMonth" [class.today]="d.today" (dblclick)="openForm(undefined, d.date)">
+          <span class="cal-num">{{ d.date.getDate() }}</span>
+          @for (t of d.tasks.slice(0, 3); track t.id) {
+            <button class="cal-task" [attr.data-p]="t.priority" [class.done]="t.status === 'Done'" [class.overdue]="t.overdue" (click)="openForm(t)" [matTooltip]="t.title + (t.campaignName ? ' · ' + t.campaignName : '')">{{ t.title }}</button>
+          }
+          @if (d.tasks.length > 3) { <small class="more">+{{ d.tasks.length - 3 }}</small> }
+        </div>
+      }
+    </div>
+    <p class="muted small">{{ 'tasks.calendarHint' | transloco }}</p>
+  } @else {
+    @if (list.loading()) { <mat-progress-bar mode="indeterminate" /> }
+    <div class="task-list">
+      @for (t of list.items(); track t.id) {
+        <div class="task-row" [class.done]="t.status === 'Done'" [class.overdue]="t.overdue">
+          <mat-checkbox [checked]="t.status === 'Done'" (change)="toggleDone(t)" [disabled]="t.status === 'Cancelled'" />
+          <div class="task-main" (click)="openForm(t)">
+            <strong>{{ t.title }}</strong>
+            <small>{{ t.campaignName ?? t.clientName ?? ('tasks.noLink' | transloco) }}@if (t.assignedToName) { · {{ t.assignedToName }} }</small>
+          </div>
+          <span class="prio" [attr.data-p]="t.priority">{{ 'enums.priority.' + t.priority | transloco }}</span>
+          <span class="due" [class.overdue]="t.overdue"><mat-icon>{{ t.overdue ? 'alarm' : 'event' }}</mat-icon>{{ t.dueDate | dt }}</span>
+          <k2-status kind="taskStatus" [value]="t.status" />
+          <button mat-icon-button (click)="remove(t)"><mat-icon>delete_outline</mat-icon></button>
+        </div>
+      }
+    </div>
+    @if (list.loaded() && !list.items().length) { <k2-empty icon="task_alt" title="tasks.empty" /> }
+    <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" [pageSizeOptions]="[20, 50]" (page)="list.onPage($event)" />
+  }
+</section>

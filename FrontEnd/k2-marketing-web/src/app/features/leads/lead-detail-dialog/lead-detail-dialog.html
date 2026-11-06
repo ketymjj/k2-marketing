@@ -1,0 +1,55 @@
+@if (d(); as det) {
+  <h2 mat-dialog-title>{{ det.lead.name }}</h2>
+  <mat-dialog-content>
+    <div class="lead-head">
+      <k2-status kind="leadStatus" [value]="det.lead.status" />
+      @if (auth.canOperate()) {
+        <mat-form-field class="compact"><mat-label>{{ 'leads.moveTo' | transloco }}</mat-label>
+          <mat-select [value]="det.lead.status" (selectionChange)="setStatus($event.value)">
+            @for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.leadStatus.' + s | transloco }}</mat-option> }
+          </mat-select></mat-form-field>
+      }
+    </div>
+    <dl class="info-list two-col">
+      <dt>{{ 'common.email' | transloco }}</dt><dd>{{ det.lead.email ?? '—' }}</dd>
+      <dt>{{ 'common.phone' | transloco }}</dt><dd>{{ det.lead.phone ?? '—' }}</dd>
+      <dt>{{ 'filters.client' | transloco }}</dt><dd>{{ det.lead.clientName }}</dd>
+      <dt>{{ 'leads.campaign' | transloco }}</dt><dd>{{ det.lead.campaignName ?? '—' }}</dd>
+      <dt>{{ 'leads.source' | transloco }}</dt><dd>{{ det.lead.source ?? '—' }}</dd>
+      <dt>{{ 'leads.consentShort' | transloco }}</dt><dd>{{ (det.lead.consentGiven ? 'common.yes' : 'common.no') | transloco }}</dd>
+      <dt>{{ 'common.createdAt' | transloco }}</dt><dd>{{ det.lead.createdAt | dt: 'datetime' }}</dd>
+      <dt>{{ 'nav.conversions' | transloco }}</dt><dd>{{ det.conversionsCount }} · {{ det.conversionsRevenue | money }}</dd>
+    </dl>
+
+    @if (auth.canOperate()) {
+      <div class="interaction-form">
+        <mat-form-field class="compact"><mat-label>{{ 'leads.interactionType' | transloco }}</mat-label>
+          <mat-select [(ngModel)]="type">@for (t of types; track t) { <mat-option [value]="t">{{ 'enums.interaction.' + t | transloco }}</mat-option> }</mat-select></mat-form-field>
+        <mat-form-field class="grow"><mat-label>{{ 'leads.addNote' | transloco }}</mat-label><input matInput [(ngModel)]="notes" maxlength="2000" (keydown.enter)="addInteraction()" /></mat-form-field>
+        <button mat-flat-button (click)="addInteraction()" [disabled]="!notes.trim()"><mat-icon>send</mat-icon></button>
+      </div>
+    }
+    <h4 class="sub-title">{{ 'leads.history' | transloco }}</h4>
+    <ul class="timeline">
+      @for (i of det.interactions; track i.id) {
+        <li><span class="tl-dot" [attr.data-t]="i.type"></span>
+          <div>
+            @if (i.type === 'StatusChange') {
+              <strong>{{ i.fromStatus ? (('enums.leadStatus.' + i.fromStatus | transloco) + ' → ') : '' }}{{ 'enums.leadStatus.' + i.toStatus | transloco }}</strong>
+            } @else { <strong>{{ 'enums.interaction.' + i.type | transloco }}</strong> }
+            @if (i.notes) { <p>{{ i.notes }}</p> }
+            <small>{{ i.createdAt | dt: 'datetime' }}{{ i.userName ? ' · ' + i.userName : '' }}</small>
+          </div></li>
+      }
+    </ul>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    @if (auth.canManage()) { <button mat-button class="danger" (click)="remove()"><mat-icon>delete</mat-icon>{{ 'leads.deleteLgpd' | transloco }}</button> }
+    <span class="spacer"></span>
+    @if (auth.canOperate()) {
+      <button mat-stroked-button (click)="conversion()" [disabled]="!det.lead.campaignId"><mat-icon>shopping_cart_checkout</mat-icon>{{ 'conversions.register' | transloco }}</button>
+      <button mat-stroked-button (click)="edit()"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button>
+    }
+    <button mat-flat-button [mat-dialog-close]="changed">{{ 'common.close' | transloco }}</button>
+  </mat-dialog-actions>
+} @else { <mat-dialog-content><k2-skeleton [rows]="6" [height]="28" /></mat-dialog-content> }

@@ -1,0 +1,3 @@
+.formula-table td { padding: 12px; }
+.formula-table code { font-size: 13px; }
+.method-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px; color: var(--text-2); line-height: 1.5; }

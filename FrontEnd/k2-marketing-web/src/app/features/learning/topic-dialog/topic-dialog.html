@@ -1,0 +1,27 @@
+@let key = 'learn.topics.' + topic().key;
+<h2 mat-dialog-title class="topic-title">
+  <span class="topic-icon"><mat-icon>{{ topic().icon }}</mat-icon></span>
+  {{ key + '.title' | transloco }}
+</h2>
+<mat-dialog-content>
+  <p class="lead">{{ key + '.what' | transloco }}</p>
+  <section class="block">
+    <h4><mat-icon>help_outline</mat-icon>{{ 'learn.help.why' | transloco }}</h4>
+    <p>{{ key + '.why' | transloco }}</p>
+  </section>
+  <section class="block example">
+    <h4><mat-icon>storefront</mat-icon>{{ 'learn.help.example' | transloco }}</h4>
+    <p>{{ key + '.example' | transloco }}</p>
+  </section>
+  <section class="block tip">
+    <h4><mat-icon>tips_and_updates</mat-icon>{{ 'learn.help.inK2' | transloco }}</h4>
+    <p>{{ key + '.inK2' | transloco }}</p>
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="move(-1)" [disabled]="index() === 0"><mat-icon>arrow_back</mat-icon>{{ 'tour.prev' | transloco }}</button>
+  <span class="counter">{{ index() + 1 }} / {{ total }}</span>
+  <button mat-button (click)="move(1)" [disabled]="index() === total - 1">{{ 'tour.next' | transloco }}<mat-icon iconPositionEnd>arrow_forward</mat-icon></button>
+  <span class="spacer"></span>
+  <button mat-flat-button mat-dialog-close>{{ 'common.close' | transloco }}</button>
+</mat-dialog-actions>

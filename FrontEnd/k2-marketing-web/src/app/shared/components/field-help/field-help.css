@@ -1,0 +1,2 @@
+.field-help { font-size: 18px; width: 18px; height: 18px; color: var(--muted); cursor: help; vertical-align: middle; }
+.field-help:hover, .field-help:focus { color: var(--purple); outline: none; }

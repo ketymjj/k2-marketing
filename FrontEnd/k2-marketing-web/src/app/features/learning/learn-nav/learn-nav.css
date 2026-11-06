@@ -1,0 +1,5 @@
+.learn-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; padding: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: fit-content; max-width: 100%; }
+.learn-nav a { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 9px; color: var(--text-2); font-weight: 600; font-size: 13px; }
+.learn-nav a mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.learn-nav a:hover { background: var(--gray-soft); }
+.learn-nav a.active { background: var(--purple); color: #fff; }

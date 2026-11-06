@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ (data.id ? 'ads.edit' : 'ads.new') | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.ad.intro" [items]="[{ label: 'ads.headline', text: 'learn.forms.ad.headline' }, { label: 'ads.primaryText', text: 'learn.forms.ad.primaryText' }, { label: 'ads.cta', text: 'learn.forms.ad.cta' }, { label: 'ads.destinationUrl', text: 'learn.forms.ad.url' }]" />
+  <div class="form-with-preview">
+    <form [formGroup]="form" class="form-grid">
+      <mat-form-field class="span-2"><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+        <mat-select formControlName="campaignId" required>
+          @for (c of campaigns(); track c.id) { <mat-option [value]="c.id" [disabled]="c.status === 'Completed' || c.status === 'Cancelled'">{{ c.name }}</mat-option> }
+        </mat-select></mat-form-field>
+      <mat-form-field class="span-2"><mat-label>{{ 'ads.name' | transloco }}</mat-label><input matInput formControlName="name" maxlength="200" required /></mat-form-field>
+      <mat-form-field class="span-2"><mat-label>{{ 'ads.headline' | transloco }}</mat-label><input matInput formControlName="headline" maxlength="150" required /><k2-field-help matSuffix text="learn.forms.ad.headline" />
+        <mat-hint align="end">{{ form.value.headline?.length ?? 0 }}/150</mat-hint></mat-form-field>
+      <mat-form-field class="span-2"><mat-label>{{ 'ads.primaryText' | transloco }}</mat-label><textarea matInput rows="4" formControlName="primaryText" maxlength="2200" required></textarea>
+        <mat-hint align="end">{{ form.value.primaryText?.length ?? 0 }}/2200</mat-hint></mat-form-field>
+      <mat-form-field class="span-2"><mat-label>{{ 'ads.description' | transloco }}</mat-label><input matInput formControlName="description" maxlength="300" /></mat-form-field>
+      <mat-form-field><mat-label>{{ 'ads.cta' | transloco }}</mat-label><input matInput formControlName="callToAction" maxlength="50" required [matAutocomplete]="cta" /><k2-field-help matSuffix text="learn.forms.ad.cta" />
+        <mat-autocomplete #cta="matAutocomplete">@for (o of ctas; track o) { <mat-option [value]="o">{{ o }}</mat-option> }</mat-autocomplete></mat-form-field>
+      <mat-form-field><mat-label>{{ 'common.status' | transloco }}</mat-label>
+        <mat-select formControlName="status">@for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.adStatus.' + s | transloco }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field class="span-2"><mat-label>{{ 'ads.destinationUrl' | transloco }}</mat-label><input matInput formControlName="destinationUrl" placeholder="https://" required /><k2-field-help matSuffix text="learn.forms.ad.url" />
+        @if (form.controls.destinationUrl.hasError('pattern')) { <mat-error>{{ 'validation.url' | transloco }}</mat-error> }</mat-form-field>
+    </form>
+    <aside>
+      <h4 class="sub-title">{{ 'ads.preview' | transloco }}</h4>
+      <k2-ad-preview [clientName]="clientName()" [headline]="form.value.headline ?? ''" [primaryText]="form.value.primaryText ?? ''" [description]="form.value.description ?? ''"
+        [callToAction]="form.value.callToAction ?? ''" [destinationUrl]="form.value.destinationUrl ?? ''" [creatives]="creatives()" />
+    </aside>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid || saving()">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

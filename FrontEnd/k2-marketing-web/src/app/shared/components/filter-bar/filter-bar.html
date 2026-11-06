@@ -1,0 +1,47 @@
+<div class="filter-bar">
+  @if (!auth.isClientViewer() && showClient()) {
+    <mat-form-field class="f-client">
+      <mat-label>{{ 'filters.client' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="clientId" (selectionChange)="onClient()">
+        <mat-option [value]="null">{{ 'filters.allClients' | transloco }}</mat-option>
+        @for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+  }
+  @if (showPlatform()) {
+    <mat-form-field class="f-platform">
+      <mat-label>{{ 'filters.platform' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="platform" (selectionChange)="emit()">
+        <mat-option [value]="null">{{ 'filters.allPlatforms' | transloco }}</mat-option>
+        @for (p of platforms; track p) { <mat-option [value]="p">{{ 'enums.platform.' + p | transloco }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+  }
+  @if (showCampaign()) {
+    <mat-form-field class="f-campaign">
+      <mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="campaignId" (selectionChange)="emit()">
+        <mat-option [value]="null">{{ 'filters.allCampaigns' | transloco }}</mat-option>
+        @for (c of filteredCampaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+  }
+  <mat-form-field class="f-period">
+    <mat-label>{{ 'filters.period' | transloco }}</mat-label>
+    <mat-select [(ngModel)]="preset" (selectionChange)="onPreset()">
+      @for (p of presets; track p) { <mat-option [value]="p">{{ 'filters.presets.' + p | transloco }}</mat-option> }
+    </mat-select>
+  </mat-form-field>
+  @if (preset === 'custom') {
+    <mat-form-field class="f-range">
+      <mat-label>{{ 'filters.dateRange' | transloco }}</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate [(ngModel)]="start" [placeholder]="'filters.from' | transloco">
+        <input matEndDate [(ngModel)]="end" [placeholder]="'filters.to' | transloco" (dateChange)="emit()">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker" />
+      <mat-date-range-picker #picker />
+    </mat-form-field>
+  }
+  <ng-content />
+</div>

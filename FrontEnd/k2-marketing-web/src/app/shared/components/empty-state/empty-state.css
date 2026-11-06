@@ -1,0 +1,4 @@
+.empty-state { text-align: center; padding: 40px 16px; color: var(--muted); }
+.empty-icon { width: 56px; height: 56px; border-radius: 16px; display: inline-grid; place-items: center; background: var(--purple-soft); color: var(--purple); margin-bottom: 12px; }
+h3 { font-size: 16px; margin-bottom: 4px; }
+p { margin: 0 0 14px; }

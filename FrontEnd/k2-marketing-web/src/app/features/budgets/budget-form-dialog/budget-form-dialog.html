@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ (data.budget ? 'budgets.edit' : 'budgets.new') | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.budget.intro" [items]="[{ label: 'budgets.planned', text: 'learn.forms.budget.planned' }, { label: 'filters.period', text: 'learn.forms.budget.period' }, { label: 'budgets.spent', text: 'learn.forms.budget.actual' }]" />
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field class="span-2"><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select formControlName="campaignId" required>@for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'budgets.planned' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" min="1" step="100" formControlName="plannedAmount" required /><k2-field-help matSuffix text="learn.forms.budget.planned" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.period' | transloco }}</mat-label>
+      <mat-date-range-input [rangePicker]="rp"><input matStartDate formControlName="startDate" required><input matEndDate formControlName="endDate" required></mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="rp" /><mat-date-range-picker #rp /></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'common.notes' | transloco }}</mat-label><input matInput formControlName="notes" maxlength="500" /></mat-form-field>
+  </form>
+  <p class="note"><mat-icon>info_outline</mat-icon>{{ 'budgets.mediaNote' | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

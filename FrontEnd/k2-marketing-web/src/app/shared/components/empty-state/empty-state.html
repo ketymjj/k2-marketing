@@ -1,0 +1,6 @@
+<div class="empty-state">
+  <span class="empty-icon"><mat-icon>{{ icon() }}</mat-icon></span>
+  <h3>{{ title() | transloco }}</h3>
+  @if (message()) { <p>{{ message()! | transloco }}</p> }
+  <ng-content />
+</div>

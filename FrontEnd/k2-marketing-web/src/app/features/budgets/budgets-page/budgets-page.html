@@ -1,0 +1,55 @@
+<k2-page-header title="budgets.title" subtitle="budgets.subtitle" icon="account_balance_wallet">
+  @if (auth.canManage()) { <button mat-flat-button data-tour="new-budget" (click)="create()"><mat-icon>add</mat-icon>{{ 'budgets.new' | transloco }}</button> }
+</k2-page-header>
+<k2-tip text="learn.tips.budgets" />
+<k2-filter-bar [showPlatform]="false" defaultPreset="90d" [initial]="initial" (changed)="load($event)">
+  <mat-form-field><mat-label>{{ 'budgets.alertLevel' | transloco }}</mat-label>
+    <mat-select [(ngModel)]="level">
+      <mat-option [value]="0">{{ 'common.all' | transloco }}</mat-option>
+      <mat-option [value]="80">≥ 80%</mat-option><mat-option [value]="90">≥ 90%</mat-option><mat-option [value]="100">≥ 100%</mat-option>
+    </mat-select></mat-form-field>
+</k2-filter-bar>
+<p class="note"><mat-icon>info_outline</mat-icon>{{ 'budgets.mediaNote' | transloco }}</p>
+
+@if (s(); as sum) {
+  <div class="kpi-grid compact">
+    <k2-kpi label="budgets.planned" [value]="money.transform(sum.planned)" icon="request_quote" tone="navy" />
+    <k2-kpi label="budgets.spent" [value]="money.transform(sum.spent)" icon="payments" tone="purple" />
+    <k2-kpi label="budgets.remaining" [value]="money.transform(sum.remaining)" icon="savings" tone="green" />
+    <k2-kpi label="budgets.usage" [value]="pct.transform(sum.usagePercent, 1)" icon="donut_large" tone="blue" />
+    <k2-kpi label="budgets.over80" [value]="sum.over80" icon="warning_amber" tone="orange" />
+    <k2-kpi label="budgets.over100" [value]="sum.over100" icon="report" tone="red" />
+  </div>
+  <section class="card">
+    <header class="card-head"><h3>{{ 'budgets.plannedVsActual' | transloco }}</h3><small class="muted">{{ 'budgets.top12' | transloco }}</small></header>
+    @if (sum.items.length) { <k2-chart [config]="chart()" [height]="320" /> } @else { <k2-empty icon="account_balance_wallet" title="budgets.empty" /> }
+  </section>
+  <section class="card">
+    <div class="table-wrap"><table class="data-table">
+      <thead><tr><th>{{ 'filters.campaign' | transloco }}</th><th>{{ 'campaigns.period' | transloco }}</th><th class="num">{{ 'budgets.planned' | transloco }}</th>
+        <th class="num">{{ 'budgets.spent' | transloco }}</th><th class="num">{{ 'budgets.remaining' | transloco }}</th><th class="usage-col">{{ 'budgets.usage' | transloco }}</th><th></th></tr></thead>
+      <tbody>
+        @for (b of rows(); track b.id) {
+          <tr [class.row-alert]="b.threshold >= 90">
+            <td><a class="cell-title" [routerLink]="['/campaigns', b.campaignId]">{{ b.campaignName }}</a><small class="cell-sub">{{ b.clientName }} · {{ 'enums.platform.' + b.platform | transloco }}</small></td>
+            <td>{{ b.startDate | dt }} – {{ b.endDate | dt }}</td>
+            <td class="num">{{ b.plannedAmount | money }}</td><td class="num">{{ b.actualSpend | money }}</td>
+            <td class="num" [class.neg]="b.remaining < 0">{{ b.remaining | money }}</td>
+            <td><k2-usage-bar [value]="b.usagePercent" />@if (b.threshold) { <span class="alert-tag" [attr.data-l]="b.threshold">{{ 'budgets.reached' | transloco: { n: b.threshold } }}</span> }</td>
+            <td class="actions">
+              <button mat-icon-button (click)="history(b)" [matTooltip]="'budgets.history' | transloco"><mat-icon>show_chart</mat-icon></button>
+              @if (auth.canOperate()) { <button mat-icon-button (click)="spend(b)" [matTooltip]="'budgets.registerSpend' | transloco"><mat-icon>add_card</mat-icon></button> }
+              @if (auth.canManage()) {
+                <button mat-icon-button [matMenuTriggerFor]="m"><mat-icon>more_vert</mat-icon></button>
+                <mat-menu #m="matMenu">
+                  <button mat-menu-item (click)="edit(b)"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button>
+                  <button mat-menu-item class="danger" (click)="remove(b)"><mat-icon>delete</mat-icon>{{ 'common.delete' | transloco }}</button>
+                </mat-menu>
+              }
+            </td>
+          </tr>
+        } @empty { <tr><td colspan="7"><k2-empty icon="account_balance_wallet" title="budgets.empty" /></td></tr> }
+      </tbody>
+    </table></div>
+  </section>
+} @else { <k2-skeleton [rows]="6" [height]="40" /> }

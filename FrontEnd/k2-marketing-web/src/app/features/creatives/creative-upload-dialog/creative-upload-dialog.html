@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ 'creatives.upload' | transloco }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+      <mat-select formControlName="clientId" required>@for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'creatives.type' | transloco }}</mat-label>
+      <mat-select formControlName="type" (selectionChange)="file.set(null)">@for (t of types; track t) { <mat-option [value]="t">{{ 'enums.creativeType.' + t | transloco }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'creatives.name' | transloco }}</mat-label><input matInput formControlName="name" maxlength="200" required /></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'common.description' | transloco }}</mat-label><textarea matInput rows="2" formControlName="description" maxlength="1000"></textarea></mat-form-field>
+    @if (form.value.type === 'Text') {
+      <mat-form-field class="span-2"><mat-label>{{ 'creatives.textContent' | transloco }}</mat-label><textarea matInput rows="5" formControlName="textContent" maxlength="5000"></textarea></mat-form-field>
+    } @else {
+      <label class="dropzone span-2" [class.has-file]="file()" (dragover)="$event.preventDefault()" (drop)="onDrop($event)">
+        <input type="file" [accept]="accept()" (change)="onFile($event)" hidden />
+        <mat-icon>{{ file() ? 'task' : 'cloud_upload' }}</mat-icon>
+        @if (file(); as f) { <strong>{{ f.name }}</strong><small>{{ f.size | fileSize }}</small> }
+        @else { <strong>{{ 'creatives.dropHere' | transloco }}</strong><small>{{ 'creatives.allowed' | transloco: { types: accept(), mb: maxMb() } }}</small> }
+      </label>
+      @if (fileError()) { <div class="form-error span-2"><mat-icon>error_outline</mat-icon>{{ fileError()! | transloco: { mb: maxMb() } }}</div> }
+    }
+  </form>
+  @if (progress() !== null) { <mat-progress-bar mode="determinate" [value]="progress()!" /> }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="!valid() || progress() !== null">{{ 'creatives.send' | transloco }}</button>
+</mat-dialog-actions>

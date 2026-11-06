@@ -1,0 +1,19 @@
+<div class="calc-grid">
+  @for (c of cards(); track c.key) {
+    <article class="calc-card" [attr.data-metric]="c.key">
+      <header>
+        <strong>{{ 'learn.metrics.' + c.key + '.name' | transloco }}</strong>
+        <button type="button" class="help" (click)="help(c.key)" [matTooltip]="'learn.help.open' | transloco"
+                [attr.aria-label]="'learn.help.open' | transloco"><mat-icon>info_outline</mat-icon></button>
+      </header>
+      <span class="calc-value">{{ c.value }}</span>
+      <code class="calc-formula">{{ 'learn.metrics.' + c.key + '.formula' | transloco }}</code>
+      <span class="calc-expr">{{ c.expression }} = <b>{{ c.value }}</b></span>
+      @if (c.empty) {
+        <small class="calc-empty">{{ 'learn.simulator.zeroNote' | transloco }}</small>
+      } @else {
+        <small>{{ 'learn.metrics.' + c.key + '.short' | transloco }}</small>
+      }
+    </article>
+  }
+</div>

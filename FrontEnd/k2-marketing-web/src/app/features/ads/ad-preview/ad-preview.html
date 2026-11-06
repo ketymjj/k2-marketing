@@ -1,0 +1,14 @@
+<div class="ad-preview">
+  <header><span class="avatar sm">{{ (clientName() || '?')[0] }}</span><div><strong>{{ clientName() }}</strong><small>{{ 'ads.sponsored' | transloco }}</small></div></header>
+  <p class="ad-primary">{{ primaryText() || ('ads.primaryText' | transloco) }}</p>
+  <div class="ad-media">
+    @if (visual(); as v) {
+      @if (v.hasFile && v.type !== 'Video') { <k2-secure-img [creativeId]="v.id" [alt]="v.name" /> }
+      @else { <div class="img-placeholder"><mat-icon>{{ v.type === 'Video' ? 'smart_display' : 'image' }}</mat-icon><small>{{ v.name }}</small></div> }
+    } @else { <div class="img-placeholder"><mat-icon>image</mat-icon><small>{{ 'ads.noCreative' | transloco }}</small></div> }
+  </div>
+  <footer>
+    <div><small class="muted">{{ domain() }}</small><strong>{{ headline() || ('ads.headline' | transloco) }}</strong>@if (description()) { <small>{{ description() }}</small> }</div>
+    <span class="cta">{{ callToAction() || 'CTA' }}</span>
+  </footer>
+</div>

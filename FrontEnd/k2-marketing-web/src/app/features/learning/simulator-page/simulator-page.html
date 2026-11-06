@@ -1,0 +1,36 @@
+<k2-page-header title="learn.simulator.title" subtitle="learn.simulator.subtitle" icon="calculate" />
+<k2-learn-nav />
+
+<p class="note isolated"><mat-icon>shield</mat-icon>{{ 'learn.simulator.isolated' | transloco }}</p>
+<k2-tip text="learn.simulator.tip" />
+
+<div class="sim-layout">
+  <section class="card sim-form">
+    <header class="card-head">
+      <h3>{{ 'learn.simulator.inputs' | transloco }}</h3>
+      <button mat-button (click)="clear()"><mat-icon>restart_alt</mat-icon>{{ 'learn.simulator.clear' | transloco }}</button>
+    </header>
+    <div class="presets">
+      <span class="muted small">{{ 'learn.simulator.presets' | transloco }}</span>
+      @for (e of examples; track e.key) {
+        <button class="preset" (click)="load(e.key)"><mat-icon>{{ e.icon }}</mat-icon>{{ 'learn.examples.items.' + e.key + '.client' | transloco }}</button>
+      }
+    </div>
+    @for (f of fields; track f.key) {
+      <mat-form-field class="full">
+        <mat-label>{{ 'learn.simulator.fields.' + f.key | transloco }}</mat-label>
+        <mat-icon matPrefix>{{ f.icon }}</mat-icon>
+        @if (f.money) { <span matTextPrefix>R$&nbsp;</span> }
+        <input matInput type="number" min="0" [step]="f.money ? 0.01 : 1" [ngModel]="get(f.key)" (ngModelChange)="set(f.key, $event)" [name]="f.key" />
+        <mat-hint>{{ 'learn.simulator.hints.' + f.key | transloco }}</mat-hint>
+      </mat-form-field>
+    }
+    @for (w of warnings(); track w) { <div class="form-error"><mat-icon>warning_amber</mat-icon>{{ w | transloco }}</div> }
+  </section>
+
+  <section class="sim-results">
+    <h3 class="section-title">{{ 'learn.simulator.results' | transloco }}</h3>
+    <k2-calc-results [inputs]="values()" />
+    <p class="note"><mat-icon>balance</mat-icon>{{ 'learn.help.disclaimer' | transloco }}</p>
+  </section>
+</div>

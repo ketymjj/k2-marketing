@@ -1,0 +1,50 @@
+<k2-page-header title="creatives.title" subtitle="creatives.subtitle" icon="photo_library">
+  @if (auth.canOperate()) { <button mat-flat-button data-tour="upload-creative" (click)="upload()"><mat-icon>cloud_upload</mat-icon>{{ 'creatives.upload' | transloco }}</button> }
+</k2-page-header>
+<k2-tip text="learn.tips.creatives" />
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label>
+      <input matInput [(ngModel)]="search" (ngModelChange)="searchChanged()" /></mat-form-field>
+    @if (!auth.isClientViewer()) {
+      <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+        <mat-select [(ngModel)]="clientId" (selectionChange)="list.load(true)">
+          <mat-option [value]="null">{{ 'filters.allClients' | transloco }}</mat-option>
+          @for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+        </mat-select></mat-form-field>
+    }
+    <div class="type-chips">
+      <button class="type-chip" [class.active]="!type" (click)="setType(null)">{{ 'common.all' | transloco }}</button>
+      @for (t of types; track t) { <button class="type-chip" [class.active]="type === t" (click)="setType(t)"><mat-icon>{{ icon(t) }}</mat-icon>{{ 'enums.creativeType.' + t | transloco }}</button> }
+    </div>
+  </div>
+  @if (list.loading()) { <mat-progress-bar mode="indeterminate" /> }
+  <div class="creative-grid">
+    @for (c of list.items(); track c.id) {
+      <article class="creative-card">
+        <button class="thumb" (click)="preview(c)">
+          @if (c.hasFile && c.type !== 'Video') { <k2-secure-img [creativeId]="c.id" [alt]="c.name" /> }
+          @else if (c.type === 'Text') { <div class="text-thumb">{{ c.textContent }}</div> }
+          @else { <div class="img-placeholder"><mat-icon>smart_display</mat-icon></div> }
+          <span class="type-badge">{{ 'enums.creativeType.' + c.type | transloco }}</span>
+        </button>
+        <div class="creative-body">
+          <strong [title]="c.name">{{ c.name }}</strong>
+          <small>{{ c.clientName }}</small>
+          <small class="muted">{{ c.createdAt | dt }} · {{ c.hasFile ? (c.fileSize | fileSize) : ('creatives.noFile' | transloco) }} · {{ 'creatives.usedIn' | transloco: { n: c.adsCount } }}</small>
+        </div>
+        @if (auth.canOperate()) {
+          <button mat-icon-button class="card-menu" [matMenuTriggerFor]="m"><mat-icon>more_vert</mat-icon></button>
+          <mat-menu #m="matMenu">
+            <button mat-menu-item (click)="preview(c)"><mat-icon>visibility</mat-icon>{{ 'creatives.view' | transloco }}</button>
+            <button mat-menu-item (click)="edit(c)"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button>
+            @if (c.hasFile) { <button mat-menu-item (click)="download(c)"><mat-icon>download</mat-icon>{{ 'common.download' | transloco }}</button> }
+            <button mat-menu-item class="danger" (click)="remove(c)"><mat-icon>delete</mat-icon>{{ 'common.delete' | transloco }}</button>
+          </mat-menu>
+        }
+      </article>
+    }
+  </div>
+  @if (list.loaded() && !list.items().length) { <k2-empty icon="photo_library" title="creatives.empty" /> }
+  <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" [pageSizeOptions]="[24, 48, 96]" (page)="list.onPage($event)" />
+</section>

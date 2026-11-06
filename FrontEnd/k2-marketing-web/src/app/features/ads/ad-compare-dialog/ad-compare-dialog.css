@@ -1,0 +1,2 @@
+.compare-cols { display: grid; gap: 14px; margin-bottom: 16px; overflow-x: auto; }
+.compare-name { display: block; margin-top: 6px; font-size: 13px; }

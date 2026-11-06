@@ -1,0 +1,39 @@
+.steps { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-weight: 600; font-size: 13px; }
+.step span { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--gray-soft); font-size: 12px; }
+.step.active { border-color: var(--purple); color: var(--purple); }
+.step.active span { background: var(--purple); color: #fff; }
+.step.done { color: var(--green); }
+.step.done span { background: var(--green); color: #fff; }
+
+.kind-toggle { margin: 10px 0 20px; }
+.column-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.column-list li { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.column-list small { width: 100%; color: var(--muted); font-size: 12px; }
+.req { font-size: 10.5px; font-weight: 700; color: var(--red); text-transform: uppercase; }
+
+.import-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.st { border-radius: 12px; padding: 14px; display: flex; flex-direction: column; border: 1px solid var(--border); }
+.st strong { font-size: 24px; }
+.st span { font-size: 12px; color: var(--muted); }
+.st.new { background: var(--green-soft); }
+.st.new strong { color: var(--green); }
+.st.dup { background: var(--orange-soft); }
+.st.dup strong { color: var(--orange); }
+.st.dupf { background: var(--blue-soft); }
+.st.dupf strong { color: var(--blue); }
+.st.inv { background: var(--red-soft); }
+.st.inv strong { color: var(--red); }
+
+.imp-chip-New { background: var(--green-soft); color: var(--green); }
+.imp-chip-Duplicate { background: var(--orange-soft); color: var(--orange); }
+.imp-chip-DuplicateInFile { background: var(--blue-soft); color: var(--blue); }
+.imp-chip-Invalid { background: var(--red-soft); color: var(--red); }
+td.errors { color: var(--red); font-size: 12px; min-width: 220px; }
+
+.dup-mode { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 12px 14px; background: var(--orange-soft); border-radius: 12px; margin-bottom: 14px; }
+.wizard-actions { display: flex; gap: 10px; align-items: center; margin-top: 18px; flex-wrap: wrap; }
+.wizard-actions.center { justify-content: center; }
+.result-card { text-align: center; }
+.big-ok { font-size: 56px; width: 56px; height: 56px; color: var(--green); }
+.result-card h3 { margin: 6px 0 18px; }

@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>{{ 'ads.linkCreatives' | transloco }} — {{ ad().name }}</h2>
+<mat-dialog-content>
+  <p class="muted">{{ 'ads.linkHint' | transloco: { client: ad().clientName } }}</p>
+  <div class="creative-pick-grid">
+    @for (c of creatives(); track c.id) {
+      <button class="creative-pick" [class.linked]="isLinked(c.id)" (click)="toggle(c)" [disabled]="busy()">
+        <div class="thumb">
+          @if (c.hasFile && c.type !== 'Video') { <k2-secure-img [creativeId]="c.id" /> }
+          @else { <div class="img-placeholder"><mat-icon>{{ c.type === 'Video' ? 'smart_display' : c.type === 'Text' ? 'notes' : 'image' }}</mat-icon></div> }
+          @if (isLinked(c.id)) { <span class="check"><mat-icon>check</mat-icon></span> }
+        </div>
+        <span class="name">{{ c.name }}</span><small>{{ 'enums.creativeType.' + c.type | transloco }}</small>
+      </button>
+    } @empty { <k2-empty icon="photo_library" title="creatives.emptyClient" /> }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-flat-button [mat-dialog-close]="ad()">{{ 'common.done' | transloco }}</button></mat-dialog-actions>

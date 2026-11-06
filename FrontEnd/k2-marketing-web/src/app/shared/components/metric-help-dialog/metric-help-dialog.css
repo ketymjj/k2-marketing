@@ -1,0 +1,9 @@
+.help-title { display: flex; align-items: center; gap: 10px; }
+.help-title mat-icon { color: var(--orange); }
+.help-block { margin-bottom: 14px; }
+.help-block h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 4px; }
+.help-block p { margin: 0; color: var(--text-2); line-height: 1.55; }
+.help-block.example { background: var(--purple-soft); border-radius: 12px; padding: 12px 14px; }
+.formula { display: inline-block; font-size: 13.5px; padding: 6px 10px; }
+.disclaimer { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--muted); margin: 4px 0 0; }
+.disclaimer mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--blue); flex: none; }

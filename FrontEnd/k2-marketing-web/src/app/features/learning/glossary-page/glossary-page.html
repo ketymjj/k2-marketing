@@ -1,0 +1,32 @@
+<k2-page-header title="learn.glossary.title" subtitle="learn.glossary.subtitle" icon="spellcheck" />
+<k2-learn-nav />
+
+<section class="card">
+  <mat-form-field class="full search">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>{{ 'learn.glossary.search' | transloco }}</mat-label>
+    <input matInput [ngModel]="query()" (ngModelChange)="setQuery($event)" name="q" />
+    @if (query()) { <button mat-icon-button matSuffix (click)="setQuery('')" [attr.aria-label]="'common.clear' | transloco"><mat-icon>close</mat-icon></button> }
+  </mat-form-field>
+  <div class="letters">
+    @for (l of letters(); track l) {
+      <button class="letter" [class.active]="letter() === l" (click)="toggleLetter(l)">{{ l }}</button>
+    }
+    <span class="muted small count">{{ 'learn.glossary.count' | transloco: { n: filtered().length } }}</span>
+  </div>
+</section>
+
+<div class="term-grid">
+  @for (t of filtered(); track t.key) {
+    <article class="term" [attr.id]="'term-' + t.key">
+      <header>
+        <h3>{{ t.name }}</h3>
+        <span class="en" [title]="'learn.glossary.english' | transloco">🇺🇸 {{ t.english }}</span>
+      </header>
+      <p>{{ t.definition }}</p>
+      <div class="term-example"><mat-icon>storefront</mat-icon><span>{{ t.example }}</span></div>
+    </article>
+  } @empty {
+    <k2-empty icon="search_off" title="learn.glossary.empty" />
+  }
+</div>

@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ 'budgets.registerSpend' | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.spend.intro" [items]="[]" />
+  <p class="muted">{{ data.campaignName }} · {{ data.startDate | dt }} – {{ data.endDate | dt }}</p>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field><mat-label>{{ 'common.date' | transloco }}</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="date" [min]="min" [max]="max" required /><mat-datepicker-toggle matIconSuffix [for]="dp" /><mat-datepicker #dp /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'budgets.amount' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" min="0.01" step="0.01" formControlName="amount" required /><k2-field-help matSuffix text="learn.forms.spend.amount" /></mat-form-field>
+  </form>
+  <p class="note"><mat-icon>info_outline</mat-icon>{{ 'budgets.spendNote' | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

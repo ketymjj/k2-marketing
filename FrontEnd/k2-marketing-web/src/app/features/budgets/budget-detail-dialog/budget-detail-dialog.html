@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ 'budgets.history' | transloco }} — {{ data.campaignName }}</h2>
+<mat-dialog-content>
+  @if (detail(); as d) {
+    <div class="mini-stats">
+      <div><span>{{ 'budgets.planned' | transloco }}</span><strong>{{ d.budget.plannedAmount | money }}</strong></div>
+      <div><span>{{ 'budgets.spent' | transloco }}</span><strong>{{ d.budget.actualSpend | money }}</strong></div>
+      <div><span>{{ 'budgets.remaining' | transloco }}</span><strong [class.neg]="d.budget.remaining < 0">{{ d.budget.remaining | money }}</strong></div>
+      <div><span>{{ 'budgets.usage' | transloco }}</span><k2-usage-bar [value]="d.budget.usagePercent" /></div>
+    </div>
+    @if (d.history.length) { <k2-chart [config]="chart()" [height]="300" /> } @else { <k2-empty icon="schedule" title="budgets.notStarted" /> }
+  } @else { <k2-skeleton [rows]="5" [height]="32" /> }
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ 'common.close' | transloco }}</button></mat-dialog-actions>

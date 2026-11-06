@@ -1,0 +1,7 @@
+<nav class="learn-nav" [attr.aria-label]="'learn.title' | transloco">
+  @for (l of links; track l.route) {
+    <a [routerLink]="l.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: l.exact }">
+      <mat-icon>{{ l.icon }}</mat-icon>{{ l.label | transloco }}
+    </a>
+  }
+</nav>

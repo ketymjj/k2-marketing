@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{ 'conversions.register' | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.conversion.intro" [items]="[{ label: 'conversions.type', text: 'learn.forms.conversion.type' }, { label: 'conversions.revenue', text: 'learn.forms.conversion.revenue' }, { label: 'conversions.externalId', text: 'learn.forms.conversion.externalId' }]" />
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field class="span-2"><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select formControlName="campaignId" required (selectionChange)="loadLeads()">@for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'conversions.type' | transloco }}</mat-label>
+      <mat-select formControlName="conversionType">@for (t of types; track t) { <mat-option [value]="t">{{ 'enums.conversionType.' + t | transloco }}</mat-option> }</mat-select><k2-field-help matSuffix text="learn.forms.conversion.type" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'conversions.lead' | transloco }}</mat-label>
+      <mat-select formControlName="leadId"><mat-option [value]="null">{{ 'conversions.noLead' | transloco }}</mat-option>@for (l of leads(); track l.id) { <mat-option [value]="l.id">{{ l.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.date' | transloco }}</mat-label>
+      <input matInput [matDatepicker]="dp" formControlName="date" [max]="today" required /><mat-datepicker-toggle matIconSuffix [for]="dp" /><mat-datepicker #dp /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'conversions.time' | transloco }}</mat-label><input matInput type="time" formControlName="time" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'conversions.revenue' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" min="0" step="0.01" formControlName="revenueAmount" /><k2-field-help matSuffix text="learn.forms.conversion.revenue" />
+      @if (form.value.conversionType === 'Purchase') { <mat-hint>{{ 'conversions.purchaseNeedsRevenue' | transloco }}</mat-hint> }</mat-form-field>
+    <mat-form-field><mat-label>{{ 'conversions.externalId' | transloco }}</mat-label><input matInput formControlName="externalId" maxlength="100" />
+      <mat-hint>{{ 'conversions.externalIdHint' | transloco }}</mat-hint></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'common.notes' | transloco }}</mat-label><input matInput formControlName="notes" maxlength="500" /></mat-form-field>
+  </form>
+  <p class="note"><mat-icon>fingerprint</mat-icon>{{ 'conversions.dedupNote' | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid || (form.value.conversionType === 'Purchase' && !(form.value.revenueAmount! > 0))">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

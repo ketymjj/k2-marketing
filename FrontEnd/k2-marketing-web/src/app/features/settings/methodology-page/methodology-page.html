@@ -1,0 +1,26 @@
+<k2-page-header title="methodology.title" subtitle="methodology.subtitle" icon="functions" />
+<div class="grid-2">
+  <section class="card">
+    <header class="card-head"><h3>{{ 'methodology.formulas' | transloco }}</h3></header>
+    <table class="data-table formula-table">
+      <tbody>
+        @for (f of formulas; track f.k) { <tr><td><strong>{{ f.k }}</strong></td><td><code>{{ 'methodology.f.' + f.k | transloco }}</code></td></tr> }
+      </tbody>
+    </table>
+    <p class="note"><mat-icon>do_not_disturb_on</mat-icon>{{ 'methodology.zero' | transloco }}</p>
+    <p class="note"><mat-icon>calculate</mat-icon>{{ 'methodology.aggregation' | transloco }}</p>
+  </section>
+  <section class="card">
+    <header class="card-head"><h3>{{ 'methodology.sources' | transloco }}</h3></header>
+    <dl class="info-list">
+      @for (s of sources; track s) { <dt>{{ 'enums.source.' + s | transloco }}</dt><dd>{{ 'methodology.src.' + s | transloco }}</dd> }
+      <dt>{{ 'methodology.calculated' | transloco }}</dt><dd>{{ 'methodology.calculatedText' | transloco }}</dd>
+    </dl>
+  </section>
+</div>
+<section class="card">
+  <header class="card-head"><h3>{{ 'methodology.doubleCount' | transloco }}</h3></header>
+  <ul class="method-list">
+    @for (i of rules; track i) { <li>{{ 'methodology.rules.' + i | transloco }}</li> }
+  </ul>
+</section>

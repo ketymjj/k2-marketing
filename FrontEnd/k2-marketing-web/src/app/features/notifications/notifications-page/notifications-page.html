@@ -1,0 +1,17 @@
+<k2-page-header title="notifications.title" subtitle="notifications.subtitle" icon="notifications">
+  <mat-slide-toggle [(ngModel)]="unreadOnly" (change)="list.load(true)">{{ 'notifications.unreadOnly' | transloco }}</mat-slide-toggle>
+  <button mat-stroked-button (click)="markAll()"><mat-icon>done_all</mat-icon>{{ 'notifications.markAll' | transloco }}</button>
+</k2-page-header>
+<section class="card">
+  <ul class="notif-list">
+    @for (n of list.items(); track n.id) {
+      <li [class.unread]="!n.readAt" (click)="open(n)">
+        <span class="notif-ic" [class]="'notif-ic notif-' + n.type"><mat-icon>{{ icon(n.type) }}</mat-icon></span>
+        <div><strong>{{ 'notifications.typeLabels.' + n.type | transloco }}</strong><p>{{ n | notificationText }}</p><small>{{ n.createdAt | dt: 'datetime' }}</small></div>
+        @if (!n.readAt) { <span class="unread-dot"></span> }
+      </li>
+    }
+  </ul>
+  @if (list.loaded() && !list.items().length) { <k2-empty icon="notifications_none" title="notifications.empty" /> }
+  <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" (page)="list.onPage($event)" />
+</section>

@@ -1,0 +1,6 @@
+.form-with-preview { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr); gap: 24px; align-items: start; }
+.form-with-preview aside { position: sticky; top: 0; }
+
+@media (max-width: 1100px) {
+  .form-with-preview { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,0 +1,24 @@
+.kanban { display: grid; grid-template-columns: repeat(5, minmax(190px, 1fr)); gap: 14px; overflow-x: auto; padding-bottom: 8px; }
+
+.kanban-col { --c: var(--blue); background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; min-height: 420px; }
+.kanban-col[data-s=Contacted] { --c: var(--indigo); }
+.kanban-col[data-s=Qualified] { --c: var(--orange); }
+.kanban-col[data-s=Converted] { --c: var(--green); }
+.kanban-col[data-s=Lost] { --c: var(--gray); }
+.kanban-col > header { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.kanban-col > header .dot { background: var(--c); margin: 0; }
+.count { margin-left: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 1px 9px; font-size: 12px; font-weight: 600; }
+
+.kanban-list { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 80px; max-height: 64vh; overflow-y: auto; }
+.kanban-list .more { text-align: center; color: var(--muted); padding: 4px; }
+
+.kanban-card {
+  background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--c, var(--blue)); border-radius: 10px; padding: 10px 12px;
+  cursor: grab; display: flex; flex-direction: column; gap: 4px; box-shadow: var(--shadow);
+}
+.kanban-card:hover { box-shadow: var(--shadow-lg); }
+.kanban-card strong { font-size: 13px; }
+.kanban-card small { color: var(--muted); font-size: 12px; }
+.kc-foot { display: flex; justify-content: space-between; align-items: center; gap: 6px; min-width: 0; }
+.kc-foot .chip { min-width: 0; overflow: hidden; text-overflow: ellipsis; display: inline-block; }
+.kc-foot small { white-space: nowrap; flex: none; }

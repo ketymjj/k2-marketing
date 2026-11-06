@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>{{ data.name }}</h2>
+<mat-dialog-content class="preview-content">
+  @if (data.type === 'Text') { <blockquote class="text-preview">{{ data.textContent }}</blockquote> }
+  @else if (url()) {
+    @if (data.type === 'Video') { <video [src]="url()" controls class="media-full"></video> } @else { <img [src]="url()" [alt]="data.name" class="media-full" /> }
+  } @else if (!data.hasFile) { <k2-empty icon="smart_display" title="creatives.noFile" message="creatives.noFileText" /> }
+  @else { <k2-skeleton [rows]="1" [height]="240" /> }
+  <dl class="info-list">
+    <dt>{{ 'filters.client' | transloco }}</dt><dd>{{ data.clientName }}</dd>
+    <dt>{{ 'creatives.type' | transloco }}</dt><dd>{{ 'enums.creativeType.' + data.type | transloco }}</dd>
+    @if (data.originalFileName) { <dt>{{ 'creatives.file' | transloco }}</dt><dd>{{ data.originalFileName }} ({{ data.fileSize | fileSize }})</dd> }
+    @if (data.description) { <dt>{{ 'common.description' | transloco }}</dt><dd>{{ data.description }}</dd> }
+  </dl>
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ 'common.close' | transloco }}</button></mat-dialog-actions>

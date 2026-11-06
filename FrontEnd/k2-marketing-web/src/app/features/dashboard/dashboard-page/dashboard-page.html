@@ -1,0 +1,82 @@
+<k2-page-header title="dashboard.title" subtitle="dashboard.subtitle" icon="space_dashboard">
+  <a mat-stroked-button routerLink="/methodology"><mat-icon>functions</mat-icon>{{ 'methodology.link' | transloco }}</a>
+</k2-page-header>
+<k2-tip text="learn.tips.dashboard" />
+<k2-filter-bar (changed)="load($event)" />
+
+@if (data(); as d) {
+  <p class="period-note">{{ 'dashboard.periodNote' | transloco: { from: (d.from | dt), to: (d.to | dt), pfrom: (d.previousFrom | dt), pto: (d.previousTo | dt) } }}</p>
+  <div class="kpi-grid" data-tour="kpis">
+    <k2-kpi label="kpi.activeClients" [value]="d.activeClients" icon="apartment" tone="navy" />
+    <k2-kpi label="kpi.activeCampaigns" [value]="d.activeCampaigns" icon="campaign" tone="purple" />
+    <k2-kpi label="kpi.spend" [value]="money.transform(d.metrics.spend)" icon="payments" tone="blue" [change]="ch(d.metrics.spend, d.previous.spend)" hint="kpi.hints.spend" />
+    <k2-kpi label="kpi.impressions" [value]="num.transform(d.metrics.impressions, 0, true)" icon="visibility" tone="teal" [change]="ch(d.metrics.impressions, d.previous.impressions)" />
+    <k2-kpi label="kpi.reach" [value]="num.transform(d.metrics.reach, 0, true)" icon="groups" tone="teal" [change]="ch(d.metrics.reach, d.previous.reach)" hint="kpi.hints.reach" />
+    <k2-kpi label="kpi.clicks" [value]="num.transform(d.metrics.clicks)" icon="ads_click" tone="blue" [change]="ch(d.metrics.clicks, d.previous.clicks)" />
+    <k2-kpi label="kpi.ctr" [value]="pct.transform(d.metrics.ctr)" icon="percent" tone="purple" [change]="ch(d.metrics.ctr, d.previous.ctr)" hint="kpi.hints.ctr" />
+    <k2-kpi label="kpi.cpc" [value]="money.transform(d.metrics.cpc)" icon="touch_app" tone="orange" [change]="ch(d.metrics.cpc, d.previous.cpc)" [lowerIsBetter]="true" hint="kpi.hints.cpc" />
+    <k2-kpi label="kpi.cpm" [value]="money.transform(d.metrics.cpm)" icon="view_in_ar" tone="orange" [change]="ch(d.metrics.cpm, d.previous.cpm)" [lowerIsBetter]="true" hint="kpi.hints.cpm" />
+    <k2-kpi label="kpi.leads" [value]="num.transform(d.metrics.leads)" icon="person_add" tone="pink" [change]="ch(d.metrics.leads, d.previous.leads)" hint="kpi.hints.leads" />
+    <k2-kpi label="kpi.conversions" [value]="num.transform(d.metrics.conversions)" icon="task_alt" tone="green" [change]="ch(d.metrics.conversions, d.previous.conversions)" hint="kpi.hints.conversions" />
+    <k2-kpi label="kpi.cpl" [value]="money.transform(d.metrics.cpl)" icon="price_change" tone="orange" [change]="ch(d.metrics.cpl, d.previous.cpl)" [lowerIsBetter]="true" hint="kpi.hints.cpl" />
+    <k2-kpi label="kpi.cpa" [value]="money.transform(d.metrics.cpa)" icon="sell" tone="red" [change]="ch(d.metrics.cpa, d.previous.cpa)" [lowerIsBetter]="true" hint="kpi.hints.cpa" />
+    <k2-kpi label="kpi.revenue" [value]="money.transform(d.metrics.attributedRevenue)" icon="trending_up" tone="green" [change]="ch(d.metrics.attributedRevenue, d.previous.attributedRevenue)" hint="kpi.hints.revenue" />
+    <k2-kpi label="kpi.roas" [value]="roas.transform(d.metrics.roas)" icon="rocket_launch" tone="purple" [change]="ch(d.metrics.roas, d.previous.roas)" hint="kpi.hints.roas" />
+  </div>
+
+  @if (!d.metrics.impressions && !d.metrics.spend) {
+    <k2-empty icon="insights" title="dashboard.noData" message="dashboard.noDataText" />
+  }
+
+  <div class="grid-2">
+    <section class="card"><header class="card-head"><h3>{{ 'dashboard.charts.spend' | transloco }}</h3></header><k2-tip compact text="learn.tips.charts.spend" /><k2-chart [config]="spendChart()" /></section>
+    <section class="card"><header class="card-head"><h3>{{ 'dashboard.charts.clicks' | transloco }}</h3></header><k2-tip compact text="learn.tips.charts.clicks" /><k2-chart [config]="clicksChart()" /></section>
+    <section class="card"><header class="card-head"><h3>{{ 'dashboard.charts.conversions' | transloco }}</h3></header><k2-tip compact text="learn.tips.charts.conversions" /><k2-chart [config]="conversionsChart()" /></section>
+    <section class="card">
+      <header class="card-head"><h3>{{ 'dashboard.charts.roasByCampaign' | transloco }}</h3><small class="muted">{{ 'dashboard.top10' | transloco }}</small></header>
+      <k2-tip compact text="learn.tips.charts.roas" />
+      <k2-chart [config]="roasChart()" />
+    </section>
+    <section class="card"><header class="card-head"><h3>{{ 'dashboard.charts.byPlatform' | transloco }}</h3></header><k2-tip compact text="learn.tips.charts.platform" /><k2-chart [config]="platformChart()" /></section>
+    <section class="card">
+      <header class="card-head"><h3>{{ 'dashboard.charts.budgetDistribution' | transloco }}</h3></header>
+      <k2-tip compact text="learn.tips.charts.budget" />
+      @if (d.budgetDistribution.length) { <k2-chart [config]="budgetChart()" /> } @else { <k2-empty icon="account_balance_wallet" title="dashboard.noBudgets" /> }
+    </section>
+  </div>
+
+  <div class="grid-2">
+    <section class="card">
+      <header class="card-head"><h3>{{ 'dashboard.platformTable' | transloco }}</h3></header>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>{{ 'filters.platform' | transloco }}</th><th class="num">{{ 'kpi.spend' | transloco }}</th><th class="num">{{ 'kpi.ctr' | transloco }}</th><th class="num">{{ 'kpi.cpa' | transloco }}</th><th class="num">{{ 'kpi.roas' | transloco }}</th></tr></thead>
+          <tbody>
+            @for (p of d.byPlatform; track p.platform) {
+              <tr><td><span class="dot" [style.background]="platformColor(p.platform)"></span>{{ 'enums.platform.' + p.platform | transloco }}</td>
+                <td class="num">{{ p.metrics.spend | money }}</td><td class="num">{{ p.metrics.ctr | pct }}</td><td class="num">{{ p.metrics.cpa | money }}</td><td class="num">{{ p.metrics.roas | roas }}</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="card crm-card">
+      <header class="card-head"><h3>{{ 'dashboard.crm.title' | transloco }}</h3>
+        <mat-icon class="muted" [matTooltip]="'dashboard.crm.help' | transloco">info_outline</mat-icon></header>
+      <div class="mini-stats">
+        <div><span>{{ 'dashboard.crm.leads' | transloco }}</span><strong>{{ d.crm.leadsRegistered | num }}</strong></div>
+        <div><span>{{ 'dashboard.crm.uniqueConverted' | transloco }}</span><strong>{{ d.crm.uniqueLeadsConverted | num }}</strong></div>
+        <div><span>{{ 'dashboard.crm.conversions' | transloco }}</span><strong>{{ d.crm.conversionsRegistered | num }}</strong></div>
+        <div><span>{{ 'dashboard.crm.sales' | transloco }}</span><strong>{{ d.crm.sales | num }}</strong></div>
+        <div><span>{{ 'dashboard.crm.salesRevenue' | transloco }}</span><strong>{{ d.crm.salesRevenue | money }}</strong></div>
+      </div>
+      <p class="note"><mat-icon>verified</mat-icon>{{ 'dashboard.crm.note' | transloco }}</p>
+      <div class="sources">
+        <span class="muted">{{ 'dashboard.sources' | transloco }}:</span>
+        @for (s of d.dataSources; track s.source) { <span class="chip chip-source">{{ 'enums.source.' + s.source | transloco }} · {{ s.rows | num }}</span> }
+      </div>
+    </section>
+  </div>
+} @else {
+  <div class="kpi-grid">@for (i of skeleton; track i) { <div class="kpi skeleton-card"></div> }</div>
+}

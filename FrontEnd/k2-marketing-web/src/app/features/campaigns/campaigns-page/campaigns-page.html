@@ -1,0 +1,81 @@
+<k2-page-header title="campaigns.title" subtitle="campaigns.subtitle" icon="campaign">
+  <a mat-stroked-button routerLink="/compare"><mat-icon>compare_arrows</mat-icon>{{ 'nav.compare' | transloco }}</a>
+  @if (auth.canOperate()) { <button mat-flat-button data-tour="new-campaign" (click)="openForm()"><mat-icon>add</mat-icon>{{ 'campaigns.new' | transloco }}</button> }
+</k2-page-header>
+<k2-tip text="learn.tips.campaigns" />
+
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label>
+      <input matInput [(ngModel)]="search" (ngModelChange)="searchChanged()" /></mat-form-field>
+    @if (!auth.isClientViewer()) {
+      <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+        <mat-select [(ngModel)]="clientId" (selectionChange)="list.load(true)">
+          <mat-option [value]="null">{{ 'filters.allClients' | transloco }}</mat-option>
+          @for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+        </mat-select></mat-form-field>
+    }
+    <mat-form-field><mat-label>{{ 'filters.platform' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="platform" (selectionChange)="list.load(true)">
+        <mat-option [value]="null">{{ 'filters.allPlatforms' | transloco }}</mat-option>
+        @for (p of platforms; track p) { <mat-option [value]="p">{{ 'enums.platform.' + p | transloco }}</mat-option> }
+      </mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.status' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="status" (selectionChange)="list.load(true)">
+        <mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+        @for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.campaignStatus.' + s | transloco }}</mat-option> }
+      </mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'campaigns.objective' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="objective" (selectionChange)="list.load(true)">
+        <mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+        @for (o of objectives; track o) { <mat-option [value]="o">{{ 'enums.objective.' + o | transloco }}</mat-option> }
+      </mat-select></mat-form-field>
+    <mat-form-field class="f-range"><mat-label>{{ 'campaigns.activeBetween' | transloco }}</mat-label>
+      <mat-date-range-input [rangePicker]="rp">
+        <input matStartDate [(ngModel)]="from" [placeholder]="'filters.from' | transloco">
+        <input matEndDate [(ngModel)]="to" [placeholder]="'filters.to' | transloco" (dateChange)="list.load(true)">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="rp" /><mat-date-range-picker #rp /></mat-form-field>
+    @if (from || to) { <button mat-icon-button (click)="from = null; to = null; list.load(true)" [matTooltip]="'common.clear' | transloco"><mat-icon>filter_alt_off</mat-icon></button> }
+  </div>
+  @if (list.loading()) { <mat-progress-bar mode="indeterminate" /> }
+  <div class="table-wrap">
+    <table mat-table [dataSource]="list.items()" matSort (matSortChange)="list.onSort($event)" class="data-table">
+      <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'campaigns.name' | transloco }}</th>
+        <td mat-cell *matCellDef="let c"><a class="cell-title" [routerLink]="['/campaigns', c.id]">{{ c.name }}</a><small class="cell-sub">{{ c.clientName }}</small></td></ng-container>
+      <ng-container matColumnDef="platform"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'filters.platform' | transloco }}</th>
+        <td mat-cell *matCellDef="let c"><span class="platform-tag" [attr.data-p]="c.platform">{{ 'enums.platform.' + c.platform | transloco }}</span></td></ng-container>
+      <ng-container matColumnDef="objective"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'campaigns.objective' | transloco }}</th>
+        <td mat-cell *matCellDef="let c">{{ 'enums.objective.' + c.objective | transloco }}</td></ng-container>
+      <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'common.status' | transloco }}</th>
+        <td mat-cell *matCellDef="let c"><k2-status kind="campaignStatus" [value]="c.status" /></td></ng-container>
+      <ng-container matColumnDef="startDate"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'campaigns.period' | transloco }}</th>
+        <td mat-cell *matCellDef="let c">{{ c.startDate | dt }}<small class="cell-sub">{{ c.endDate ? (c.endDate | dt) : ('campaigns.noEnd' | transloco) }}</small></td></ng-container>
+      <ng-container matColumnDef="plannedBudget"><th mat-header-cell *matHeaderCellDef mat-sort-header class="num">{{ 'campaigns.plannedBudget' | transloco }}</th>
+        <td mat-cell *matCellDef="let c" class="num">{{ c.plannedBudget | money: 0 }}</td></ng-container>
+      <ng-container matColumnDef="spend"><th mat-header-cell *matHeaderCellDef class="num">{{ 'kpi.spend' | transloco }}</th>
+        <td mat-cell *matCellDef="let c" class="num">{{ c.spend | money }}</td></ng-container>
+      <ng-container matColumnDef="roas"><th mat-header-cell *matHeaderCellDef class="num">{{ 'kpi.roas' | transloco }}</th>
+        <td mat-cell *matCellDef="let c" class="num">{{ c.roas | roas }}</td></ng-container>
+      <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let c" class="actions">
+          <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <a mat-menu-item [routerLink]="['/campaigns', c.id]"><mat-icon>insights</mat-icon>{{ 'campaigns.performance' | transloco }}</a>
+            @if (auth.canOperate()) {
+              <button mat-menu-item (click)="openForm(c.id)"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button>
+              <button mat-menu-item (click)="duplicate(c)"><mat-icon>content_copy</mat-icon>{{ 'common.duplicate' | transloco }}</button>
+              @for (s of transitions(c.status); track s) {
+                <button mat-menu-item (click)="setStatus(c, s)"><mat-icon>{{ action(s).icon }}</mat-icon>{{ action(s).key | transloco }}</button>
+              }
+            }
+            @if (auth.canManage()) { <button mat-menu-item class="danger" (click)="remove(c)"><mat-icon>delete</mat-icon>{{ 'common.delete' | transloco }}</button> }
+          </mat-menu>
+        </td></ng-container>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns"></tr>
+    </table>
+  </div>
+  @if (list.loaded() && !list.items().length) { <k2-empty icon="campaign" title="campaigns.empty" /> }
+  <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" [pageSizeOptions]="[10, 20, 50]" (page)="list.onPage($event)" />
+</section>

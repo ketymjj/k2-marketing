@@ -1,0 +1,109 @@
+@if (c(); as camp) {
+  <k2-page-header [title]="camp.name" [raw]="true" [subtitle]="camp.clientName + ' · ' + ('enums.platform.' + camp.platform | transloco) + ' · ' + ('enums.objective.' + camp.objective | transloco)" [rawSubtitle]="true" icon="campaign">
+    <k2-status kind="campaignStatus" [value]="camp.status" />
+    @if (auth.canOperate()) {
+      @for (s of camp.allowedTransitions; track s) {
+        <button mat-stroked-button (click)="setStatus(s)" [class.btn-danger-outline]="s === 'Cancelled'"><mat-icon>{{ action(s).icon }}</mat-icon>{{ action(s).key | transloco }}</button>
+      }
+      <button mat-icon-button [matMenuTriggerFor]="more"><mat-icon>more_vert</mat-icon></button>
+      <mat-menu #more="matMenu">
+        <button mat-menu-item (click)="edit()"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button>
+        <button mat-menu-item (click)="duplicate()"><mat-icon>content_copy</mat-icon>{{ 'common.duplicate' | transloco }}</button>
+        <a mat-menu-item routerLink="/compare" [queryParams]="{ ids: camp.id }"><mat-icon>compare_arrows</mat-icon>{{ 'nav.compare' | transloco }}</a>
+      </mat-menu>
+    }
+  </k2-page-header>
+  <p class="note"><mat-icon>info_outline</mat-icon>{{ 'campaigns.internalNote' | transloco }}</p>
+
+  <div class="info-strip card">
+    <div><span>{{ 'campaigns.period' | transloco }}</span><strong>{{ camp.startDate | dt }} – {{ camp.endDate ? (camp.endDate | dt) : ('campaigns.noEnd' | transloco) }}</strong></div>
+    <div><span>{{ 'campaigns.plannedBudget' | transloco }}</span><strong>{{ camp.plannedBudget | money: 0 }}</strong></div>
+    <div><span>{{ 'campaigns.budgetUsage' | transloco }}</span><k2-usage-bar [value]="camp.budgetUsage" /></div>
+    <div><span>{{ 'nav.ads' | transloco }}</span><strong>{{ camp.adsCount }}</strong></div>
+    <div><span>{{ 'campaigns.crm' | transloco }}</span><strong>{{ camp.leadsRegistered }} {{ 'nav.leads' | transloco | lowercase }} · {{ camp.conversionsRegistered }} {{ 'nav.conversions' | transloco | lowercase }}</strong></div>
+  </div>
+
+  <k2-tip text="learn.tips.campaignDetail" />
+  <mat-tab-group animationDuration="150ms" class="tabs">
+    <mat-tab [label]="'campaigns.performance' | transloco">
+      <div class="tab-body">
+        <div class="toolbar">
+          <mat-form-field class="f-range"><mat-label>{{ 'filters.period' | transloco }}</mat-label>
+            <mat-date-range-input [rangePicker]="rp">
+              <input matStartDate [(ngModel)]="from" [placeholder]="'filters.from' | transloco">
+              <input matEndDate [(ngModel)]="to" [placeholder]="'filters.to' | transloco" (dateChange)="loadPerformance()">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="rp" /><mat-date-range-picker #rp /></mat-form-field>
+          @if (from || to) { <button mat-button (click)="from = null; to = null; loadPerformance()">{{ 'campaigns.fullPeriod' | transloco }}</button> }
+          @if (p(); as perf) { <span class="muted">{{ perf.from | dt }} – {{ perf.to | dt }}</span> }
+          <span class="spacer"></span>
+          @if (auth.canOperate()) { <a mat-stroked-button routerLink="/metrics" [queryParams]="{ campaignId: id(), new: 1 }"><mat-icon>add_chart</mat-icon>{{ 'metrics.new' | transloco }}</a> }
+        </div>
+        @if (p(); as perf) {
+          <div class="kpi-grid compact">
+            <k2-kpi label="kpi.spend" [value]="money.transform(perf.totals.spend)" icon="payments" tone="blue" />
+            <k2-kpi label="kpi.impressions" [value]="num.transform(perf.totals.impressions, 0, true)" icon="visibility" tone="teal" />
+            <k2-kpi label="kpi.clicks" [value]="num.transform(perf.totals.clicks)" icon="ads_click" tone="blue" />
+            <k2-kpi label="kpi.ctr" [value]="pct.transform(perf.totals.ctr)" icon="percent" tone="purple" />
+            <k2-kpi label="kpi.cpc" [value]="money.transform(perf.totals.cpc)" icon="touch_app" tone="orange" />
+            <k2-kpi label="kpi.leads" [value]="num.transform(perf.totals.leads)" icon="person_add" tone="pink" />
+            <k2-kpi label="kpi.cpl" [value]="money.transform(perf.totals.cpl)" icon="price_change" tone="orange" />
+            <k2-kpi label="kpi.conversions" [value]="num.transform(perf.totals.conversions)" icon="task_alt" tone="green" />
+            <k2-kpi label="kpi.cpa" [value]="money.transform(perf.totals.cpa)" icon="sell" tone="red" />
+            <k2-kpi label="kpi.roas" [value]="roas.transform(perf.totals.roas)" icon="rocket_launch" tone="purple" />
+          </div>
+          <div class="grid-2">
+            <section class="card"><header class="card-head"><h3>{{ 'campaigns.dailySpendRevenue' | transloco }}</h3></header><k2-chart [config]="spendChart()" /></section>
+            <section class="card"><header class="card-head"><h3>{{ 'campaigns.dailyClicksConversions' | transloco }}</h3></header><k2-chart [config]="clicksChart()" /></section>
+          </div>
+          <section class="card">
+            <header class="card-head"><h3>{{ 'campaigns.byAd' | transloco }}</h3>
+              @if (perf.campaignLevelSpend > 0) { <small class="muted">{{ 'campaigns.campaignLevelSpend' | transloco: { value: (perf.campaignLevelSpend | money) } }}</small> }</header>
+            <div class="table-wrap"><table class="data-table">
+              <thead><tr><th>{{ 'ads.name' | transloco }}</th><th>{{ 'common.status' | transloco }}</th><th class="num">{{ 'kpi.spend' | transloco }}</th><th class="num">{{ 'kpi.impressions' | transloco }}</th><th class="num">{{ 'kpi.clicks' | transloco }}</th><th class="num">{{ 'kpi.ctr' | transloco }}</th><th class="num">{{ 'kpi.cpc' | transloco }}</th><th class="num">{{ 'kpi.conversions' | transloco }}</th><th class="num">{{ 'kpi.cpa' | transloco }}</th><th class="num">{{ 'kpi.roas' | transloco }}</th></tr></thead>
+              <tbody>
+                @for (a of perf.byAd; track a.advertisementId) {
+                  <tr><td>{{ a.name }}</td><td><k2-status kind="adStatus" [value]="a.status" /></td><td class="num">{{ a.metrics.spend | money }}</td><td class="num">{{ a.metrics.impressions | num }}</td>
+                    <td class="num">{{ a.metrics.clicks | num }}</td><td class="num">{{ a.metrics.ctr | pct }}</td><td class="num">{{ a.metrics.cpc | money }}</td><td class="num">{{ a.metrics.conversions | num }}</td><td class="num">{{ a.metrics.cpa | money }}</td><td class="num">{{ a.metrics.roas | roas }}</td></tr>
+                } @empty { <tr><td colspan="10"><k2-empty icon="ad_units" title="ads.empty" /></td></tr> }
+              </tbody>
+            </table></div>
+          </section>
+        } @else { <k2-skeleton [rows]="6" [height]="40" /> }
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="('nav.ads' | transloco) + ' (' + camp.adsCount + ')'">
+      <div class="tab-body">
+        <div class="toolbar"><span class="spacer"></span>
+          @if (auth.canOperate() && camp.status !== 'Completed' && camp.status !== 'Cancelled') { <button mat-flat-button (click)="newAd()"><mat-icon>add</mat-icon>{{ 'ads.new' | transloco }}</button> }
+          <a mat-stroked-button routerLink="/ads" [queryParams]="{ campaignId: id() }">{{ 'ads.manage' | transloco }}</a>
+        </div>
+        <div class="ad-grid">
+          @for (a of p()?.byAd ?? []; track a.advertisementId) {
+            <article class="ad-card"><header><k2-status kind="adStatus" [value]="a.status" /></header><h4>{{ a.name }}</h4>
+              <footer><span>{{ 'kpi.clicks' | transloco }}: <strong>{{ a.metrics.clicks | num }}</strong></span><span>{{ 'kpi.conversions' | transloco }}: <strong>{{ a.metrics.conversions | num }}</strong></span></footer></article>
+          } @empty { <k2-empty icon="ad_units" title="ads.empty" /> }
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'nav.budgets' | transloco">
+      <div class="tab-body card">
+        <div class="toolbar"><span class="spacer"></span>
+          @if (auth.canManage()) { <button mat-flat-button (click)="newBudget()"><mat-icon>add</mat-icon>{{ 'budgets.new' | transloco }}</button> }
+          <a mat-stroked-button routerLink="/budgets" [queryParams]="{ campaignId: id() }">{{ 'budgets.manage' | transloco }}</a>
+        </div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>{{ 'campaigns.period' | transloco }}</th><th class="num">{{ 'budgets.planned' | transloco }}</th><th class="num">{{ 'budgets.spent' | transloco }}</th><th class="num">{{ 'budgets.remaining' | transloco }}</th><th>{{ 'budgets.usage' | transloco }}</th></tr></thead>
+          <tbody>
+            @for (b of budgets(); track b.id) {
+              <tr><td>{{ b.startDate | dt }} – {{ b.endDate | dt }}<small class="cell-sub">{{ b.notes }}</small></td><td class="num">{{ b.plannedAmount | money }}</td><td class="num">{{ b.actualSpend | money }}</td>
+                <td class="num" [class.neg]="b.remaining < 0">{{ b.remaining | money }}</td><td><k2-usage-bar [value]="b.usagePercent" /></td></tr>
+            } @empty { <tr><td colspan="5"><k2-empty icon="account_balance_wallet" title="budgets.empty" /></td></tr> }
+          </tbody>
+        </table></div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+} @else { <k2-skeleton [rows]="8" [height]="40" /> }

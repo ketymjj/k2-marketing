@@ -1,0 +1,15 @@
+.type-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.type-chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--text-2); padding: 6px 12px; border-radius: 999px; cursor: pointer; font: 500 13px Inter, sans-serif; }
+.type-chip mat-icon { font-size: 16px; width: 16px; height: 16px; }
+.type-chip.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+.creative-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+.creative-card { position: relative; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface); transition: box-shadow .15s; }
+.creative-card:hover { box-shadow: var(--shadow-lg); }
+.thumb { display: block; width: 100%; aspect-ratio: 1.5; border: 0; padding: 0; background: var(--gray-soft); cursor: pointer; position: relative; overflow: hidden; }
+.text-thumb { padding: 36px 14px 14px; font-size: 12.5px; color: var(--text-2); text-align: left; height: 100%; overflow: hidden; background: linear-gradient(135deg, var(--purple-soft), var(--blue-soft)); font-style: italic; }
+.type-badge { position: absolute; left: 8px; top: 8px; background: rgba(16, 24, 40, .7); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 6px; }
+.creative-body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 2px; }
+.creative-body strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 26px; }
+.creative-body small { font-size: 11.5px; }
+.card-menu { position: absolute; right: 2px; bottom: 34px; }

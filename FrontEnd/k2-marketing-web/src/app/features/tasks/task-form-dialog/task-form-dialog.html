@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ (data.task ? 'tasks.edit' : 'tasks.new') | transloco }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field class="span-2"><mat-label>{{ 'tasks.titleField' | transloco }}</mat-label><input matInput formControlName="title" maxlength="200" required /></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'common.description' | transloco }}</mat-label><textarea matInput rows="3" formControlName="description" maxlength="2000"></textarea></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+      <mat-select formControlName="clientId" (selectionChange)="loadCampaigns(true)"><mat-option [value]="null">—</mat-option>@for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select formControlName="campaignId"><mat-option [value]="null">—</mat-option>@for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'tasks.assignee' | transloco }}</mat-label>
+      <mat-select formControlName="assignedToId"><mat-option [value]="null">{{ 'tasks.unassigned' | transloco }}</mat-option>@for (u of users(); track u.id) { <mat-option [value]="u.id">{{ u.fullName }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'tasks.dueDate' | transloco }}</mat-label><input matInput [matDatepicker]="dp" formControlName="dueDate" required /><mat-datepicker-toggle matIconSuffix [for]="dp" /><mat-datepicker #dp /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'tasks.priority' | transloco }}</mat-label>
+      <mat-select formControlName="priority">@for (p of priorities; track p) { <mat-option [value]="p">{{ 'enums.priority.' + p | transloco }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.status' | transloco }}</mat-label>
+      <mat-select formControlName="status">@for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.taskStatus.' + s | transloco }}</mat-option> }</mat-select></mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

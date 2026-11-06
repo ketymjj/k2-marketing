@@ -1,0 +1,169 @@
+<k2-page-header title="reports.title" subtitle="reports.subtitle" icon="summarize">
+  @if (tab() !== 'executive') { <button mat-stroked-button (click)="csv()"><mat-icon>table_view</mat-icon>CSV</button> }
+  <button mat-stroked-button (click)="print()"><mat-icon>print</mat-icon>{{ 'reports.print' | transloco }}</button>
+  <button mat-flat-button data-tour="export-pdf" (click)="pdf()" [disabled]="generating()"><mat-icon>picture_as_pdf</mat-icon>{{ (generating() ? 'reports.generating' : 'reports.pdf') | transloco }}</button>
+</k2-page-header>
+<k2-filter-bar [initial]="initial" (changed)="onFilter($event)" class="no-print" />
+
+<mat-tab-group class="tabs no-print" [selectedIndex]="tabIndex()" (selectedIndexChange)="setTab($event)" animationDuration="120ms">
+  @for (t of tabs; track t) { <mat-tab [label]="'reports.' + t | transloco" /> }
+</mat-tab-group>
+<k2-tip class="no-print" [text]="'learn.tips.reports.' + tab()" />
+
+<div class="report-sheet">
+  <div class="print-header">
+    <strong>{{ agency.settings()?.agencyName ?? 'K2 Digital' }}</strong>
+    <span>{{ 'reports.' + tab() | transloco }} · {{ periodLabel() }}</span>
+  </div>
+
+  @switch (tab()) {
+    @case ('executive') {
+      @if (exec(); as e) {
+        <section class="exec-hero" [style.--brand]="e.agency.primaryColor">
+          <div><small>{{ e.agency.agencyName }}</small><h2>{{ 'reports.executive' | transloco }}</h2>
+            <p>{{ e.clientName ?? ('reports.allClients' | transloco) }} · {{ e.from | dt }} – {{ e.to | dt }}</p></div>
+          <div class="exec-meta"><small>{{ 'reports.comparedTo' | transloco: { from: (e.previousFrom | dt), to: (e.previousTo | dt) } }}</small></div>
+        </section>
+        <div class="kpi-grid">
+          <k2-kpi label="kpi.spend" [value]="money.transform(e.metrics.spend)" icon="payments" tone="blue" [change]="ch(e.metrics.spend, e.previous.spend)" />
+          <k2-kpi label="kpi.impressions" [value]="num.transform(e.metrics.impressions, 0, true)" icon="visibility" tone="teal" [change]="ch(e.metrics.impressions, e.previous.impressions)" />
+          <k2-kpi label="kpi.clicks" [value]="num.transform(e.metrics.clicks)" icon="ads_click" tone="blue" [change]="ch(e.metrics.clicks, e.previous.clicks)" />
+          <k2-kpi label="kpi.ctr" [value]="pct.transform(e.metrics.ctr)" icon="percent" tone="purple" [change]="ch(e.metrics.ctr, e.previous.ctr)" />
+          <k2-kpi label="kpi.leads" [value]="num.transform(e.metrics.leads)" icon="person_add" tone="pink" [change]="ch(e.metrics.leads, e.previous.leads)" />
+          <k2-kpi label="kpi.conversions" [value]="num.transform(e.metrics.conversions)" icon="task_alt" tone="green" [change]="ch(e.metrics.conversions, e.previous.conversions)" />
+          <k2-kpi label="kpi.cpa" [value]="money.transform(e.metrics.cpa)" icon="sell" tone="orange" [change]="ch(e.metrics.cpa, e.previous.cpa)" [lowerIsBetter]="true" />
+          <k2-kpi label="kpi.roas" [value]="roas.transform(e.metrics.roas)" icon="rocket_launch" tone="green" [change]="ch(e.metrics.roas, e.previous.roas)" />
+        </div>
+        <section class="card">
+          <header class="card-head"><h3>{{ 'reports.observations' | transloco }}</h3></header>
+          <ul class="observations">@for (o of e.observations; track $index) { <li [attr.data-tone]="o.tone">{{ obs(o) }}</li> }</ul>
+        </section>
+        <div class="grid-2">
+          <section class="card"><header class="card-head"><h3>{{ 'dashboard.charts.spend' | transloco }}</h3></header><k2-chart [config]="execDaily()" /></section>
+          <section class="card"><header class="card-head"><h3>{{ 'dashboard.charts.byPlatform' | transloco }}</h3></header><k2-chart [config]="execPlatform()" /></section>
+        </div>
+        <section class="card">
+          <header class="card-head"><h3>{{ 'reports.topCampaigns' | transloco }}</h3></header>
+          <ng-container *ngTemplateOutlet="perfTable; context: { rows: e.topCampaigns, totals: null }" />
+        </section>
+        <div class="grid-2">
+          <section class="card">
+            <header class="card-head"><h3>{{ 'reports.budget' | transloco }}</h3></header>
+            <div class="mini-stats">
+              <div><span>{{ 'budgets.planned' | transloco }}</span><strong>{{ e.budget.planned | money }}</strong></div>
+              <div><span>{{ 'budgets.spent' | transloco }}</span><strong>{{ e.budget.spent | money }}</strong></div>
+              <div><span>{{ 'budgets.usage' | transloco }}</span><k2-usage-bar [value]="e.budget.usagePercent" /></div>
+              <div><span>{{ 'budgets.over90' | transloco }}</span><strong>{{ e.budget.over90 }}</strong></div>
+            </div>
+          </section>
+          <section class="card">
+            <header class="card-head"><h3>{{ 'dashboard.crm.title' | transloco }}</h3></header>
+            <div class="mini-stats">
+              <div><span>{{ 'dashboard.crm.leads' | transloco }}</span><strong>{{ e.crm.leadsRegistered | num }}</strong></div>
+              <div><span>{{ 'dashboard.crm.uniqueConverted' | transloco }}</span><strong>{{ e.crm.uniqueLeadsConverted | num }}</strong></div>
+              <div><span>{{ 'dashboard.crm.sales' | transloco }}</span><strong>{{ e.crm.sales | num }}</strong></div>
+              <div><span>{{ 'dashboard.crm.salesRevenue' | transloco }}</span><strong>{{ e.crm.salesRevenue | money }}</strong></div>
+            </div>
+          </section>
+        </div>
+        <p class="muted small">{{ 'reports.methodNote' | transloco }}</p>
+      } @else { <k2-skeleton [rows]="8" [height]="40" /> }
+    }
+
+    @case ('performance') {
+      <div class="toolbar no-print">
+        <mat-button-toggle-group [(ngModel)]="groupBy" (change)="load()" [hideSingleSelectionIndicator]="true">
+          <mat-button-toggle value="client">{{ 'reports.byClient' | transloco }}</mat-button-toggle>
+          <mat-button-toggle value="campaign">{{ 'reports.byCampaign' | transloco }}</mat-button-toggle>
+          <mat-button-toggle value="platform">{{ 'reports.byPlatform' | transloco }}</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      @if (perf(); as p) {
+        <section class="card"><header class="card-head"><h3>{{ 'reports.spendVsRevenue' | transloco }}</h3></header><k2-chart [config]="perfChart()" [height]="300" /></section>
+        <section class="card"><ng-container *ngTemplateOutlet="perfTable; context: { rows: p.rows, totals: p.totals }" /></section>
+      } @else { <k2-skeleton [rows]="8" [height]="32" /> }
+    }
+
+    @case ('budget') {
+      @if (budget(); as b) {
+        <div class="kpi-grid compact">
+          <k2-kpi label="budgets.planned" [value]="money.transform(b.planned)" icon="request_quote" tone="navy" />
+          <k2-kpi label="budgets.spent" [value]="money.transform(b.spent)" icon="payments" tone="purple" />
+          <k2-kpi label="budgets.remaining" [value]="money.transform(b.remaining)" icon="savings" tone="green" />
+          <k2-kpi label="budgets.usage" [value]="pct.transform(b.usagePercent, 1)" icon="donut_large" tone="blue" />
+        </div>
+        <section class="card"><header class="card-head"><h3>{{ 'budgets.plannedVsActual' | transloco }}</h3></header><k2-chart [config]="budgetChart()" [height]="300" /></section>
+        <section class="card"><div class="table-wrap"><table class="data-table">
+          <thead><tr><th>{{ 'filters.campaign' | transloco }}</th><th>{{ 'campaigns.period' | transloco }}</th><th class="num">{{ 'budgets.planned' | transloco }}</th><th class="num">{{ 'budgets.spent' | transloco }}</th><th class="num">{{ 'budgets.remaining' | transloco }}</th><th>{{ 'budgets.usage' | transloco }}</th></tr></thead>
+          <tbody>@for (i of b.items; track i.id) {
+            <tr><td>{{ i.campaignName }}<small class="cell-sub">{{ i.clientName }}</small></td><td>{{ i.startDate | dt }} – {{ i.endDate | dt }}</td><td class="num">{{ i.plannedAmount | money }}</td>
+              <td class="num">{{ i.actualSpend | money }}</td><td class="num" [class.neg]="i.remaining < 0">{{ i.remaining | money }}</td><td><k2-usage-bar [value]="i.usagePercent" /></td></tr>
+          } @empty { <tr><td colspan="6"><k2-empty icon="account_balance_wallet" title="budgets.empty" /></td></tr> }</tbody>
+        </table></div></section>
+      } @else { <k2-skeleton [rows]="8" [height]="32" /> }
+    }
+
+    @case ('leads') {
+      @if (leads(); as l) {
+        <div class="kpi-grid compact">
+          <k2-kpi label="reports.leadsRegistered" [value]="num.transform(l.total)" icon="person_add" tone="pink" />
+          <k2-kpi label="reports.leadsConverted" [value]="num.transform(l.converted)" icon="how_to_reg" tone="green" />
+          <k2-kpi label="reports.conversionRate" [value]="pct.transform(l.conversionRate, 1)" icon="percent" tone="purple" />
+          <k2-kpi label="reports.platformLeads" [value]="num.transform(l.platformLeads)" icon="ads_click" tone="blue" hint="reports.platformLeadsHint" />
+        </div>
+        <div class="grid-2">
+          <section class="card"><header class="card-head"><h3>{{ 'reports.leadsByStatus' | transloco }}</h3></header><k2-chart [config]="leadsStatusChart()" /></section>
+          <section class="card"><header class="card-head"><h3>{{ 'reports.leadsPerDay' | transloco }}</h3></header><k2-chart [config]="leadsDailyChart()" /></section>
+        </div>
+        <div class="grid-2">
+          <section class="card"><header class="card-head"><h3>{{ 'reports.bySource' | transloco }}</h3></header>
+            <table class="data-table"><thead><tr><th>{{ 'leads.source' | transloco }}</th><th class="num">{{ 'nav.leads' | transloco }}</th><th class="num">{{ 'reports.converted' | transloco }}</th></tr></thead>
+              <tbody>@for (s of l.bySource; track s.key) { <tr><td>{{ s.key }}</td><td class="num">{{ s.count }}</td><td class="num">{{ s.converted }}</td></tr> }</tbody></table></section>
+          <section class="card"><header class="card-head"><h3>{{ 'reports.byCampaign' | transloco }}</h3></header>
+            <table class="data-table"><thead><tr><th>{{ 'filters.campaign' | transloco }}</th><th class="num">{{ 'nav.leads' | transloco }}</th><th class="num">{{ 'reports.converted' | transloco }}</th></tr></thead>
+              <tbody>@for (s of l.byCampaign; track s.key) { <tr><td>{{ s.label ?? ('reports.noCampaign' | transloco) }}</td><td class="num">{{ s.count }}</td><td class="num">{{ s.converted }}</td></tr> }</tbody></table></section>
+        </div>
+      } @else { <k2-skeleton [rows]="8" [height]="32" /> }
+    }
+
+    @case ('conversions') {
+      @if (conv(); as c) {
+        <div class="kpi-grid compact">
+          <k2-kpi label="conversions.total" [value]="num.transform(c.total)" icon="task_alt" tone="green" />
+          <k2-kpi label="conversions.uniqueLeads" [value]="num.transform(c.uniqueLeads)" icon="person_pin" tone="pink" />
+          <k2-kpi label="conversions.sales" [value]="num.transform(c.sales)" icon="shopping_bag" tone="purple" />
+          <k2-kpi label="conversions.salesRevenue" [value]="money.transform(c.salesRevenue)" icon="payments" tone="blue" />
+        </div>
+        <div class="grid-2">
+          <section class="card"><header class="card-head"><h3>{{ 'reports.conversionsPerDay' | transloco }}</h3></header><k2-chart [config]="convDailyChart()" /></section>
+          <section class="card"><header class="card-head"><h3>{{ 'reports.byType' | transloco }}</h3></header><k2-chart [config]="convTypeChart()" /></section>
+        </div>
+        <section class="card"><header class="card-head"><h3>{{ 'reports.byCampaign' | transloco }}</h3></header>
+          <table class="data-table"><thead><tr><th>{{ 'filters.campaign' | transloco }}</th><th class="num">{{ 'nav.conversions' | transloco }}</th><th class="num">{{ 'conversions.sales' | transloco }}</th></tr></thead>
+            <tbody>@for (s of c.byCampaign; track s.key) { <tr><td>{{ s.label }}</td><td class="num">{{ s.count }}</td><td class="num">{{ s.converted }}</td></tr> }
+              @empty { <tr><td colspan="3"><k2-empty icon="shopping_cart_checkout" title="conversions.empty" /></td></tr> }</tbody></table></section>
+      } @else { <k2-skeleton [rows]="8" [height]="32" /> }
+    }
+  }
+</div>
+
+<ng-template #perfTable let-rows="rows" let-totals="totals">
+  <div class="table-wrap"><table class="data-table">
+    <thead><tr><th>{{ 'reports.item' | transloco }}</th><th class="num">{{ 'kpi.spend' | transloco }}</th><th class="num">{{ 'kpi.impressions' | transloco }}</th><th class="num">{{ 'kpi.clicks' | transloco }}</th>
+      <th class="num">{{ 'kpi.ctr' | transloco }}</th><th class="num">{{ 'kpi.cpc' | transloco }}</th><th class="num">{{ 'kpi.leads' | transloco }}</th><th class="num">{{ 'kpi.conversions' | transloco }}</th>
+      <th class="num">{{ 'kpi.cpa' | transloco }}</th><th class="num">{{ 'kpi.revenue' | transloco }}</th><th class="num">{{ 'kpi.roas' | transloco }}</th></tr></thead>
+    <tbody>
+      @for (r of rows; track r.key) {
+        <tr><td>{{ groupBy === 'platform' && tab() === 'performance' ? ('enums.platform.' + r.label | transloco) : r.label }}@if (r.detail) { <small class="cell-sub">{{ r.detail }}</small> }</td>
+          <td class="num">{{ r.metrics.spend | money }}</td><td class="num">{{ r.metrics.impressions | num }}</td><td class="num">{{ r.metrics.clicks | num }}</td><td class="num">{{ r.metrics.ctr | pct }}</td>
+          <td class="num">{{ r.metrics.cpc | money }}</td><td class="num">{{ r.metrics.leads | num }}</td><td class="num">{{ r.metrics.conversions | num }}</td><td class="num">{{ r.metrics.cpa | money }}</td>
+          <td class="num">{{ r.metrics.attributedRevenue | money }}</td><td class="num">{{ r.metrics.roas | roas }}</td></tr>
+      } @empty { <tr><td colspan="11"><k2-empty icon="insights" title="dashboard.noData" /></td></tr> }
+      @if (totals) {
+        <tr class="total-row"><td>{{ 'common.total' | transloco }}</td><td class="num">{{ totals.spend | money }}</td><td class="num">{{ totals.impressions | num }}</td><td class="num">{{ totals.clicks | num }}</td>
+          <td class="num">{{ totals.ctr | pct }}</td><td class="num">{{ totals.cpc | money }}</td><td class="num">{{ totals.leads | num }}</td><td class="num">{{ totals.conversions | num }}</td>
+          <td class="num">{{ totals.cpa | money }}</td><td class="num">{{ totals.attributedRevenue | money }}</td><td class="num">{{ totals.roas | roas }}</td></tr>
+      }
+    </tbody>
+  </table></div>
+</ng-template>

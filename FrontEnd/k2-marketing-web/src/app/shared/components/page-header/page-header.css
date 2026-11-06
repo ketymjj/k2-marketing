@@ -1,0 +1,10 @@
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.page-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.page-title h1 { font-size: 24px; line-height: 1.25; }
+.page-title p { margin: 4px 0 0; color: var(--muted); }
+.page-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--purple-soft); color: var(--purple); flex: none; }
+.page-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .page-title h1 { font-size: 20px; }
+}

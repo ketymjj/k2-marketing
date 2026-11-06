@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ (data.id ? 'campaigns.edit' : 'campaigns.new') | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.campaign.intro" [items]="[{ label: 'campaigns.name', text: 'learn.forms.campaign.name' }, { label: 'campaigns.objective', text: 'learn.forms.campaign.objective' }, { label: 'filters.platform', text: 'learn.forms.campaign.platform' }, { label: 'campaigns.plannedBudget', text: 'learn.forms.campaign.budget' }, { label: 'campaigns.period', text: 'learn.forms.campaign.period' }, { label: 'learn.forms.campaign.audienceLabel', text: 'learn.forms.campaign.audience' }]" />
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field class="span-2"><mat-label>{{ 'campaigns.name' | transloco }}</mat-label><input matInput formControlName="name" maxlength="200" required /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+      <mat-select formControlName="clientId" required>
+        @for (c of clients(); track c.id) { <mat-option [value]="c.id" [disabled]="c.status !== 'Active'">{{ c.name }}</mat-option> }
+      </mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'filters.platform' | transloco }}</mat-label>
+      <mat-select formControlName="platform" required>
+        @for (p of platforms; track p) { <mat-option [value]="p">{{ 'enums.platform.' + p | transloco }}</mat-option> }
+      </mat-select><k2-field-help matSuffix text="learn.forms.campaign.platform" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'campaigns.objective' | transloco }}</mat-label>
+      <mat-select formControlName="objective" required>
+        @for (o of objectives; track o) { <mat-option [value]="o">{{ 'enums.objective.' + o | transloco }}</mat-option> }
+      </mat-select><k2-field-help matSuffix text="learn.forms.campaign.objective" /></mat-form-field>
+    @if (!data.id) {
+      <mat-form-field><mat-label>{{ 'campaigns.initialStatus' | transloco }}</mat-label>
+        <mat-select formControlName="status">
+          @for (s of initialStatuses; track s) { <mat-option [value]="s">{{ 'enums.campaignStatus.' + s | transloco }}</mat-option> }
+        </mat-select></mat-form-field>
+    }
+    <mat-form-field><mat-label>{{ 'campaigns.startDate' | transloco }}</mat-label>
+      <input matInput [matDatepicker]="sd" formControlName="startDate" required /><mat-datepicker-toggle matIconSuffix [for]="sd" /><mat-datepicker #sd /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'campaigns.endDate' | transloco }}</mat-label>
+      <input matInput [matDatepicker]="ed" formControlName="endDate" [min]="form.value.startDate" /><mat-datepicker-toggle matIconSuffix [for]="ed" /><mat-datepicker #ed />
+      <mat-hint>{{ 'campaigns.endDateHint' | transloco }}</mat-hint></mat-form-field>
+    <mat-form-field><mat-label>{{ 'campaigns.plannedBudget' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" min="0" step="100" formControlName="plannedBudget" required /><k2-field-help matSuffix text="learn.forms.campaign.budget" /></mat-form-field>
+  </form>
+  <p class="note"><mat-icon>info_outline</mat-icon>{{ 'campaigns.internalNote' | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid || saving()">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

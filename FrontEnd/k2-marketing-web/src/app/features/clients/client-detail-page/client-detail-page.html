@@ -1,0 +1,131 @@
+@if (o(); as ov) {
+  <k2-page-header [title]="ov.client.name" [raw]="true" [subtitle]="ov.client.companyName" [rawSubtitle]="true" icon="apartment">
+    <k2-status kind="clientStatus" [value]="ov.client.status" />
+    @if (auth.canManage()) { <button mat-stroked-button (click)="edit()"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button> }
+    @if (auth.canOperate()) { <a mat-flat-button routerLink="/campaigns" [queryParams]="{ clientId: id(), new: 1 }"><mat-icon>add</mat-icon>{{ 'campaigns.new' | transloco }}</a> }
+  </k2-page-header>
+
+  <mat-tab-group animationDuration="150ms" (selectedIndexChange)="onTab($event)" class="tabs">
+    <mat-tab [label]="'clients.tabs.overview' | transloco">
+      <div class="tab-body">
+        <div class="kpi-grid">
+          <k2-kpi label="clients.activeCampaigns" [value]="ov.activeCampaigns + ' / ' + ov.totalCampaigns" icon="campaign" tone="purple" />
+          <k2-kpi label="clients.spendMonth" [value]="money.transform(ov.currentMonth.spend)" icon="payments" tone="blue" [caption]="('clients.ofBudget' | transloco: { budget: money.transform(ov.client.monthlyBudget, 0) })" />
+          <k2-kpi label="kpi.spend" [value]="money.transform(ov.allTime.spend)" icon="account_balance" tone="navy" [caption]="'clients.allTime' | transloco" />
+          <k2-kpi label="kpi.roas" [value]="roas.transform(ov.allTime.roas)" icon="rocket_launch" tone="green" [caption]="'clients.allTime' | transloco" />
+          <k2-kpi label="kpi.ctr" [value]="pct.transform(ov.allTime.ctr)" icon="percent" tone="teal" />
+          <k2-kpi label="kpi.cpa" [value]="money.transform(ov.allTime.cpa)" icon="sell" tone="orange" />
+          <k2-kpi label="clients.leadsRegistered" [value]="num.transform(ov.leadsRegistered)" icon="person_add" tone="pink" />
+          <k2-kpi label="clients.salesRevenue" [value]="money.transform(ov.salesRevenue)" icon="shopping_bag" tone="green" />
+        </div>
+        <div class="grid-2">
+          <section class="card">
+            <header class="card-head"><h3>{{ 'clients.info' | transloco }}</h3></header>
+            <dl class="info-list">
+              <dt>{{ 'common.email' | transloco }}</dt><dd>{{ ov.client.email }}</dd>
+              <dt>{{ 'common.phone' | transloco }}</dt><dd>{{ ov.client.phone ?? '—' }}</dd>
+              <dt>{{ 'clients.document' | transloco }}</dt><dd>{{ ov.client.document ?? '—' }}</dd>
+              <dt>{{ 'clients.industry' | transloco }}</dt><dd>{{ ov.client.industry ?? '—' }}</dd>
+              <dt>{{ 'clients.website' | transloco }}</dt><dd>@if (ov.client.website) { <a [href]="ov.client.website" target="_blank" rel="noopener">{{ ov.client.website }}</a> } @else { — }</dd>
+              <dt>{{ 'common.createdAt' | transloco }}</dt><dd>{{ ov.client.createdAt | dt }}</dd>
+            </dl>
+            <h4 class="sub-title">{{ 'clients.monthlyBudgetUsage' | transloco }}</h4>
+            <k2-usage-bar [value]="ov.monthlyBudgetUsage" />
+            <small class="muted">{{ 'clients.budgetNote' | transloco }}</small>
+          </section>
+          <section class="card">
+            <header class="card-head"><h3>{{ 'clients.last30' | transloco }}</h3></header>
+            @if (trend()) { <k2-chart [config]="trendChart()" [height]="260" /> } @else { <k2-skeleton [rows]="6" [height]="30" /> }
+          </section>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'clients.tabs.campaigns' | transloco">
+      <div class="tab-body card">
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>{{ 'campaigns.name' | transloco }}</th><th>{{ 'filters.platform' | transloco }}</th><th>{{ 'common.status' | transloco }}</th><th>{{ 'campaigns.period' | transloco }}</th><th class="num">{{ 'kpi.spend' | transloco }}</th><th class="num">{{ 'kpi.roas' | transloco }}</th></tr></thead>
+          <tbody>
+            @for (c of campaigns(); track c.id) {
+              <tr><td><a class="cell-title" [routerLink]="['/campaigns', c.id]">{{ c.name }}</a><small class="cell-sub">{{ 'enums.objective.' + c.objective | transloco }}</small></td>
+                <td>{{ 'enums.platform.' + c.platform | transloco }}</td><td><k2-status kind="campaignStatus" [value]="c.status" /></td>
+                <td>{{ c.startDate | dt }} – {{ c.endDate | dt }}</td><td class="num">{{ c.spend | money }}</td><td class="num">{{ c.roas | roas }}</td></tr>
+            } @empty { <tr><td colspan="6"><k2-empty icon="campaign" title="campaigns.empty" /></td></tr> }
+          </tbody>
+        </table></div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'clients.tabs.ads' | transloco">
+      <div class="tab-body">
+        <div class="ad-grid">
+          @for (a of ads(); track a.id) {
+            <article class="ad-card">
+              <header><k2-status kind="adStatus" [value]="a.status" /><small class="muted">{{ a.campaignName }}</small></header>
+              <h4>{{ a.headline }}</h4><p>{{ a.primaryText }}</p>
+              <footer><span>{{ 'kpi.clicks' | transloco }}: <strong>{{ a.metrics.clicks | num }}</strong></span><span>{{ 'kpi.ctr' | transloco }}: <strong>{{ a.metrics.ctr | pct }}</strong></span></footer>
+            </article>
+          } @empty { <k2-empty icon="ad_units" title="ads.empty" /> }
+        </div>
+        <a mat-button routerLink="/ads" [queryParams]="{ clientId: id() }">{{ 'common.viewAll' | transloco }} <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'clients.tabs.leads' | transloco">
+      <div class="tab-body card">
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>{{ 'leads.name' | transloco }}</th><th>{{ 'leads.campaign' | transloco }}</th><th>{{ 'leads.source' | transloco }}</th><th>{{ 'common.status' | transloco }}</th><th>{{ 'common.createdAt' | transloco }}</th></tr></thead>
+          <tbody>
+            @for (l of leads(); track l.id) {
+              <tr><td>{{ l.name }}<small class="cell-sub">{{ l.email ?? l.phone }}</small></td><td>{{ l.campaignName ?? '—' }}</td><td>{{ l.source ?? '—' }}</td>
+                <td><k2-status kind="leadStatus" [value]="l.status" /></td><td>{{ l.createdAt | dt }}</td></tr>
+            } @empty { <tr><td colspan="5"><k2-empty icon="people_alt" title="leads.empty" /></td></tr> }
+          </tbody>
+        </table></div>
+        <a mat-button routerLink="/leads" [queryParams]="{ clientId: id() }">{{ 'common.viewAll' | transloco }} <mat-icon>arrow_forward</mat-icon></a>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'clients.tabs.results' | transloco">
+      <div class="tab-body card">
+        <p class="muted">{{ 'clients.resultsNote' | transloco }}</p>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>{{ 'campaigns.name' | transloco }}</th><th class="num">{{ 'kpi.spend' | transloco }}</th><th class="num">{{ 'kpi.impressions' | transloco }}</th><th class="num">{{ 'kpi.clicks' | transloco }}</th><th class="num">{{ 'kpi.ctr' | transloco }}</th><th class="num">{{ 'kpi.cpc' | transloco }}</th><th class="num">{{ 'kpi.conversions' | transloco }}</th><th class="num">{{ 'kpi.cpa' | transloco }}</th><th class="num">{{ 'kpi.roas' | transloco }}</th></tr></thead>
+          <tbody>
+            @for (r of results()?.rows ?? []; track r.key) {
+              <tr><td>{{ r.label }}</td><td class="num">{{ r.metrics.spend | money }}</td><td class="num">{{ r.metrics.impressions | num }}</td><td class="num">{{ r.metrics.clicks | num }}</td>
+                <td class="num">{{ r.metrics.ctr | pct }}</td><td class="num">{{ r.metrics.cpc | money }}</td><td class="num">{{ r.metrics.conversions | num }}</td><td class="num">{{ r.metrics.cpa | money }}</td><td class="num">{{ r.metrics.roas | roas }}</td></tr>
+            }
+            @if (results(); as res) {
+              <tr class="total-row"><td>{{ 'common.total' | transloco }}</td><td class="num">{{ res.totals.spend | money }}</td><td class="num">{{ res.totals.impressions | num }}</td><td class="num">{{ res.totals.clicks | num }}</td>
+                <td class="num">{{ res.totals.ctr | pct }}</td><td class="num">{{ res.totals.cpc | money }}</td><td class="num">{{ res.totals.conversions | num }}</td><td class="num">{{ res.totals.cpa | money }}</td><td class="num">{{ res.totals.roas | roas }}</td></tr>
+            }
+          </tbody>
+        </table></div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'clients.tabs.reports' | transloco">
+      <div class="tab-body">
+        <div class="report-links">
+          <a class="report-link" routerLink="/reports" [queryParams]="{ clientId: id(), tab: 'executive' }"><mat-icon>picture_as_pdf</mat-icon><strong>{{ 'reports.executive' | transloco }}</strong><small>{{ 'clients.reportExecutiveHint' | transloco }}</small></a>
+          <a class="report-link" routerLink="/reports" [queryParams]="{ clientId: id(), tab: 'performance' }"><mat-icon>table_chart</mat-icon><strong>{{ 'reports.performance' | transloco }}</strong><small>{{ 'clients.reportPerformanceHint' | transloco }}</small></a>
+          <a class="report-link" routerLink="/reports" [queryParams]="{ clientId: id(), tab: 'budget' }"><mat-icon>account_balance_wallet</mat-icon><strong>{{ 'reports.budget' | transloco }}</strong><small>{{ 'clients.reportBudgetHint' | transloco }}</small></a>
+        </div>
+      </div>
+    </mat-tab>
+
+    @if (!auth.isClientViewer()) {
+      <mat-tab [label]="'clients.tabs.history' | transloco">
+        <div class="tab-body card">
+          <ul class="timeline">
+            @for (h of history(); track $index) {
+              <li><span class="tl-dot"></span><div><strong>{{ 'audit.actions.' + h.action | transloco }}</strong> · {{ 'audit.entities.' + h.entity | transloco }}
+                @if (h.details) { <span class="muted"> — {{ h.details }}</span> }<small>{{ h.createdAt | dt: 'datetime' }} · {{ h.userEmail }}</small></div></li>
+            } @empty { <k2-empty icon="history" title="clients.noHistory" /> }
+          </ul>
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
+} @else { <k2-skeleton [rows]="8" [height]="40" /> }

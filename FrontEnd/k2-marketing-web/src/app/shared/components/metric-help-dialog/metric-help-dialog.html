@@ -1,0 +1,29 @@
+<h2 mat-dialog-title class="help-title">
+  <mat-icon>lightbulb</mat-icon>
+  {{ 'learn.metrics.' + metric + '.name' | transloco }}
+</h2>
+<mat-dialog-content>
+  <section class="help-block">
+    <h4>{{ 'learn.help.meaning' | transloco }}</h4>
+    <p>{{ 'learn.metrics.' + metric + '.meaning' | transloco }}</p>
+  </section>
+  <section class="help-block">
+    <h4>{{ 'learn.help.formula' | transloco }}</h4>
+    <code class="formula">{{ 'learn.metrics.' + metric + '.formula' | transloco }}</code>
+  </section>
+  <section class="help-block example">
+    <h4>{{ 'learn.help.example' | transloco }}</h4>
+    <p>{{ 'learn.metrics.' + metric + '.example' | transloco }}</p>
+  </section>
+  <section class="help-block">
+    <h4>{{ 'learn.help.interpret' | transloco }}</h4>
+    <p>{{ 'learn.metrics.' + metric + '.interpret' | transloco }}</p>
+  </section>
+  <p class="disclaimer"><mat-icon>balance</mat-icon>{{ 'learn.help.disclaimer' | transloco }}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <a mat-button routerLink="/learn/glossary" mat-dialog-close>{{ 'learn.glossary.title' | transloco }}</a>
+  <a mat-button routerLink="/learn/simulator" mat-dialog-close>{{ 'learn.simulator.title' | transloco }}</a>
+  <span class="spacer"></span>
+  <button mat-flat-button mat-dialog-close>{{ 'common.close' | transloco }}</button>
+</mat-dialog-actions>

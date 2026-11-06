@@ -1,0 +1,51 @@
+<k2-page-header title="learn.title" subtitle="learn.subtitle" icon="menu_book">
+  <button mat-stroked-button (click)="tour.start()"><mat-icon>play_circle</mat-icon>{{ 'tour.start' | transloco }}</button>
+</k2-page-header>
+<k2-learn-nav />
+
+<section class="learn-hero">
+  <div>
+    <span class="hero-badge"><mat-icon>auto_stories</mat-icon>{{ 'learn.hero.badge' | transloco }}</span>
+    <h2>{{ 'learn.hero.title' | transloco }}</h2>
+    <p>{{ 'learn.hero.text' | transloco }}</p>
+  </div>
+  <div class="hero-actions">
+    <mat-slide-toggle [checked]="learning.beginner()" (change)="learning.setBeginner($event.checked)">
+      {{ 'learn.beginner.label' | transloco }}
+    </mat-slide-toggle>
+    <small>{{ 'learn.beginner.hint' | transloco }}</small>
+  </div>
+</section>
+
+<h3 class="section-title">{{ 'learn.topicsTitle' | transloco }}</h3>
+<div class="topic-grid">
+  @for (t of topics; track t.key; let i = $index) {
+    <button class="topic-card" (click)="openTopic(t.key, i)">
+      <span class="topic-num">{{ i + 1 }}</span>
+      <span class="topic-icon"><mat-icon>{{ t.icon }}</mat-icon></span>
+      <strong>{{ 'learn.topics.' + t.key + '.title' | transloco }}</strong>
+      <small>{{ 'learn.topics.' + t.key + '.summary' | transloco }}</small>
+      <span class="topic-more">{{ 'learn.readMore' | transloco }} <mat-icon>arrow_forward</mat-icon></span>
+    </button>
+  }
+</div>
+
+<h3 class="section-title">{{ 'learn.metricsTitle' | transloco }}</h3>
+<p class="muted section-sub">{{ 'learn.metricsSub' | transloco }}</p>
+<div class="metric-grid">
+  @for (m of metrics; track m) {
+    <button class="metric-chip" (click)="openMetric(m)">
+      <strong>{{ 'learn.metrics.' + m + '.name' | transloco }}</strong>
+      <small>{{ 'learn.metrics.' + m + '.short' | transloco }}</small>
+      <mat-icon>info_outline</mat-icon>
+    </button>
+  }
+</div>
+
+<h3 class="section-title">{{ 'learn.toolsTitle' | transloco }}</h3>
+<div class="tool-grid">
+  <a class="tool-card" routerLink="/learn/examples"><mat-icon>lightbulb</mat-icon><strong>{{ 'learn.examples.title' | transloco }}</strong><small>{{ 'learn.examples.subtitle' | transloco }}</small></a>
+  <a class="tool-card" routerLink="/learn/simulator"><mat-icon>calculate</mat-icon><strong>{{ 'learn.simulator.title' | transloco }}</strong><small>{{ 'learn.simulator.subtitle' | transloco }}</small></a>
+  <a class="tool-card" routerLink="/learn/glossary"><mat-icon>spellcheck</mat-icon><strong>{{ 'learn.glossary.title' | transloco }}</strong><small>{{ 'learn.glossary.subtitle' | transloco }}</small></a>
+  <a class="tool-card" routerLink="/methodology"><mat-icon>functions</mat-icon><strong>{{ 'methodology.title' | transloco }}</strong><small>{{ 'methodology.subtitle' | transloco }}</small></a>
+</div>

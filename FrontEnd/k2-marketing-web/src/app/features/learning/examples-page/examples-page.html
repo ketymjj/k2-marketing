@@ -1,0 +1,81 @@
+<k2-page-header title="learn.examples.title" subtitle="learn.examples.subtitle" icon="lightbulb" />
+<k2-learn-nav />
+
+<div class="example-picker">
+  @for (e of examples; track e.key) {
+    <button class="example-tab" [class.active]="selected().key === e.key" (click)="select(e)">
+      <span class="ex-icon"><mat-icon>{{ e.icon }}</mat-icon></span>
+      <span><strong>{{ 'learn.examples.items.' + e.key + '.client' | transloco }}</strong>
+        <small>{{ 'learn.examples.items.' + e.key + '.campaign' | transloco }}</small></span>
+    </button>
+  }
+</div>
+
+@let ex = selected();
+@let k = 'learn.examples.items.' + ex.key;
+<section class="card example-head">
+  <div class="ex-title">
+    <h2>{{ k + '.campaign' | transloco }}</h2>
+    <span class="sim-badge"><mat-icon>science</mat-icon>{{ 'learn.examples.simulated' | transloco }}</span>
+  </div>
+  <dl class="ex-facts">
+    <div><dt>{{ 'filters.client' | transloco }}</dt><dd>{{ k + '.client' | transloco }}</dd></div>
+    <div><dt>{{ 'filters.platform' | transloco }}</dt><dd>{{ ex.platforms }}</dd></div>
+    <div><dt>{{ 'campaigns.objective' | transloco }}</dt><dd>{{ k + '.objective' | transloco }}</dd></div>
+    <div><dt>{{ 'budgets.planned' | transloco }}</dt><dd>{{ ex.data.spend | money: 0 }}</dd></div>
+  </dl>
+  <p class="ex-story">{{ k + '.story' | transloco }}</p>
+</section>
+
+<div class="grid-2">
+  <section class="card">
+    <header class="card-head"><h3>{{ 'learn.examples.data' | transloco }}</h3></header>
+    <div class="data-grid">
+      <div><span>{{ 'kpi.spend' | transloco }}</span><strong>{{ ex.data.spend | money }}</strong></div>
+      <div><span>{{ 'kpi.impressions' | transloco }}</span><strong>{{ ex.data.impressions | num }}</strong></div>
+      <div><span>{{ 'kpi.reach' | transloco }}</span><strong>{{ ex.data.reach | num }}</strong></div>
+      <div><span>{{ 'kpi.clicks' | transloco }}</span><strong>{{ ex.data.clicks | num }}</strong></div>
+      <div><span>{{ 'kpi.leads' | transloco }}</span><strong>{{ ex.data.leads | num }}</strong></div>
+      <div><span>{{ 'kpi.conversions' | transloco }}</span><strong>{{ ex.data.conversions | num }}</strong></div>
+      <div><span>{{ 'kpi.revenue' | transloco }}</span><strong>{{ ex.data.revenue | money }}</strong></div>
+    </div>
+    <p class="muted small">{{ k + '.dataNote' | transloco }}</p>
+  </section>
+  <section class="card">
+    <header class="card-head"><h3>{{ 'learn.examples.funnel' | transloco }}</h3></header>
+    <div class="funnel">
+      @for (s of funnel(); track s.key) {
+        <div class="stage" [style.width.%]="s.width" [attr.data-s]="s.key">
+          <span class="stage-label">{{ 'learn.examples.stages.' + s.key | transloco }}</span>
+          <strong>{{ s.value | num }}</strong>
+          @if (s.rate !== null) { <span class="stage-rate">{{ s.rate | pct: 1 }} {{ 'learn.examples.ofPrevious' | transloco }}</span> }
+        </div>
+      }
+    </div>
+    <p class="muted small">{{ 'learn.examples.funnelNote' | transloco }}</p>
+  </section>
+</div>
+
+<h3 class="section-title">{{ 'learn.examples.calculations' | transloco }}</h3>
+<k2-calc-results [inputs]="ex.data" />
+
+<section class="card explain">
+  <header class="card-head"><h3>{{ 'learn.examples.whatItMeans' | transloco }}</h3></header>
+  <ul>
+    @for (m of explainKeys; track m) {
+      <li><strong>{{ 'learn.metrics.' + m + '.name' | transloco }}:</strong> {{ k + '.explain.' + m | transloco }}</li>
+    }
+  </ul>
+  @if (ex.key === 'realEstate') {
+    <div class="funnel-compare">
+      <h4>{{ 'learn.examples.clickLeadSale.title' | transloco }}</h4>
+      <div class="cls-grid">
+        <div><mat-icon>ads_click</mat-icon><strong>{{ 'kpi.clicks' | transloco }}</strong><p>{{ 'learn.examples.clickLeadSale.click' | transloco }}</p></div>
+        <div><mat-icon>person_add</mat-icon><strong>{{ 'kpi.leads' | transloco }}</strong><p>{{ 'learn.examples.clickLeadSale.lead' | transloco }}</p></div>
+        <div><mat-icon>handshake</mat-icon><strong>{{ 'learn.examples.clickLeadSale.saleTitle' | transloco }}</strong><p>{{ 'learn.examples.clickLeadSale.sale' | transloco }}</p></div>
+      </div>
+    </div>
+  }
+  <p class="note"><mat-icon>science</mat-icon>{{ 'learn.examples.disclaimer' | transloco }}</p>
+  <a mat-stroked-button routerLink="/learn/simulator" [queryParams]="{ example: ex.key }"><mat-icon>calculate</mat-icon>{{ 'learn.examples.openSimulator' | transloco }}</a>
+</section>

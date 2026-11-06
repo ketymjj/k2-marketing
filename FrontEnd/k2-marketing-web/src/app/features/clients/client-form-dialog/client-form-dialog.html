@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{ (data.id ? 'clients.edit' : 'clients.new') | transloco }}</h2>
+<mat-dialog-content>
+  <k2-tip text="learn.forms.client.intro" [items]="[{ label: 'clients.monthlyBudget', text: 'learn.forms.client.monthlyBudget' }, { label: 'clients.industry', text: 'learn.forms.client.industry' }]" />
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field><mat-label>{{ 'clients.name' | transloco }}</mat-label><input matInput formControlName="name" maxlength="150" required /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'clients.companyName' | transloco }}</mat-label><input matInput formControlName="companyName" maxlength="200" required /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.email' | transloco }}</mat-label><input matInput type="email" formControlName="email" required />
+      @if (form.controls.email.hasError('email')) { <mat-error>{{ 'validation.email' | transloco }}</mat-error> }</mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.phone' | transloco }}</mat-label><input matInput formControlName="phone" maxlength="30" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'clients.document' | transloco }}</mat-label><input matInput formControlName="document" maxlength="20" placeholder="00.000.000/0000-00" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'clients.industry' | transloco }}</mat-label><input matInput formControlName="industry" maxlength="80" /></mat-form-field>
+    <mat-form-field><mat-label>{{ 'clients.website' | transloco }}</mat-label><input matInput formControlName="website" placeholder="https://" />
+      @if (form.controls.website.hasError('pattern')) { <mat-error>{{ 'validation.url' | transloco }}</mat-error> }</mat-form-field>
+    <mat-form-field><mat-label>{{ 'clients.monthlyBudget' | transloco }}</mat-label><span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" min="0" step="100" formControlName="monthlyBudget" required /><k2-field-help matSuffix text="learn.forms.client.monthlyBudget" />
+      <mat-hint>{{ 'clients.monthlyBudgetHint' | transloco }}</mat-hint></mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid || saving()">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

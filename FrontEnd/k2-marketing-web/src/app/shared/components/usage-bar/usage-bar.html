@@ -1,0 +1,4 @@
+<div class="usage">
+  <div class="usage-track"><div class="usage-fill" [class]="'usage-fill ' + level()" [style.width.%]="width()"></div></div>
+  <span class="usage-label">{{ value() === null ? '—' : (value()! | number: '1.0-1') + '%' }}</span>
+</div>

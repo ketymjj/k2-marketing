@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>{{ 'common.edit' | transloco }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field class="span-2"><mat-label>{{ 'creatives.name' | transloco }}</mat-label><input matInput formControlName="name" maxlength="200" required /></mat-form-field>
+    <mat-form-field class="span-2"><mat-label>{{ 'common.description' | transloco }}</mat-label><textarea matInput rows="2" formControlName="description" maxlength="1000"></textarea></mat-form-field>
+    @if (data.type === 'Text') { <mat-form-field class="span-2"><mat-label>{{ 'creatives.textContent' | transloco }}</mat-label><textarea matInput rows="5" formControlName="textContent" maxlength="5000"></textarea></mat-form-field> }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'common.cancel' | transloco }}</button>
+  <button mat-flat-button (click)="save()" [disabled]="form.invalid">{{ 'common.save' | transloco }}</button>
+</mat-dialog-actions>

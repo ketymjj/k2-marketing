@@ -1,0 +1,99 @@
+<k2-page-header title="ads.title" subtitle="ads.subtitle" icon="ad_units">
+  @if (selected().length >= 2) { <button mat-stroked-button (click)="compare()"><mat-icon>compare</mat-icon>{{ 'ads.compareN' | transloco: { n: selected().length } }}</button> }
+  @if (auth.canOperate()) { <button mat-flat-button data-tour="new-ad" (click)="openForm()"><mat-icon>add</mat-icon>{{ 'ads.new' | transloco }}</button> }
+</k2-page-header>
+<k2-tip text="learn.tips.ads" />
+
+<section class="card">
+  <div class="toolbar">
+    <mat-form-field class="search"><mat-icon matPrefix>search</mat-icon><mat-label>{{ 'common.search' | transloco }}</mat-label>
+      <input matInput [(ngModel)]="search" (ngModelChange)="searchChanged()" /></mat-form-field>
+    @if (!auth.isClientViewer()) {
+      <mat-form-field><mat-label>{{ 'filters.client' | transloco }}</mat-label>
+        <mat-select [(ngModel)]="clientId" (selectionChange)="onClient()">
+          <mat-option [value]="null">{{ 'filters.allClients' | transloco }}</mat-option>
+          @for (c of clients(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+        </mat-select></mat-form-field>
+    }
+    <mat-form-field><mat-label>{{ 'filters.campaign' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="campaignId" (selectionChange)="list.load(true)">
+        <mat-option [value]="null">{{ 'filters.allCampaigns' | transloco }}</mat-option>
+        @for (c of campaigns(); track c.id) { <mat-option [value]="c.id">{{ c.name }}</mat-option> }
+      </mat-select></mat-form-field>
+    <mat-form-field><mat-label>{{ 'common.status' | transloco }}</mat-label>
+      <mat-select [(ngModel)]="status" (selectionChange)="list.load(true)">
+        <mat-option [value]="null">{{ 'common.all' | transloco }}</mat-option>
+        @for (s of statuses; track s) { <mat-option [value]="s">{{ 'enums.adStatus.' + s | transloco }}</mat-option> }
+      </mat-select></mat-form-field>
+    <span class="spacer"></span>
+    <mat-button-toggle-group [(ngModel)]="view" [hideSingleSelectionIndicator]="true">
+      <mat-button-toggle value="cards" [matTooltip]="'common.cards' | transloco"><mat-icon>grid_view</mat-icon></mat-button-toggle>
+      <mat-button-toggle value="table" [matTooltip]="'common.table' | transloco"><mat-icon>table_rows</mat-icon></mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <p class="muted small">{{ 'ads.compareHint' | transloco }}</p>
+  @if (list.loading()) { <mat-progress-bar mode="indeterminate" /> }
+
+  @if (view === 'cards') {
+    <div class="ad-grid">
+      @for (a of list.items(); track a.id) {
+        <article class="ad-card rich" [class.selected]="isSelected(a.id)">
+          <header>
+            <mat-checkbox [checked]="isSelected(a.id)" (change)="toggleSelect(a.id)" [disabled]="!isSelected(a.id) && selected().length >= 4" />
+            <k2-status kind="adStatus" [value]="a.status" />
+            <span class="spacer"></span>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+          </header>
+          <k2-ad-preview [clientName]="a.clientName" [headline]="a.headline" [primaryText]="a.primaryText" [description]="a.description"
+            [callToAction]="a.callToAction" [destinationUrl]="a.destinationUrl" [creatives]="a.creatives" />
+          <div class="ad-meta"><strong>{{ a.name }}</strong><small>{{ a.campaignName }} · {{ 'enums.platform.' + a.platform | transloco }}</small></div>
+          <footer class="ad-stats">
+            <span>{{ 'kpi.spend' | transloco }}<strong>{{ a.metrics.spend | money }}</strong></span>
+            <span>{{ 'kpi.ctr' | transloco }}<strong>{{ a.metrics.ctr | pct }}</strong></span>
+            <span>{{ 'kpi.conversions' | transloco }}<strong>{{ a.metrics.conversions | num }}</strong></span>
+            <span>{{ 'kpi.roas' | transloco }}<strong>{{ a.metrics.roas | roas }}</strong></span>
+          </footer>
+          <mat-menu #menu="matMenu">
+            @if (auth.canOperate()) {
+              <button mat-menu-item (click)="openForm(a.id)"><mat-icon>edit</mat-icon>{{ 'common.edit' | transloco }}</button>
+              <button mat-menu-item (click)="link(a)"><mat-icon>link</mat-icon>{{ 'ads.linkCreatives' | transloco }}</button>
+              <button mat-menu-item (click)="duplicate(a)"><mat-icon>content_copy</mat-icon>{{ 'common.duplicate' | transloco }}</button>
+              <button mat-menu-item class="danger" (click)="remove(a)"><mat-icon>delete</mat-icon>{{ 'common.delete' | transloco }}</button>
+            }
+            <a mat-menu-item [routerLink]="['/campaigns', a.campaignId]"><mat-icon>campaign</mat-icon>{{ 'ads.openCampaign' | transloco }}</a>
+          </mat-menu>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="table-wrap">
+      <table mat-table [dataSource]="list.items()" matSort (matSortChange)="list.onSort($event)" class="data-table">
+        <ng-container matColumnDef="select"><th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let a"><mat-checkbox [checked]="isSelected(a.id)" (change)="toggleSelect(a.id)" [disabled]="!isSelected(a.id) && selected().length >= 4" /></td></ng-container>
+        <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ads.name' | transloco }}</th>
+          <td mat-cell *matCellDef="let a"><span class="cell-title">{{ a.name }}</span><small class="cell-sub">{{ a.headline }}</small></td></ng-container>
+        <ng-container matColumnDef="campaign"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'filters.campaign' | transloco }}</th>
+          <td mat-cell *matCellDef="let a">{{ a.campaignName }}<small class="cell-sub">{{ a.clientName }}</small></td></ng-container>
+        <ng-container matColumnDef="creatives"><th mat-header-cell *matHeaderCellDef class="num">{{ 'nav.creatives' | transloco }}</th>
+          <td mat-cell *matCellDef="let a" class="num">{{ a.creatives.length }}</td></ng-container>
+        <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'common.status' | transloco }}</th>
+          <td mat-cell *matCellDef="let a"><k2-status kind="adStatus" [value]="a.status" /></td></ng-container>
+        <ng-container matColumnDef="spend"><th mat-header-cell *matHeaderCellDef class="num">{{ 'kpi.spend' | transloco }}</th><td mat-cell *matCellDef="let a" class="num">{{ a.metrics.spend | money }}</td></ng-container>
+        <ng-container matColumnDef="ctr"><th mat-header-cell *matHeaderCellDef class="num">{{ 'kpi.ctr' | transloco }}</th><td mat-cell *matCellDef="let a" class="num">{{ a.metrics.ctr | pct }}</td></ng-container>
+        <ng-container matColumnDef="cpa"><th mat-header-cell *matHeaderCellDef class="num">{{ 'kpi.cpa' | transloco }}</th><td mat-cell *matCellDef="let a" class="num">{{ a.metrics.cpa | money }}</td></ng-container>
+        <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let a" class="actions">
+            @if (auth.canOperate()) {
+              <button mat-icon-button (click)="openForm(a.id)" [matTooltip]="'common.edit' | transloco"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="link(a)" [matTooltip]="'ads.linkCreatives' | transloco"><mat-icon>link</mat-icon></button>
+              <button mat-icon-button (click)="duplicate(a)" [matTooltip]="'common.duplicate' | transloco"><mat-icon>content_copy</mat-icon></button>
+            }
+          </td></ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  }
+  @if (list.loaded() && !list.items().length) { <k2-empty icon="ad_units" title="ads.empty" /> }
+  <mat-paginator [length]="list.total()" [pageSize]="list.pageSize" [pageIndex]="list.page" [pageSizeOptions]="[12, 24, 48]" (page)="list.onPage($event)" />
+</section>

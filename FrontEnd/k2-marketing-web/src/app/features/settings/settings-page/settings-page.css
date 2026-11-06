@@ -1,0 +1,11 @@
+.color-input { width: 32px; height: 26px; border: 0; padding: 0; background: none; cursor: pointer; margin-right: 8px; }
+
+.brand-preview { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; margin: 6px 0 16px; background: var(--brand, #6941C6); color: #fff; }
+.brand-preview .brand-logo { background: rgba(255, 255, 255, .2); box-shadow: none; }
+.brand-preview small { opacity: .85; margin-left: auto; }
+
+.integration-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.integration-card { display: flex; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+.integration-card > div { flex: 1; display: flex; flex-direction: column; }
+.integration-card small { color: var(--muted); font-size: 12px; }
+.int-ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--purple-soft); color: var(--purple); flex: none; }

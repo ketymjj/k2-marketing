@@ -1,0 +1,52 @@
+<div class="login-page">
+  <section class="login-hero">
+    <div class="hero-inner">
+      <span class="brand-logo lg">K2</span>
+      <h1>K2 Marketing</h1>
+      <p>{{ 'auth.heroText' | transloco }}</p>
+      <ul class="hero-list">
+        <li><mat-icon>insights</mat-icon>{{ 'auth.hero1' | transloco }}</li>
+        <li><mat-icon>account_balance_wallet</mat-icon>{{ 'auth.hero2' | transloco }}</li>
+        <li><mat-icon>people_alt</mat-icon>{{ 'auth.hero3' | transloco }}</li>
+        <li><mat-icon>summarize</mat-icon>{{ 'auth.hero4' | transloco }}</li>
+      </ul>
+    </div>
+  </section>
+  <section class="login-form-wrap">
+    <div class="login-tools">
+      <div class="lang-switch">
+        <button [class.active]="lang.lang() === 'pt-BR'" (click)="setLang('pt-BR')">🇧🇷 <span>PT</span></button>
+        <button [class.active]="lang.lang() === 'en-US'" (click)="setLang('en-US')">🇺🇸 <span>EN</span></button>
+      </div>
+      <button mat-icon-button (click)="theme.toggle()"><mat-icon>{{ theme.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon></button>
+    </div>
+    <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+      <h2>{{ 'auth.title' | transloco }}</h2>
+      <p class="muted">{{ 'auth.subtitle' | transloco }}</p>
+      <mat-form-field class="full">
+        <mat-label>{{ 'auth.email' | transloco }}</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="username" />
+        <mat-icon matPrefix>mail_outline</mat-icon>
+      </mat-form-field>
+      <mat-form-field class="full">
+        <mat-label>{{ 'auth.password' | transloco }}</mat-label>
+        <input matInput [type]="show() ? 'text' : 'password'" formControlName="password" autocomplete="current-password" />
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="show.set(!show())"><mat-icon>{{ show() ? 'visibility_off' : 'visibility' }}</mat-icon></button>
+      </mat-form-field>
+      @if (error()) { <div class="form-error"><mat-icon>error_outline</mat-icon>{{ error()! | transloco }}</div> }
+      <button mat-flat-button class="full big" type="submit" [disabled]="form.invalid || loading()">
+        {{ (loading() ? 'auth.signingIn' : 'auth.signIn') | transloco }}
+      </button>
+
+      <div class="demo-box">
+        <strong>{{ 'auth.demoUsers' | transloco }}</strong>
+        @for (d of demo; track d.email) {
+          <button type="button" class="demo-user" (click)="fill(d.email, d.password)">
+            <span>{{ 'enums.role.' + d.role | transloco }}</span><small>{{ d.email }}</small>
+          </button>
+        }
+      </div>
+    </form>
+  </section>
+</div>

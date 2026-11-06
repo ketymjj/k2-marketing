@@ -1,0 +1,15 @@
+@if (learning.beginner()) {
+  <aside class="tip" [class.compact]="compact()">
+    <mat-icon>school</mat-icon>
+    <div>
+      <p>{{ text() | transloco }}</p>
+      @if (items().length) {
+        <dl>
+          @for (i of items(); track i.label) {
+            <dt>{{ i.label | transloco }}</dt><dd>{{ i.text | transloco }}</dd>
+          }
+        </dl>
+      }
+    </div>
+  </aside>
+}

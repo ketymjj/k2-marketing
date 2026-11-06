@@ -1,0 +1,8 @@
+.creative-pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.creative-pick { border: 2px solid var(--border); border-radius: 12px; background: var(--surface); padding: 0 0 8px; cursor: pointer; text-align: left; font: inherit; color: var(--text); overflow: hidden; }
+.creative-pick.linked { border-color: var(--purple); }
+.thumb { aspect-ratio: 1.4; position: relative; background: var(--gray-soft); }
+.check { position: absolute; right: 6px; top: 6px; background: var(--purple); color: #fff; border-radius: 50%; width: 26px; height: 26px; display: grid; place-items: center; }
+.check mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.name { display: block; font-size: 12.5px; font-weight: 600; padding: 6px 8px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.creative-pick small { padding: 0 8px; color: var(--muted); font-size: 11px; }

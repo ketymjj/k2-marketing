@@ -1,0 +1,29 @@
+<div class="kpi" [class]="'kpi kpi-' + tone()">
+  <div class="kpi-top">
+    <span class="kpi-label">{{ label() | transloco }}
+      @if (metric()) {
+        <button type="button" class="kpi-help-btn" data-tour="kpi-help" (click)="openHelp()"
+                [matTooltip]="hint() ? (hint()! | transloco) : ('learn.help.open' | transloco)"
+                [attr.aria-label]="('learn.help.whatIs' | transloco) + ' ' + (label() | transloco)">
+          <mat-icon>info_outline</mat-icon>
+        </button>
+      } @else if (hint()) {
+        <mat-icon class="kpi-help" [matTooltip]="hint()! | transloco">info_outline</mat-icon>
+      }
+    </span>
+    <span class="kpi-icon"><mat-icon>{{ icon() }}</mat-icon></span>
+  </div>
+  <strong class="kpi-value">{{ value() }}</strong>
+  @if (change() !== null && change() !== undefined) {
+    <span class="kpi-delta" [class.up]="good()" [class.down]="!good()">
+      <mat-icon>{{ change()! >= 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+      {{ change()! >= 0 ? '+' : '' }}{{ change()! | number: '1.1-1' }}%
+      <small>{{ 'dashboard.vsPrevious' | transloco }}</small>
+    </span>
+  } @else if (caption()) {
+    <span class="kpi-caption">{{ caption() }}</span>
+  }
+  @if (learning.beginner() && metric()) {
+    <span class="kpi-beginner">{{ 'learn.metrics.' + metric() + '.short' | transloco }}</span>
+  }
+</div>

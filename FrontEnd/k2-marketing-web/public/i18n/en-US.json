@@ -1,0 +1,1460 @@
+{
+  "nav": {
+    "groups": {
+      "overview": "Overview",
+      "management": "Management",
+      "crm": "CRM",
+      "analytics": "Analytics",
+      "operations": "Operations",
+      "admin": "Administration",
+      "learning": "Learn"
+    },
+    "dashboard": "Dashboard",
+    "clients": "Clients",
+    "campaigns": "Campaigns",
+    "ads": "Ads",
+    "creatives": "Creatives",
+    "budgets": "Budgets",
+    "leads": "Leads",
+    "conversions": "Conversions",
+    "metrics": "Metrics",
+    "compare": "Compare campaigns",
+    "reports": "Reports",
+    "tasks": "Tasks & calendar",
+    "users": "Users & permissions",
+    "settings": "Settings",
+    "collapse": "Collapse menu",
+    "toggle": "Open/close menu",
+    "learn": "Learning Center"
+  },
+  "theme": {
+    "light": "Light theme",
+    "dark": "Dark theme"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Use your work e-mail.",
+    "email": "E-mail",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "logout": "Sign out",
+    "invalid": "Invalid e-mail or password.",
+    "demoUsers": "Demo users (click to fill in)",
+    "heroText": "Digital marketing and paid media management with reliable KPIs calculated from your own data.",
+    "hero1": "Executive dashboard with CTR, CPC, CPA and ROAS",
+    "hero2": "Budget control with 80%, 90% and 100% alerts",
+    "hero3": "Kanban lead pipeline and conversions without double counting",
+    "hero4": "PDF reports with your agency's branding"
+  },
+  "common": {
+    "search": "Search",
+    "all": "All",
+    "status": "Status",
+    "save": "Save",
+    "saved": "Changes saved.",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleted": "Record deleted.",
+    "duplicate": "Duplicate",
+    "details": "Details",
+    "back": "Back",
+    "done": "Done",
+    "email": "E-mail",
+    "phone": "Phone",
+    "createdAt": "Created at",
+    "date": "Date",
+    "total": "Total",
+    "description": "Description",
+    "notes": "Notes",
+    "source": "Source",
+    "viewAll": "View all",
+    "clear": "Clear filters",
+    "download": "Download",
+    "cards": "Cards",
+    "table": "Table",
+    "yes": "Yes",
+    "no": "No",
+    "empty": "No records found",
+    "backHome": "Back to dashboard"
+  },
+  "filters": {
+    "client": "Client",
+    "allClients": "All clients",
+    "platform": "Platform",
+    "allPlatforms": "All platforms",
+    "campaign": "Campaign",
+    "allCampaigns": "All campaigns",
+    "period": "Period",
+    "dateRange": "Date range",
+    "from": "Start",
+    "to": "End",
+    "presets": {
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days",
+      "month": "This month",
+      "lastMonth": "Last month",
+      "custom": "Custom"
+    }
+  },
+  "kpi": {
+    "activeClients": "Active clients",
+    "activeCampaigns": "Active campaigns",
+    "spend": "Ad spend",
+    "impressions": "Impressions",
+    "reach": "Reach",
+    "clicks": "Clicks",
+    "ctr": "CTR",
+    "cpc": "CPC",
+    "cpm": "CPM",
+    "leads": "Leads",
+    "conversions": "Conversions",
+    "cpl": "CPL",
+    "cpa": "CPA",
+    "revenue": "Attributed revenue",
+    "roas": "ROAS",
+    "hints": {
+      "spend": "Sum of media spend recorded in metrics (not agency revenue).",
+      "reach": "Sum of daily reach; the same people may be counted on different days.",
+      "ctr": "CTR = (Clicks ÷ Impressions) × 100",
+      "cpc": "CPC = Spend ÷ Clicks",
+      "cpm": "CPM = (Spend ÷ Impressions) × 1,000",
+      "leads": "Leads reported by the platform (metrics). Leads registered in the CRM are shown separately.",
+      "conversions": "Conversions reported by the platform (metrics). Never added to CRM conversions.",
+      "cpl": "CPL = Spend ÷ Leads",
+      "cpa": "CPA = Spend ÷ Conversions",
+      "revenue": "Revenue attributed to campaigns, recorded in metrics.",
+      "roas": "ROAS = Attributed revenue ÷ Spend"
+    }
+  },
+  "dashboard": {
+    "title": "Executive dashboard",
+    "subtitle": "KPIs calculated from persisted data.",
+    "vsPrevious": "vs. previous",
+    "periodNote": "Period: {{from}} to {{to}} · compared with {{pfrom}} to {{pto}}.",
+    "noData": "No data in this period",
+    "noDataText": "Record or import metrics to see the KPIs.",
+    "noBudgets": "No active budgets in this period",
+    "top10": "Top 10 campaigns by spend",
+    "platformTable": "Performance by platform",
+    "sources": "Metric sources in this period",
+    "charts": {
+      "spend": "Spend over time",
+      "clicks": "Clicks over time",
+      "conversions": "Conversions and leads over time",
+      "roasByCampaign": "ROAS by campaign",
+      "byPlatform": "Performance by platform",
+      "budgetDistribution": "Planned budget distribution"
+    },
+    "crm": {
+      "title": "CRM (records in K2)",
+      "leads": "Registered leads",
+      "uniqueConverted": "Unique converted leads",
+      "conversions": "Recorded conversions",
+      "sales": "Sales",
+      "salesRevenue": "Sales revenue",
+      "help": "Data entered manually or imported into K2 Marketing.",
+      "note": "CRM figures are shown separately from platform metrics to avoid double counting."
+    }
+  },
+  "methodology": {
+    "link": "Methodology",
+    "title": "Calculation methodology",
+    "subtitle": "Where the numbers come from and the formulas used across the platform.",
+    "formulas": "Official formulas",
+    "f": {
+      "CTR": "(Clicks ÷ Impressions) × 100",
+      "CPC": "Spend ÷ Clicks",
+      "CPM": "(Spend ÷ Impressions) × 1,000",
+      "CPL": "Spend ÷ Leads",
+      "CPA": "Spend ÷ Conversions",
+      "ROAS": "Attributed revenue ÷ Spend"
+    },
+    "zero": "When the denominator is zero the KPI is undefined and shown as \"—\" (never 0 or infinity).",
+    "aggregation": "Aggregated KPIs are calculated from summed totals (e.g. period CTR = total clicks ÷ total impressions), never by averaging averages. Monetary values use decimal.",
+    "sources": "Data sources",
+    "calculated": "Calculated",
+    "calculatedText": "CTR, CPC, CPM, CPL, CPA and ROAS are never stored: the server calculates them on every request.",
+    "src": {
+      "Manual": "Typed by a user in the metrics screen or through the budget spend registration.",
+      "CsvImport": "Imported from a CSV file after preview, validation and confirmation.",
+      "Demo": "Fictitious data generated for demonstration.",
+      "Integration": "Reserved for future integrations (Meta, Google Ads). No integration is active in this version."
+    },
+    "doubleCount": "Rules to avoid double counting",
+    "rules": {
+      "spend": "Spend has a single source: metrics (CampaignMetrics.Spend). Budget actual spend is synchronized from them.",
+      "budget": "Registering spend on a budget adds the amount to the campaign-level metric of that day — it never creates a second entry.",
+      "leads": "Platform leads (metrics) and CRM leads are shown separately and never summed.",
+      "conversions": "Platform conversions (metrics) and CRM conversions are shown separately. In the CRM we distinguish overall conversions, unique converted leads and sales.",
+      "dedup": "Each conversion has a unique key per campaign (external ID, lead+type or event fingerprint): the same event is never counted twice.",
+      "metricsUnique": "There is at most one metrics row per campaign + ad + day; imports detect duplicates before saving.",
+      "reach": "Aggregated reach is the sum of daily reach and may contain the same people on different days.",
+      "revenue": "Attributed revenue (metrics) differs from CRM sales revenue and from agency revenue.",
+      "comparison": "In comparisons, highlights only consider campaigns with minimum volume (≥ 100 clicks, ≥ 7 days of data and spend), and ROAS is only highlighted when all have attributed revenue."
+    }
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "The agency's client portfolio.",
+    "new": "New client",
+    "edit": "Edit client",
+    "detail": "Details",
+    "name": "Name",
+    "companyName": "Legal name",
+    "document": "Tax ID",
+    "industry": "Industry",
+    "website": "Website",
+    "contact": "Contact",
+    "campaigns": "Campaigns (active/total)",
+    "monthlyBudget": "Monthly media budget",
+    "monthlyBudgetHint": "Client ad spend (not agency revenue).",
+    "searchHint": "Name, legal name, e-mail or tax ID",
+    "empty": "No clients found",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "confirmActivate": "Activate client {{name}}?",
+    "confirmDeactivate": "Deactivate client {{name}}? History is preserved and the client's users lose access.",
+    "tabs": {
+      "overview": "Overview",
+      "campaigns": "Campaigns",
+      "ads": "Ads",
+      "leads": "Leads",
+      "results": "Results",
+      "reports": "Reports",
+      "history": "History"
+    },
+    "activeCampaigns": "Active campaigns",
+    "spendMonth": "Spend this month",
+    "ofBudget": "of {{budget}} monthly budget",
+    "allTime": "All time",
+    "leadsRegistered": "Registered leads",
+    "salesRevenue": "Sales revenue (CRM)",
+    "info": "Information",
+    "monthlyBudgetUsage": "Monthly budget usage (current month)",
+    "budgetNote": "Current month spend ÷ registered monthly budget.",
+    "last30": "Spend × revenue (last 30 days)",
+    "resultsNote": "Results by campaign over the last 90 days.",
+    "noHistory": "No changes recorded",
+    "reportExecutiveHint": "Summary with KPIs, charts and observations.",
+    "reportPerformanceHint": "Campaign performance with CSV/PDF export.",
+    "reportBudgetHint": "Planned × actual per budget."
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "subtitle": "Campaign planning, status and performance.",
+    "new": "New campaign",
+    "edit": "Edit campaign",
+    "detail": "Details",
+    "name": "Campaign",
+    "objective": "Objective",
+    "period": "Period",
+    "startDate": "Start",
+    "endDate": "End",
+    "endDateHint": "Optional for always-on campaigns",
+    "plannedBudget": "Planned budget",
+    "initialStatus": "Initial status",
+    "noEnd": "No end date",
+    "activeBetween": "Running between",
+    "empty": "No campaigns found",
+    "performance": "Performance",
+    "budgetUsage": "Budget usage",
+    "crm": "CRM",
+    "internalNote": "Status changes are internal to K2 Marketing and do not pause or activate campaigns on ad platforms (there is no authenticated integration in this version).",
+    "confirmStatus": "Change the internal status of campaign {{name}}?",
+    "statusChanged": "Status updated in K2 Marketing.",
+    "confirmDuplicate": "Duplicate campaign {{name}}? The copy is created as a draft with its ads and linked creatives.",
+    "duplicated": "Campaign duplicated.",
+    "confirmDelete": "Delete campaign {{name}}? Only campaigns without metrics, leads or conversions can be deleted.",
+    "fullPeriod": "Full period",
+    "dailySpendRevenue": "Daily spend and revenue",
+    "dailyClicksConversions": "Daily clicks and conversions",
+    "byAd": "Performance by ad",
+    "campaignLevelSpend": "Includes {{value}} recorded at campaign level (no ad).",
+    "actions": {
+      "toDraft": "Back to draft",
+      "schedule": "Schedule",
+      "activate": "Activate",
+      "pause": "Pause",
+      "complete": "Complete",
+      "cancel": "Cancel campaign"
+    }
+  },
+  "ads": {
+    "title": "Ads",
+    "subtitle": "Ad copy, destinations and creatives.",
+    "new": "New ad",
+    "edit": "Edit ad",
+    "name": "Ad name",
+    "headline": "Headline",
+    "primaryText": "Primary text",
+    "description": "Description",
+    "cta": "Call to action (CTA)",
+    "destinationUrl": "Destination URL",
+    "preview": "Preview",
+    "sponsored": "Sponsored",
+    "noCreative": "No linked creative",
+    "empty": "No ads found",
+    "manage": "Manage ads",
+    "linkCreatives": "Link creatives",
+    "linkHint": "Only creatives from client {{client}} can be linked. Click to link or unlink.",
+    "duplicated": "Ad duplicated.",
+    "confirmDelete": "Delete ad {{name}}?",
+    "openCampaign": "Open campaign",
+    "compareHint": "Select 2 to 4 ads to compare.",
+    "compareN": "Compare ({{n}})",
+    "compareTitle": "Ad comparison",
+    "compareNote": "The best value of each metric is highlighted only among ads with clicks. Also consider volume and period."
+  },
+  "creatives": {
+    "title": "Creative library",
+    "subtitle": "Images, videos, banners, carousels and copy by client.",
+    "upload": "Upload creative",
+    "send": "Upload",
+    "name": "Name",
+    "type": "Type",
+    "textContent": "Creative copy",
+    "file": "File",
+    "dropHere": "Drag the file here or click to select",
+    "allowed": "Formats: {{types}} · up to {{mb}} MB",
+    "invalidType": "File format not allowed for this type.",
+    "tooLarge": "File exceeds {{mb}} MB.",
+    "uploaded": "Creative uploaded.",
+    "empty": "No creatives found",
+    "emptyClient": "This client has no creatives yet",
+    "noFile": "No file",
+    "noFileText": "Demo creative without an attached file.",
+    "usedIn": "{{n}} ad(s)",
+    "view": "View",
+    "confirmDelete": "Delete creative {{name}}?",
+    "confirmDeleteLinked": "Creative {{name}} is linked to {{n}} ad(s). Delete anyway?"
+  },
+  "budgets": {
+    "title": "Budgets",
+    "subtitle": "Planned × actual spend, balance and alerts.",
+    "new": "New budget",
+    "edit": "Edit budget",
+    "manage": "Manage budgets",
+    "planned": "Planned",
+    "spent": "Actual",
+    "remaining": "Balance",
+    "usage": "Usage",
+    "over80": "≥ 80% used",
+    "over90": "≥ 90% used",
+    "over100": "Overspent (≥ 100%)",
+    "alertLevel": "Alert level",
+    "reached": "{{n}}%",
+    "plannedVsActual": "Planned × actual",
+    "top12": "Largest budgets in the period",
+    "empty": "No budgets found",
+    "registerSpend": "Register spend",
+    "amount": "Amount spent",
+    "spendRegistered": "Spend registered.",
+    "spendNote": "The amount is added to the campaign's spend for that day (campaign-level metric), so it shows up in metrics, dashboard and budget without double counting.",
+    "mediaNote": "Budgets refer to the client's media investment — they are not the agency's revenue.",
+    "history": "Budget history",
+    "cumulative": "Cumulative spend",
+    "plannedPace": "Planned pace",
+    "dailySpend": "Daily spend",
+    "notStarted": "The budget has not started yet",
+    "confirmDelete": "Delete the budget of campaign {{name}}?"
+  },
+  "leads": {
+    "title": "Leads",
+    "subtitle": "Contacts captured by campaigns, as a list or pipeline.",
+    "new": "New lead",
+    "edit": "Edit lead",
+    "name": "Name",
+    "campaign": "Campaign",
+    "source": "Source",
+    "kanban": "Pipeline",
+    "searchHint": "Name, e-mail or phone",
+    "capturedBetween": "Captured between",
+    "empty": "No leads found",
+    "dragHint": "Drag cards between columns to change the status. The change is recorded in the history.",
+    "more": "more",
+    "statusChanged": "Lead status updated.",
+    "moveTo": "Move to",
+    "history": "Contact history",
+    "interactionType": "Type",
+    "addNote": "Log a contact or note",
+    "consent": "The lead consented to the use of their data for contact (LGPD)",
+    "consentShort": "LGPD consent",
+    "contactRequired": "Provide an e-mail or phone.",
+    "deleteLgpd": "Delete data (LGPD)",
+    "confirmDelete": "Permanently delete {{name}}'s data? This fulfills the right to erasure and cannot be undone."
+  },
+  "conversions": {
+    "title": "Conversions",
+    "subtitle": "Conversion events recorded manually or imported.",
+    "register": "Record conversion",
+    "registered": "Conversion recorded.",
+    "import": "Import CSV",
+    "type": "Type",
+    "lead": "Lead",
+    "noLead": "No linked lead",
+    "time": "Time",
+    "revenue": "Revenue",
+    "externalId": "External ID",
+    "externalIdHint": "Order/transaction number — prevents recording the same event twice.",
+    "purchaseNeedsRevenue": "Purchases require revenue greater than zero.",
+    "dedupNote": "K2 Marketing generates a unique key for each event. Repeated conversions (same external ID, same lead and type, or same event) are rejected.",
+    "total": "Overall conversions",
+    "totalHint": "All events recorded in the CRM.",
+    "uniqueLeads": "Unique converted leads",
+    "uniqueLeadsHint": "Each lead counts once, even with several conversions.",
+    "sales": "Sales",
+    "salesHint": "Purchase conversions only.",
+    "salesRevenue": "Sales revenue",
+    "totalRevenue": "Total recorded revenue",
+    "empty": "No conversions found",
+    "confirmDelete": "Delete this conversion?"
+  },
+  "metrics": {
+    "title": "Metrics & results",
+    "subtitle": "Daily data by campaign and ad — entered, imported and calculated.",
+    "new": "Record metrics",
+    "edit": "Edit metrics",
+    "ad": "Ad",
+    "campaignLevel": "Campaign level (no ad)",
+    "empty": "No metrics found",
+    "totalFiltered": "Filtered totals (all pages)",
+    "calcLegend": "Purple columns are calculated by the system from the entered values.",
+    "calculated": "Calculated KPIs",
+    "inconsistent": "Clicks and reach cannot exceed impressions.",
+    "confirmDelete": "Delete the metrics of {{date}}?",
+    "sourceNote": "Each row shows the data source (manual, CSV import or demo). Derived KPIs are never typed in."
+  },
+  "imports": {
+    "title": "Import CSV",
+    "subtitle": "Preview, column validation, duplicate handling and confirmation before saving.",
+    "step1": "File",
+    "step2": "Preview & validation",
+    "step3": "Result",
+    "whatToImport": "What do you want to import?",
+    "metrics": "Daily metrics",
+    "conversions": "Conversions",
+    "columns": "Accepted columns",
+    "required": "required",
+    "template": "CSV template",
+    "templateText": "Download a template with real campaigns from your account and sample values.",
+    "downloadTemplate": "Download template",
+    "drop": "Drag the CSV file here or click to select",
+    "max": "up to 5 MB",
+    "preview": "Generate preview",
+    "formatNote": "Comma or semicolon separator. Dates yyyy-MM-dd or dd/MM/yyyy. Decimal point or comma. Provide campaign_id or campaign_name.",
+    "tooLarge": "The file exceeds 5 MB.",
+    "invalidType": "Please upload a .csv file.",
+    "missing": "Missing required columns: {{cols}}",
+    "ignored": "Ignored columns: {{cols}}",
+    "totalRows": "Rows in file",
+    "validTotals": "Valid rows totals",
+    "newRevenue": "New conversions revenue",
+    "duplicateMode": "Rows that already exist in the database:",
+    "skip": "Keep existing (skip)",
+    "overwrite": "Replace with file values",
+    "conversionDupNote": "Conversions already recorded are always skipped so the same event is never counted twice.",
+    "show": "Show",
+    "previewLimit": "Showing the first {{n}} rows.",
+    "line": "Line",
+    "errors": "Issues",
+    "confirm": "Confirm import ({{n}})",
+    "done": "Import completed",
+    "inserted": "Inserted",
+    "updated": "Updated",
+    "skipped": "Skipped",
+    "another": "Import another file",
+    "viewData": "View imported data",
+    "status": {
+      "New": "New",
+      "Duplicate": "Already exist",
+      "DuplicateInFile": "Repeated in file",
+      "Invalid": "Invalid"
+    },
+    "cols": {
+      "date": "Data date",
+      "campaign_id": "Campaign ID (recommended)",
+      "campaign_name": "Exact campaign name",
+      "ad_id": "Ad ID",
+      "ad_name": "Ad name (optional)",
+      "impressions": "Impressions",
+      "reach": "Reach",
+      "clicks": "Clicks",
+      "spend": "Spend",
+      "leads": "Leads",
+      "conversions": "Conversions",
+      "attributed_revenue": "Attributed revenue",
+      "conversion_type": "Lead, SignUp, Contact, Purchase, Appointment or Other",
+      "conversion_date": "Conversion date and time",
+      "revenue_amount": "Revenue",
+      "external_id": "Order/transaction ID (deduplication)",
+      "lead_email": "Lead e-mail (links to the client's lead)"
+    }
+  },
+  "compare": {
+    "title": "Compare campaigns",
+    "subtitle": "2 to 4 campaigns side by side with objective metrics.",
+    "select": "Campaigns",
+    "hint": "{{n}} of 4 selected (minimum 2)",
+    "periodHint": "Optional",
+    "run": "Compare",
+    "period": "Analyzed period: {{from}} to {{to}}",
+    "metric": "KPI",
+    "daysWithData": "{{n}} days with data",
+    "lowVolume": "Insufficient volume",
+    "bestTip": "Best value among campaigns with enough volume",
+    "emptyTitle": "Select campaigns to compare",
+    "emptyText": "Choose 2 to 4 campaigns and click Compare.",
+    "methodNote": "Highlights only consider campaigns with minimum volume. Higher ROAS does not automatically mean the best campaign: consider objective, volume and data quality.",
+    "warnings": {
+      "differentObjectives": "The campaigns have different objectives; compare KPIs carefully.",
+      "differentPlatforms": "The campaigns run on different platforms with different costs and audiences.",
+      "lowVolume": "{{campaign}} does not have enough volume for conclusions (fewer than 100 clicks, 7 days of data or no spend).",
+      "roasNotComparable": "Not all campaigns have attributed revenue; ROAS is not highlighted.",
+      "noHighlights": "There are not enough campaigns with minimum volume to highlight results."
+    },
+    "flags": {
+      "lowClicks": "Fewer than 100 clicks",
+      "fewDays": "Fewer than 7 days with data",
+      "noSpend": "No spend in the period",
+      "noRevenue": "No attributed revenue",
+      "noConversions": "No conversions"
+    },
+    "charts": {
+      "spendRevenue": "Spend × revenue",
+      "efficiency": "Cost efficiency (CPC and CPA)",
+      "roas": "ROAS",
+      "dailySpend": "Daily spend"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Reports with filters, CSV/PDF export and printing.",
+    "executive": "Executive report",
+    "performance": "Performance",
+    "budget": "Planned × actual budget",
+    "leads": "Leads",
+    "conversions": "Conversions",
+    "pdf": "Export PDF",
+    "generating": "Generating...",
+    "print": "Print",
+    "allClients": "All clients",
+    "comparedTo": "Compared with {{from}} to {{to}}",
+    "observations": "Observations",
+    "topCampaigns": "Top campaigns by spend",
+    "byClient": "By client",
+    "byCampaign": "By campaign",
+    "byPlatform": "By platform",
+    "bySource": "By source",
+    "byType": "By type",
+    "item": "Item",
+    "spendVsRevenue": "Spend × revenue",
+    "leadsRegistered": "Registered leads",
+    "leadsConverted": "Converted leads",
+    "conversionRate": "Conversion rate",
+    "platformLeads": "Platform leads",
+    "platformLeadsHint": "Leads reported in metrics (not added to registered leads).",
+    "leadsByStatus": "Leads by status",
+    "leadsPerDay": "Leads per day",
+    "converted": "Converted",
+    "noCampaign": "(no campaign)",
+    "conversionsPerDay": "Conversions and revenue per day",
+    "charts": "Charts",
+    "generatedAt": "Generated at",
+    "waitData": "Please wait for the data to load.",
+    "methodNote": "KPIs calculated from data recorded in K2 Marketing (manual, CSV or demo). CTR, CPC, CPA and ROAS follow the official methodology; CRM leads and conversions are shown separately from platform metrics.",
+    "obs": {
+      "noData": "There are no metrics recorded in the selected period.",
+      "spendChange": "Spend changed {{pct}}% compared with the previous period.",
+      "roasChange": "ROAS changed {{pct}}% compared with the previous period, reaching {{roas}}.",
+      "lowCtr": "The period CTR ({{ctr}}) is below 1%; consider reviewing targeting and creatives.",
+      "bestRoas": "Highest ROAS among campaigns with enough volume: {{campaign}} ({{roas}}, {{spend}} spent).",
+      "highCpa": "{{campaign}} has a CPA of {{cpa}}, more than 1.5× the period average ({{avg}}).",
+      "noConversions": "{{count}} campaign(s) spent budget without any conversion in the period.",
+      "budgetsAtRisk": "{{count}} budget(s) used 90% or more of the planned amount ({{over100}} above 100%).",
+      "crmGap": "Platform leads ({{platform}}) and CRM leads ({{crm}}) differ by {{pct}}%; check the form integration.",
+      "demoData": "The period contains demo data."
+    }
+  },
+  "tasks": {
+    "title": "Tasks & calendar",
+    "subtitle": "Campaign activities with owners and due dates.",
+    "new": "New task",
+    "edit": "Edit task",
+    "calendar": "Calendar",
+    "list": "List",
+    "open": "Open",
+    "overdue": "Overdue",
+    "dueToday": "Due today",
+    "doneWeek": "Done this week",
+    "assignee": "Assignee",
+    "mine": "My tasks",
+    "unassigned": "Unassigned",
+    "overdueOnly": "Overdue only",
+    "today": "Today",
+    "titleField": "Title",
+    "dueDate": "Due date",
+    "priority": "Priority",
+    "calendarHint": "Click a task to edit it or double-click a day to create one.",
+    "noLink": "Not linked",
+    "empty": "No tasks found",
+    "updated": "Task updated.",
+    "confirmDelete": "Delete task {{name}}?"
+  },
+  "users": {
+    "title": "Users & permissions",
+    "subtitle": "Access profiles and per-client data isolation.",
+    "new": "New user",
+    "edit": "Edit user",
+    "name": "Name",
+    "role": "Role",
+    "active": "Active",
+    "inactive": "Inactive",
+    "lastLogin": "Last sign-in",
+    "resetPassword": "Reset password",
+    "newPassword": "New password",
+    "passwordPolicy": "At least 8 characters with uppercase, lowercase and a number.",
+    "passwordReset": "Password reset.",
+    "resetNote": "The user's active sessions will be ended.",
+    "roleDesc": {
+      "Admin": "Full access, including users, settings and audit trail.",
+      "Manager": "Manages clients, campaigns, budgets and reports.",
+      "Analyst": "Operates campaigns, ads, creatives, metrics, leads and conversions.",
+      "ClientViewer": "Access only to their own client's data and reports."
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Alerts about campaigns, budgets, tasks, leads and reports.",
+    "markAll": "Mark all as read",
+    "viewAll": "View all",
+    "empty": "No notifications",
+    "unreadOnly": "Unread only",
+    "typeLabels": {
+      "CampaignEnding": "Campaign ending soon",
+      "BudgetThreshold": "Budget reaching limit",
+      "TaskOverdue": "Overdue task",
+      "NewLead": "New lead",
+      "ReportAvailable": "Report available",
+      "System": "System"
+    },
+    "types": {
+      "CampaignEnding": "Campaign {{campaign}} ({{client}}) ends in {{days}} day(s).",
+      "BudgetThreshold": "The budget of {{campaign}} reached {{threshold}}% of the planned amount.",
+      "TaskOverdue": "Task \"{{task}}\" is {{days}} day(s) overdue.",
+      "NewLead": "New lead {{lead}} for {{client}}.",
+      "ReportAvailable": "The {{month}} report is available."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Profile, agency branding, integrations and audit.",
+    "profile": "My profile",
+    "preferences": "Preferences",
+    "language": "Language",
+    "languageNote": "Your preference is saved in the browser and in your profile. Campaign names and ad copy are never translated.",
+    "theme": "Theme",
+    "changePassword": "Change password",
+    "currentPassword": "Current password",
+    "updatePassword": "Update password",
+    "passwordChanged": "Password changed. Other sessions were ended.",
+    "agency": "Agency",
+    "agencyText": "Branding used in the header and in PDF reports.",
+    "agencyName": "Agency name",
+    "primaryColor": "Primary color",
+    "reportFooter": "Report footer",
+    "adminOnly": "Only administrators can change this information.",
+    "integrations": "Integrations",
+    "integrationsNote": "The architecture is ready for future integrations. No connection to external platforms is active or simulated in this version; data comes from manual entry, CSV and demo data.",
+    "integrationStatus": {
+      "NotConfigured": "Not configured",
+      "Configured": "Configured",
+      "Error": "Error"
+    },
+    "audit": "Audit trail",
+    "user": "User",
+    "action": "Action",
+    "entity": "Entity",
+    "details": "Details",
+    "lgpdNote": "The audit trail records who changed what. Lead personal data can be erased at the data subject's request (LGPD)."
+  },
+  "integrations": {
+    "MetaAds": "Meta Marketing API — Facebook and Instagram Ads metrics",
+    "GoogleAds": "Google Ads API — search and display campaign metrics",
+    "TikTokAds": "TikTok Marketing API",
+    "LinkedInAds": "LinkedIn Marketing API",
+    "GoogleAnalytics": "Google Analytics — website sessions and conversions",
+    "Webhooks": "Event delivery (lead, conversion, budget) to external systems",
+    "AI": "AI service for summaries and suggestions"
+  },
+  "audit": {
+    "actions": {
+      "Create": "Created",
+      "Update": "Updated",
+      "Delete": "Deleted",
+      "Activate": "Activated",
+      "Deactivate": "Deactivated",
+      "ChangeStatus": "Status change",
+      "Duplicate": "Duplicated",
+      "LinkCreative": "Creative linked",
+      "UnlinkCreative": "Creative unlinked",
+      "RegisterSpend": "Spend registered",
+      "ImportCsv": "CSV import",
+      "ChangePassword": "Password change",
+      "ResetPassword": "Password reset",
+      "Seed": "Demo data"
+    },
+    "entities": {
+      "Client": "Client",
+      "Campaign": "Campaign",
+      "Advertisement": "Ad",
+      "CreativeAsset": "Creative",
+      "CampaignBudget": "Budget",
+      "Lead": "Lead",
+      "Conversion": "Conversion",
+      "CampaignMetric": "Metric",
+      "MarketingTask": "Task",
+      "User": "User",
+      "AgencySettings": "Agency",
+      "System": "System"
+    }
+  },
+  "enums": {
+    "role": {
+      "Admin": "Administrator",
+      "Manager": "Manager",
+      "Analyst": "Analyst",
+      "ClientViewer": "Client"
+    },
+    "clientStatus": {
+      "Active": "Active",
+      "Inactive": "Inactive"
+    },
+    "campaignStatus": {
+      "Draft": "Draft",
+      "Scheduled": "Scheduled",
+      "Active": "Active",
+      "Paused": "Paused",
+      "Completed": "Completed",
+      "Cancelled": "Cancelled"
+    },
+    "adStatus": {
+      "Draft": "Draft",
+      "Active": "Active",
+      "Paused": "Paused",
+      "Archived": "Archived"
+    },
+    "objective": {
+      "Awareness": "Awareness",
+      "Traffic": "Traffic",
+      "Engagement": "Engagement",
+      "LeadGeneration": "Lead generation",
+      "Conversions": "Conversions",
+      "Sales": "Sales"
+    },
+    "platform": {
+      "MetaAds": "Meta Ads",
+      "GoogleAds": "Google Ads",
+      "TikTokAds": "TikTok Ads",
+      "LinkedInAds": "LinkedIn Ads",
+      "Other": "Other"
+    },
+    "creativeType": {
+      "Image": "Image",
+      "Video": "Video",
+      "Banner": "Banner",
+      "Carousel": "Carousel",
+      "Text": "Copy"
+    },
+    "leadStatus": {
+      "New": "New",
+      "Contacted": "Contacted",
+      "Qualified": "Qualified",
+      "Converted": "Converted",
+      "Lost": "Lost"
+    },
+    "interaction": {
+      "Note": "Note",
+      "Call": "Call",
+      "Email": "E-mail",
+      "WhatsApp": "WhatsApp",
+      "Meeting": "Meeting",
+      "StatusChange": "Status change"
+    },
+    "conversionType": {
+      "Lead": "Lead",
+      "SignUp": "Sign-up",
+      "Contact": "Contact",
+      "Purchase": "Purchase",
+      "Appointment": "Appointment",
+      "Other": "Other"
+    },
+    "source": {
+      "Manual": "Manual",
+      "CsvImport": "CSV import",
+      "Integration": "Integration",
+      "Demo": "Demo"
+    },
+    "priority": {
+      "Low": "Low",
+      "Medium": "Medium",
+      "High": "High",
+      "Urgent": "Urgent"
+    },
+    "taskStatus": {
+      "Todo": "To do",
+      "InProgress": "In progress",
+      "Done": "Done",
+      "Cancelled": "Cancelled"
+    }
+  },
+  "validation": {
+    "email": "Enter a valid e-mail.",
+    "url": "Enter a URL starting with http:// or https://."
+  },
+  "errors": {
+    "generic": "The operation could not be completed.",
+    "network": "No connection to the server.",
+    "tooManyRequests": "Too many attempts. Wait a minute and try again.",
+    "validation": "Check the fields: {{details}}",
+    "forbiddenTitle": "Access denied",
+    "forbiddenText": "Your role is not allowed to open this page.",
+    "notFoundTitle": "Page not found",
+    "notFoundText": "This address does not exist."
+  },
+  "apiErrors": {
+    "notFound": "Record not found or not accessible.",
+    "forbidden": "You are not allowed to perform this action.",
+    "conflict": "A record with this data already exists.",
+    "inUse": "The record is in use by other data.",
+    "internal": "Unexpected server error.",
+    "auth.invalidCredentials": "Invalid e-mail or password.",
+    "auth.clientInactive": "This client's access is disabled.",
+    "auth.wrongPassword": "Current password is incorrect.",
+    "auth.refreshExpired": "Session expired. Please sign in again.",
+    "auth.refreshReused": "Session revoked for security. Please sign in again.",
+    "user.emailTaken": "A user with this e-mail already exists.",
+    "user.selfLockout": "You cannot deactivate or downgrade your own user.",
+    "client.documentTaken": "A client with this tax ID already exists.",
+    "client.inactive": "The client is inactive.",
+    "campaign.invalidTransition": "This status change is not allowed.",
+    "campaign.hasData": "The campaign has metrics, leads or conversions. Cancel or complete it instead of deleting.",
+    "campaign.clientLocked": "You cannot change the client of a campaign with metrics.",
+    "campaign.closed": "The campaign is completed or cancelled.",
+    "ad.hasMetrics": "The ad has metrics. Archive it instead of deleting.",
+    "ad.campaignLocked": "You cannot move an ad with metrics.",
+    "ad.otherClient": "The ad can only be moved to campaigns of the same client.",
+    "creative.otherClient": "The creative belongs to another client.",
+    "budget.overlap": "There is already a budget for this campaign in that period.",
+    "budget.campaignLocked": "You cannot move the budget to another campaign.",
+    "lead.campaignMismatch": "The campaign does not belong to the selected client.",
+    "lead.clientLocked": "You cannot move the lead to another client.",
+    "conversion.duplicate": "This conversion has already been recorded (same event).",
+    "conversion.leadMismatch": "The lead does not belong to the campaign's client.",
+    "metric.duplicate": "Metrics already exist for this campaign/ad on this date.",
+    "metric.adMismatch": "The ad does not belong to the campaign.",
+    "task.campaignMismatch": "The campaign does not belong to the selected client.",
+    "task.invalidAssignee": "Invalid assignee.",
+    "compare.count": "Select 2 to 4 items to compare.",
+    "integration.notConfigured": "Integration not configured in this version."
+  },
+  "tour": {
+    "title": "System tour",
+    "start": "Take a tour of the system",
+    "stepOf": "Step {{n}} of {{total}}",
+    "skip": "Skip",
+    "prev": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "notAvailable": "This feature is not available for your role, but the explanation still applies.",
+    "steps": {
+      "dashboard": {
+        "title": "1. Meet the Dashboard",
+        "text": "This is where the key campaign numbers live: how much was invested, how many people saw and clicked the ads and how much came back in sales. Use the filters above to choose client, platform and period."
+      },
+      "client": {
+        "title": "2. Register a client",
+        "text": "Everything starts with the client: the business that hired the agency. Click this button to register name, contact, industry and the monthly ad budget."
+      },
+      "campaign": {
+        "title": "3. Create a campaign",
+        "text": "A campaign groups ads with the same goal, for example getting WhatsApp messages or selling a product. Choose client, platform, objective and period."
+      },
+      "budget": {
+        "title": "4. Set a budget",
+        "text": "The budget is the amount planned for ads. The system compares planned vs. actual spend and warns you when usage reaches 80%, 90% and 100%."
+      },
+      "ad": {
+        "title": "5. Create an ad",
+        "text": "The ad is what people see: headline, text, call-to-action button and destination link. You get a live preview while writing."
+      },
+      "creative": {
+        "title": "6. Add a creative",
+        "text": "Creatives are the images, videos and copy used in ads. Upload the files here and then link them to the same client's ads."
+      },
+      "results": {
+        "title": "7. Record the results",
+        "text": "Enter each day's numbers (impressions, clicks, spend, leads, conversions) or import a CSV spreadsheet. KPIs are calculated automatically."
+      },
+      "metrics": {
+        "title": "8. Understand the metrics",
+        "text": "Click the ⓘ icon next to any KPI to see what it means, how it is calculated and a practical example. Turn on Beginner Mode to see explanations on every screen."
+      },
+      "lead": {
+        "title": "9. Register a lead",
+        "text": "Leads are interested people who left their contact. In the pipeline, drag the card between columns as the conversation moves forward, up to the sale."
+      },
+      "report": {
+        "title": "10. Generate a report",
+        "text": "Choose the period and client and export a PDF report with KPIs, charts and observations to present to the client."
+      }
+    }
+  },
+  "learn": {
+    "title": "Learning Center",
+    "subtitle": "Understand digital marketing, campaigns and results in a simple way.",
+    "nav": {
+      "overview": "Overview",
+      "examples": "Examples",
+      "simulator": "Simulator",
+      "glossary": "Glossary"
+    },
+    "hero": {
+      "badge": "Learn at your own pace",
+      "title": "Digital marketing made simple",
+      "text": "Short explanations with examples from small Brazilian businesses, so you understand what each number means and make decisions with more confidence."
+    },
+    "beginner": {
+      "label": "Beginner Mode",
+      "short": "Beginner",
+      "on": "ON",
+      "off": "OFF",
+      "hint": "Shows extra explanations on dashboards, charts, forms and reports. Help icons remain available even when it is off."
+    },
+    "topicsTitle": "Start here",
+    "metricsTitle": "Understand the KPIs",
+    "metricsSub": "Click a KPI to see its meaning, formula, an example and how to interpret it.",
+    "toolsTitle": "Practice tools",
+    "readMore": "Read explanation",
+    "help": {
+      "meaning": "What does it mean?",
+      "formula": "How is it calculated?",
+      "example": "Example",
+      "interpret": "How to interpret it?",
+      "disclaimer": "There is no value that is always good or bad: interpretation depends on the campaign objective, platform, industry and period.",
+      "open": "See explanation",
+      "whatIs": "What is",
+      "why": "Why does it matter?",
+      "inK2": "How to do it in K2 Marketing"
+    },
+    "topics": {
+      "intro": {
+        "title": "Introduction to Digital Marketing",
+        "summary": "What it is and why small businesses use the internet to sell.",
+        "what": "Digital marketing is the set of actions that promote a business online: social media, search engines like Google, websites and messaging. The goal is to be found by the right people and turn interest into customers.",
+        "why": "With a small investment you can reach people in your area or with specific interests and measure exactly what worked — something hard to do with flyers or radio.",
+        "example": "A neighborhood bakery in Belo Horizonte promotes its Saturday breakfast on Instagram to residents within 3 km of the store and tracks how many orders arrive on WhatsApp.",
+        "inK2": "Register the client, create the campaigns and record the results. The Dashboard shows the performance of everything in one place."
+      },
+      "campaign": {
+        "title": "What is a campaign?",
+        "summary": "A set of ads with the same goal and period.",
+        "what": "A campaign is a promotional action with a clear goal, a period and a budget. It contains the ads that will be shown.",
+        "why": "Separating by campaign lets you know which action brought results. Mixing different goals makes the numbers confusing.",
+        "example": "A clothing store in Recife creates a \"Summer Collection\" campaign to sell through its online store, and a separate campaign to gain followers.",
+        "inK2": "In Campaigns › New campaign, choose client, platform, objective, dates and planned budget. The status (active, paused, completed) is managed here."
+      },
+      "ad": {
+        "title": "What is an ad?",
+        "summary": "The piece people see: copy, image and button.",
+        "what": "An ad is the message shown to the audience: a headline, text, an image or video and an action button such as \"Shop now\" or \"Send message\".",
+        "why": "The ad is what catches attention and makes people click. Testing different versions helps you find the message that works best.",
+        "example": "A beauty salon tests two ads: one with a photo of a blowout result and another with a customer testimonial, and compares which one brings more bookings.",
+        "inK2": "In Ads, enter headline, text, button and link. The preview shows how the ad looks. You can duplicate and compare up to 4 ads."
+      },
+      "creatives": {
+        "title": "What are creatives?",
+        "summary": "Images, videos and copy used in ads.",
+        "what": "Creatives are the visual and written materials of ads: product photos, short videos, banners, carousels and ready-made copy.",
+        "why": "A good creative stands out among many posts. Keeping everything organized by client avoids rework.",
+        "example": "A burger shop in Curitiba records a 15-second video of a burger being assembled and reuses the same image in several ads.",
+        "inK2": "In the Creative library, upload each client's images and videos and then link them to ads."
+      },
+      "paidTraffic": {
+        "title": "What is paid traffic?",
+        "summary": "Paying platforms to show your ads.",
+        "what": "Paid traffic is when you pay platforms such as Meta (Instagram and Facebook), Google or TikTok to show your ads to a chosen audience. The opposite is organic traffic, which comes from unpaid posts.",
+        "why": "It reaches new people quickly and lets you control how much to spend per day. Results appear while there is investment.",
+        "example": "A pet shop in Campinas spends R$ 20 a day on Instagram to promote its grooming service to dog owners in the neighborhood.",
+        "inK2": "The amount spent on each campaign is recorded in the metrics and compared with the planned budget."
+      },
+      "budget": {
+        "title": "How does a budget work?",
+        "summary": "How much to plan and how to track spending.",
+        "what": "A budget is the amount planned for ads in a period. It can be daily (e.g. R$ 30 per day) or total (e.g. R$ 900 for the month).",
+        "why": "Tracking the budget prevents overspending and shows whether the money is bringing results.",
+        "example": "A dental clinic sets R$ 1,500 for the month. Halfway through it has already spent R$ 1,200 (80%) and decides to reduce the daily spend.",
+        "inK2": "In Budgets, set the planned amount and period. Actual spend is calculated from the metrics and you get alerts at 80%, 90% and 100%. Remember: it is the client's media investment, not agency revenue."
+      },
+      "leads": {
+        "title": "What are leads?",
+        "summary": "Interested people who left their contact.",
+        "what": "A lead is a person who showed interest and left a contact: filled in a form, sent a WhatsApp message or called.",
+        "why": "A lead is not a customer yet. Following each lead up to the sale shows which campaigns bring genuinely interested people.",
+        "example": "A driving school gets 30 messages from an ad. Of those, 12 ask for a quote and 5 enroll.",
+        "inK2": "In Leads, register each contact and use the Kanban pipeline: drag from New to Contacted, Qualified and Converted (or Lost)."
+      },
+      "conversions": {
+        "title": "What are conversions?",
+        "summary": "The most important action you want the customer to take.",
+        "what": "A conversion is the action you defined as the goal: a purchase, a booking, a sign-up or a contact.",
+        "why": "Conversions show whether the campaign generated business results, not just views and clicks.",
+        "example": "For a beauty salon, the conversion is a confirmed booking. For an online store, it is a completed purchase.",
+        "inK2": "Record conversions manually or by spreadsheet. The system avoids counting the same event twice and separates overall conversions, unique converted leads and sales."
+      },
+      "results": {
+        "title": "How to interpret results?",
+        "summary": "Look at the numbers together, not just one.",
+        "what": "Interpreting results means reading the KPIs together: reach and clicks show attention; leads and conversions show interest and business; CPL, CPA and ROAS show cost and return.",
+        "why": "A single number can be misleading. Many clicks with few sales, or a high ROAS with very few sales, call for caution.",
+        "example": "Campaign A had an 8x ROAS but only 2 sales; campaign B had a 3x ROAS with 60 sales. B brought more customers and a more reliable result.",
+        "inK2": "Use the Dashboard, the campaign detail and the Compare campaigns screen, which only highlights results when there is enough data."
+      },
+      "report": {
+        "title": "How to create a report?",
+        "summary": "Show the client what was done and what happened.",
+        "what": "A report summarizes a period's results with numbers, charts and observations so the client understands the return on investment.",
+        "why": "Clear reports build trust and help decide next steps: increase, keep or adjust the campaigns.",
+        "example": "At the start of every month, the agency sends the clothing store a PDF with spend, sales, ROAS and the best-selling campaigns.",
+        "inK2": "In Reports, choose client and period and export to PDF or CSV. The executive report already includes automatic observations."
+      }
+    },
+    "metrics": {
+      "spend": {
+        "name": "Ad spend",
+        "short": "How much was spent on ads.",
+        "meaning": "The amount spent on ads in the period.",
+        "formula": "Sum of the spend recorded in metrics (not calculated).",
+        "example": "The bakery spent R$ 500 on one week of ads.",
+        "interpret": "It is the client's media investment, not agency revenue. Always compare it with what it brought in leads, conversions and revenue."
+      },
+      "impressions": {
+        "name": "Impressions",
+        "short": "How many times the ad was shown.",
+        "meaning": "The number of times the ad was displayed on people's screens. The same person may see the ad more than once.",
+        "formula": "Value reported by the ad platform (not calculated).",
+        "example": "The bakery's ad was shown 10,000 times on Instagram during the week.",
+        "interpret": "It shows the size of the exposure. Many impressions with few clicks may mean the message or image did not catch attention."
+      },
+      "reach": {
+        "name": "Reach",
+        "short": "How many different people saw it.",
+        "meaning": "The number of different people who saw the ad at least once.",
+        "formula": "Value reported by the platform. Adding up reach over several days may count the same person more than once.",
+        "example": "With 10,000 impressions and 6,500 reach, each person saw the ad about 1.5 times on average.",
+        "interpret": "Comparing reach with impressions shows frequency: if the same people see the ad many times, it may be time to refresh the creative."
+      },
+      "clicks": {
+        "name": "Clicks",
+        "short": "How many times the ad was clicked.",
+        "meaning": "The number of times people clicked the ad to learn more, visit the website or open WhatsApp.",
+        "formula": "Value reported by the platform (not calculated).",
+        "example": "The ad got 400 clicks that led to the bakery's WhatsApp.",
+        "interpret": "A click shows initial interest but is not a sale yet. Track how many clicks become leads and conversions."
+      },
+      "ctr": {
+        "name": "CTR — Click-through rate",
+        "short": "% of impressions that became clicks.",
+        "meaning": "The percentage of ad impressions that generated clicks.",
+        "formula": "CTR = (Clicks ÷ Impressions) × 100",
+        "example": "An ad had 1,000 impressions and 50 clicks. CTR = (50 ÷ 1,000) × 100 = 5%.",
+        "interpret": "This means that for every 100 impressions, about 5 generated a click. It is useful to compare ads in the same campaign and platform."
+      },
+      "cpc": {
+        "name": "CPC — Cost per click",
+        "short": "How much each click cost.",
+        "meaning": "How much, on average, you paid for each click on the ad.",
+        "formula": "CPC = Spend ÷ Clicks",
+        "example": "R$ 500 spent and 400 clicks: CPC = R$ 500 ÷ 400 = R$ 1.25.",
+        "interpret": "It helps compare the cost of bringing people to the website or WhatsApp. A low CPC does not guarantee sales: also look at leads and conversions."
+      },
+      "cpm": {
+        "name": "CPM — Cost per thousand impressions",
+        "short": "Cost to be shown 1,000 times.",
+        "meaning": "How much it cost to show the ad one thousand times.",
+        "formula": "CPM = (Spend ÷ Impressions) × 1,000",
+        "example": "R$ 500 spent and 10,000 impressions: CPM = (500 ÷ 10,000) × 1,000 = R$ 50.00.",
+        "interpret": "It shows the cost of reaching the audience. It varies with platform, chosen audience and time of year — dates like Black Friday are usually more competitive."
+      },
+      "leads": {
+        "name": "Leads",
+        "short": "Interested people who left a contact.",
+        "meaning": "People who showed interest and left a contact: form, WhatsApp message or phone call.",
+        "formula": "Value reported by the platform or registered in K2's CRM (not calculated).",
+        "example": "40 people messaged the bakery from the ad.",
+        "interpret": "Leads are opportunities, not sales yet. In K2, platform leads and CRM leads are shown separately so they are never counted twice."
+      },
+      "cpl": {
+        "name": "CPL — Cost per lead",
+        "short": "How much each contact cost.",
+        "meaning": "How much each lead cost on average.",
+        "formula": "CPL = Spend ÷ Leads",
+        "example": "R$ 500 spent and 40 leads: CPL = R$ 500 ÷ 40 = R$ 12.50.",
+        "interpret": "Compare it with how much a customer usually spends. A higher CPL may be worth it if the leads are more qualified and buy more."
+      },
+      "conversions": {
+        "name": "Conversions",
+        "short": "Key actions completed (e.g. purchase).",
+        "meaning": "The actions you defined as the goal: purchase, booking, sign-up or contact.",
+        "formula": "Value reported by the platform or recorded in the CRM (not calculated).",
+        "example": "10 customers ordered the breakfast kit.",
+        "interpret": "What counts as a conversion depends on the campaign objective, so define it before you start. Always compare conversions of the same type."
+      },
+      "cpa": {
+        "name": "CPA — Cost per acquisition",
+        "short": "How much each conversion cost.",
+        "meaning": "How much each conversion (sale, booking or sign-up) cost on average.",
+        "formula": "CPA = Spend ÷ Conversions",
+        "example": "R$ 500 spent and 10 conversions: CPA = R$ 500 ÷ 10 = R$ 50.00.",
+        "interpret": "Compare it with the profit of each sale or the value of a booking. If CPA is higher than the profit per sale, the campaign may be losing money."
+      },
+      "revenue": {
+        "name": "Attributed revenue",
+        "short": "Sales linked to the campaign.",
+        "meaning": "The value of sales that the platform or the system attributed to the campaign.",
+        "formula": "Value recorded in metrics (not calculated).",
+        "example": "The 10 orders added up to R$ 1,250 in sales.",
+        "interpret": "It is the client's revenue, not profit and not agency revenue. The value depends on tracking rules (pixel, coupons, forms)."
+      },
+      "roas": {
+        "name": "ROAS — Return on ad spend",
+        "short": "How much came back for each R$ 1 spent.",
+        "meaning": "How much came back in sales for each real spent on ads.",
+        "formula": "ROAS = Attributed revenue ÷ Spend",
+        "example": "R$ 1,250 in sales with R$ 500 spent: ROAS = 1,250 ÷ 500 = 2.5x, that is, R$ 2.50 for every R$ 1.00.",
+        "interpret": "ROAS shows gross return, not profit: product costs still need to be deducted. A higher ROAS does not automatically mean the best campaign — also look at sales volume and objective."
+      }
+    },
+    "simulator": {
+      "title": "Results Simulator",
+      "subtitle": "Try different numbers and see the KPIs calculated instantly.",
+      "isolated": "Isolated simulation: values stay on this screen only and do not change campaigns, metrics or financial data.",
+      "tip": "Change one value at a time and watch the effect: for example, increase clicks while keeping spend the same and see CPC drop.",
+      "inputs": "Campaign data",
+      "clear": "Clear",
+      "presets": "Load example:",
+      "results": "Calculated KPIs",
+      "zeroNote": "Nothing to divide by: the KPI is undefined (—).",
+      "warnClicks": "Clicks greater than impressions: check the numbers (this does not happen with real data).",
+      "warnConversions": "Conversions greater than clicks: possible but unusual. Check whether the conversions came from this campaign.",
+      "warnNegative": "Use positive values only.",
+      "fields": {
+        "spend": "Ad spend",
+        "impressions": "Impressions",
+        "clicks": "Clicks",
+        "leads": "Leads",
+        "conversions": "Conversions",
+        "revenue": "Attributed revenue"
+      },
+      "hints": {
+        "spend": "How much was spent on ads",
+        "impressions": "Times the ad was shown",
+        "clicks": "Times the ad was clicked",
+        "leads": "Contacts received",
+        "conversions": "Sales, bookings or sign-ups",
+        "revenue": "Value of sales linked to the campaign"
+      }
+    },
+    "examples": {
+      "title": "Example campaigns",
+      "subtitle": "Three small-business cases with the calculations explained.",
+      "simulated": "Simulated data",
+      "data": "Campaign numbers",
+      "funnel": "From ad to sale",
+      "funnelNote": "Each stage shows how many people moved forward compared with the previous stage.",
+      "ofPrevious": "of the previous stage",
+      "stages": {
+        "impressions": "Impressions",
+        "clicks": "Clicks",
+        "leads": "Leads",
+        "conversions": "Conversions"
+      },
+      "calculations": "Calculated KPIs",
+      "whatItMeans": "What these numbers mean",
+      "disclaimer": "Fictitious results created for teaching only. They are not stored in the system and do not represent guaranteed results.",
+      "openSimulator": "Open in simulator",
+      "clickLeadSale": {
+        "title": "Click, lead and sale: what is the difference?",
+        "click": "The person saw the ad and clicked to learn more. It is a sign of curiosity: 1,500 clicks.",
+        "lead": "The person left name and phone asking about the lots. Now it is a real opportunity: 75 leads.",
+        "saleTitle": "Sale",
+        "sale": "After visits and negotiation, the lead closed the purchase. In real estate this can take weeks or months: 2 sales."
+      },
+      "items": {
+        "bakery": {
+          "client": "Padaria Jardim Andrade",
+          "campaign": "Breakfast Promotion",
+          "objective": "Get contacts via WhatsApp",
+          "story": "A neighborhood bakery promoted its Saturday breakfast delivery kit with Instagram and Facebook ads for nearby residents. The ad button opened a WhatsApp chat.",
+          "dataNote": "Leads = WhatsApp chats started. Conversions = confirmed orders.",
+          "explain": {
+            "ctr": "4% of impressions became clicks: for every 100 times the ad was shown, about 4 people clicked.",
+            "cpc": "Each person who opened WhatsApp cost R$ 1.25 on average.",
+            "cpl": "Each chat started cost R$ 12.50. If the kit costs R$ 125, a single order pays for several contacts.",
+            "cpa": "Each confirmed order cost R$ 50.00 in ads. The bakery should compare that with the profit of each kit.",
+            "roas": "R$ 1,250 in sales for R$ 500 spent: R$ 2.50 back for every R$ 1.00. This is gross revenue, not profit."
+          }
+        },
+        "salon": {
+          "client": "Studio Bella",
+          "campaign": "Service Bookings",
+          "objective": "Get bookings",
+          "story": "A beauty salon advertised before-and-after photos of blowouts and coloring on Instagram, with a \"Send message\" button to book an appointment.",
+          "dataNote": "Leads = people who asked for an appointment. Conversions = appointments completed (average ticket R$ 90).",
+          "explain": {
+            "ctr": "3% of impressions generated a click. Result photos usually spark interest in this industry.",
+            "cpc": "Each click cost R$ 1.25, the same as the bakery, but with a different audience and service.",
+            "cpl": "Each appointment request cost R$ 8.33: the ads brought low-cost contacts.",
+            "cpa": "Each booking cost R$ 16.67 in ads, well below the average service price (R$ 90).",
+            "roas": "R$ 1,620 in services for R$ 300 spent: a 5.4x ROAS. Half of the contacts booked, a sign of good lead quality."
+          }
+        },
+        "realEstate": {
+          "client": "Imobiliária Horizonte",
+          "campaign": "Land Development Launch",
+          "objective": "Capture people interested in property",
+          "story": "A real estate agency advertised lots in a new development on Facebook and Instagram, with a form for anyone who wanted the price list and to schedule a visit.",
+          "dataNote": "Leads = forms filled in. Conversions = lots sold (R$ 90,000 each) after visits and negotiation.",
+          "explain": {
+            "ctr": "2.5% of impressions became clicks. Property is a big decision, so it is natural that fewer people click.",
+            "cpc": "Each click cost R$ 2.00 — more than in the other examples, because the audience is more specific.",
+            "cpl": "Each interested person cost R$ 40.00. It looks expensive, but each lead may be worth a high-value sale.",
+            "cpa": "Each sale cost R$ 1,500 in ads. Compared with the price of a lot, the cost is small.",
+            "roas": "A 60x ROAS looks huge, but it comes from only 2 high-value sales. With so few sales, one sale more or less changes the result a lot: evaluate it carefully."
+          }
+        }
+      }
+    },
+    "glossary": {
+      "title": "Digital Marketing Glossary",
+      "subtitle": "Terms explained simply, with an example and translation.",
+      "search": "Search a term (in English or Portuguese)",
+      "count": "{{n}} term(s)",
+      "english": "English term",
+      "empty": "No terms found",
+      "terms": {
+        "campaign": {
+          "name": "Campaign",
+          "en": "Campaign",
+          "definition": "A set of ads with the same goal, period and budget.",
+          "example": "A stationery store's \"Back to school\" campaign, from Jan 15 to Feb 15."
+        },
+        "ad": {
+          "name": "Ad",
+          "en": "Ad",
+          "definition": "The piece shown to the audience, with headline, text, image or video and an action button.",
+          "example": "A photo of a cake with the text \"Order for the weekend\" and a \"Send message\" button."
+        },
+        "creative": {
+          "name": "Creative",
+          "en": "Creative",
+          "definition": "Visual or written material used in the ad: photo, video, banner, carousel or copy.",
+          "example": "A 15-second video showing a haircut being done."
+        },
+        "paidTraffic": {
+          "name": "Paid traffic",
+          "en": "Paid traffic",
+          "definition": "Visits and contacts obtained with paid ads on the platforms.",
+          "example": "Spending R$ 20 a day on Instagram to promote a pizzeria."
+        },
+        "impression": {
+          "name": "Impression",
+          "en": "Impression",
+          "definition": "Each time the ad appears on someone's screen.",
+          "example": "If the same person saw the ad 3 times, that is 3 impressions."
+        },
+        "reach": {
+          "name": "Reach",
+          "en": "Reach",
+          "definition": "Number of different people who saw the ad.",
+          "example": "3 people saw the ad 3 times each: 9 impressions and a reach of 3."
+        },
+        "click": {
+          "name": "Click",
+          "en": "Click",
+          "definition": "When someone taps or clicks the ad to learn more.",
+          "example": "Tapping the \"Learn more\" button and opening the store's website."
+        },
+        "ctr": {
+          "name": "CTR (click-through rate)",
+          "en": "Click-through rate",
+          "definition": "Percentage of impressions that became clicks: (Clicks ÷ Impressions) × 100.",
+          "example": "50 clicks out of 1,000 impressions = 5% CTR."
+        },
+        "cpc": {
+          "name": "CPC (cost per click)",
+          "en": "Cost per click",
+          "definition": "Average amount paid per click: Spend ÷ Clicks.",
+          "example": "R$ 100 and 80 clicks = R$ 1.25 CPC."
+        },
+        "cpm": {
+          "name": "CPM (cost per thousand impressions)",
+          "en": "Cost per mille",
+          "definition": "Cost to show the ad one thousand times: (Spend ÷ Impressions) × 1,000.",
+          "example": "R$ 30 for 2,000 impressions = R$ 15.00 CPM."
+        },
+        "cpl": {
+          "name": "CPL (cost per lead)",
+          "en": "Cost per lead",
+          "definition": "Average amount paid per interested contact: Spend ÷ Leads.",
+          "example": "R$ 200 and 25 contacts = R$ 8.00 CPL."
+        },
+        "cpa": {
+          "name": "CPA (cost per acquisition)",
+          "en": "Cost per acquisition",
+          "definition": "Average amount paid per conversion: Spend ÷ Conversions.",
+          "example": "R$ 300 and 6 sales = R$ 50.00 CPA."
+        },
+        "roas": {
+          "name": "ROAS (return on ad spend)",
+          "en": "Return on ad spend",
+          "definition": "How much came back in sales for each real spent: Revenue ÷ Spend.",
+          "example": "R$ 900 in sales with R$ 300 spent = 3x ROAS."
+        },
+        "lead": {
+          "name": "Lead",
+          "en": "Lead",
+          "definition": "An interested person who left a contact, such as name and phone.",
+          "example": "Someone who filled in the form asking for the party menu."
+        },
+        "conversion": {
+          "name": "Conversion",
+          "en": "Conversion",
+          "definition": "An important action taken by the customer, such as a purchase or a booking.",
+          "example": "A customer booked an appointment through the ad link."
+        },
+        "audience": {
+          "name": "Target audience",
+          "en": "Target audience",
+          "definition": "The group of people you want to reach, defined by location, age, interests or behavior.",
+          "example": "Women aged 25 to 45 within 5 km of the salon, interested in beauty."
+        },
+        "remarketing": {
+          "name": "Remarketing",
+          "en": "Remarketing / Retargeting",
+          "definition": "Showing ads to people who already interacted with the business, such as website visitors.",
+          "example": "Someone who added sneakers to the cart and did not buy later sees an ad for those sneakers."
+        },
+        "funnel": {
+          "name": "Sales funnel",
+          "en": "Sales funnel",
+          "definition": "The customer's path from discovering the business to buying: attention, interest, contact and sale.",
+          "example": "1,000 saw the ad, 50 clicked, 10 asked for a quote and 3 bought."
+        },
+        "landingPage": {
+          "name": "Landing page",
+          "en": "Landing page",
+          "definition": "The page the ad takes people to, built for one specific action.",
+          "example": "A page with the course offer and a sign-up form."
+        },
+        "pixel": {
+          "name": "Conversion pixel",
+          "en": "Conversion pixel",
+          "definition": "Code installed on the website that tells the platform when someone buys or signs up.",
+          "example": "The pixel records the purchase and shows which ad led to the sale."
+        },
+        "dailyBudget": {
+          "name": "Daily budget",
+          "en": "Daily budget",
+          "definition": "The maximum amount the platform can spend per day on the campaign.",
+          "example": "R$ 25 per day for 30 days ≈ R$ 750 for the month."
+        }
+      }
+    },
+    "tips": {
+      "dashboard": "This panel summarizes the campaigns in the selected period. Start with Ad spend and ROAS (how much came back for each R$ 1). Click the ⓘ next to any KPI to understand what it means.",
+      "clients": "Clients are the businesses served by the agency. Every campaign, ad, creative and lead belongs to a client.",
+      "campaigns": "A campaign groups ads with the same goal. The status here is internal to K2: pausing in the system does not pause the ad on the platform.",
+      "budgets": "Planned is what you intend to spend; actual is what has already been spent. The bar changes color at 80%, 90% and 100%.",
+      "ads": "Each ad belongs to a campaign. Select 2 to 4 ads to compare which message performed better.",
+      "creatives": "Store each client's images, videos and copy here. Then link them to ads.",
+      "metrics": "Each row is one day of results. Purple columns (CTR, CPC, ROAS) are calculated automatically from the entered values.",
+      "leads": "Leads are interested people. Drag the cards between columns as the conversation moves forward: New → Contacted → Qualified → Converted.",
+      "conversions": "Overall conversions count every event; unique leads count each person once; sales only consider purchases.",
+      "campaignDetail": "Track daily and per-ad performance. Compare spend with revenue to see whether the campaign is paying off.",
+      "charts": {
+        "spend": "Each bar shows how much was spent that day. Peaks may indicate budget increases or special dates.",
+        "clicks": "Shows how many times people clicked the ads each day.",
+        "conversions": "Compare the lines: leads are contacts; conversions are final actions such as purchases or bookings.",
+        "roas": "How much came back for each R$ 1 spent. Green: above 3x; orange: between 1x and 3x; red: below 1x (revenue did not cover the spend).",
+        "platform": "Compares spend and revenue on each platform (Meta, Google, TikTok...).",
+        "budget": "Shows how the planned budget is split across platforms."
+      },
+      "reports": {
+        "executive": "A ready-to-present summary for the client: KPIs, comparison with the previous period and automatic observations.",
+        "performance": "Full table by client, campaign or platform. Use it to find where the investment performs best.",
+        "budget": "Compares what was planned with what was spent on each budget.",
+        "leads": "Shows how many leads arrived, where they came from and how many became customers.",
+        "conversions": "Shows conversions per day, type and campaign, including revenue."
+      }
+    },
+    "forms": {
+      "campaign": {
+        "intro": "A campaign organizes ads with the same goal. About the fields:",
+        "name": "A name that identifies the action, such as \"Mother's Day Promotion\".",
+        "objective": "Choose the result you want to achieve, such as website visits, contacts or sales.",
+        "platform": "Where the ads will run: Meta (Instagram and Facebook), Google, TikTok or LinkedIn.",
+        "budget": "Amount planned to spend on ads during the campaign.",
+        "period": "Start and end dates. Leave the end date empty for always-on campaigns.",
+        "audienceLabel": "Target audience",
+        "audience": "The group of people you want to reach. It is configured on the ad platform; describe it in the name or in the campaign tasks."
+      },
+      "budget": {
+        "intro": "The budget defines how much to invest in media in a period.",
+        "planned": "Amount planned to spend on ads in the period.",
+        "period": "Date range of this budget. Periods of the same campaign cannot overlap.",
+        "actual": "Actual spend is calculated automatically from the recorded metrics."
+      },
+      "spend": {
+        "intro": "Record how much was spent on a day. The amount is added to the campaign's spend for that day.",
+        "amount": "Amount spent on ads on the selected date."
+      },
+      "ad": {
+        "intro": "The ad is what the audience sees. Write clearly and directly:",
+        "headline": "Short, catchy phrase, such as \"Full breakfast for R$ 39\".",
+        "primaryText": "Main text: explain the offer and the benefit in a few lines.",
+        "cta": "Action button: say what the person should do, such as \"Send message\" or \"Shop now\".",
+        "url": "Where the person goes after clicking: website, offer page or WhatsApp link."
+      },
+      "lead": {
+        "intro": "A lead is an interested person who left a contact.",
+        "source": "Where the contact came from: form, WhatsApp, phone, referral...",
+        "consent": "Under the LGPD, record whether the person authorized contact."
+      },
+      "conversion": {
+        "intro": "A conversion is an important action taken by the customer, such as a purchase or a booking.",
+        "type": "Choose the type of action: purchase, booking, sign-up, contact...",
+        "revenue": "Sale value, if any. Purchases must have a value greater than zero.",
+        "externalId": "Order or transaction number. Prevents recording the same sale twice."
+      },
+      "metric": {
+        "intro": "Enter the day's numbers as shown on the ad platform. KPIs are calculated automatically.",
+        "impressions": "How many times the ad was shown.",
+        "reach": "How many different people saw it (cannot exceed impressions).",
+        "clicks": "How many times it was clicked (cannot exceed impressions).",
+        "leads": "How many contacts the platform recorded.",
+        "conversions": "How many final actions (purchases, bookings) the platform recorded.",
+        "revenue": "Value of sales attributed to the campaign that day."
+      },
+      "client": {
+        "intro": "Register the business served by the agency.",
+        "monthlyBudget": "How much the client plans to spend on ads per month. It is not the amount paid to the agency.",
+        "industry": "Line of business, such as \"Food\" or \"Health\". Helps compare results of similar businesses."
+      }
+    }
+  }
+}

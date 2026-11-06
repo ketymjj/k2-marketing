@@ -1,0 +1,41 @@
+/* Calendário */
+.cal-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.cal-head h3 { min-width: 200px; text-align: center; }
+.cal-head h3::first-letter { text-transform: uppercase; }
+.calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.cal-wd { padding: 8px; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--surface-2); border-bottom: 1px solid var(--border); text-transform: capitalize; text-align: center; }
+.cal-day { min-height: 112px; padding: 6px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.cal-day:nth-child(7n) { border-right: 0; }
+.cal-day.out { background: var(--surface-2); }
+.cal-day.out .cal-num { opacity: .45; }
+.cal-num { font-size: 12px; font-weight: 600; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
+.cal-day.today .cal-num { background: var(--purple); color: #fff; }
+.cal-day .more { color: var(--muted); font-size: 11px; padding-left: 4px; }
+.cal-task {
+  border: 0; text-align: left; font: 500 11.5px Inter, sans-serif; padding: 3px 6px; border-radius: 6px; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: var(--blue-soft); color: var(--blue);
+}
+.cal-task[data-p=High] { background: var(--orange-soft); color: var(--orange); }
+.cal-task[data-p=Urgent] { background: var(--red-soft); color: var(--red); }
+.cal-task[data-p=Low] { background: var(--gray-soft); color: var(--muted); }
+.cal-task.done { text-decoration: line-through; opacity: .6; }
+.cal-task.overdue { box-shadow: inset 3px 0 0 var(--red); }
+
+/* Lista */
+.task-list { display: flex; flex-direction: column; }
+.task-row { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.task-main { flex: 1 1 240px; cursor: pointer; display: flex; flex-direction: column; }
+.task-main small { color: var(--muted); font-size: 12px; }
+.task-row.done strong { text-decoration: line-through; color: var(--muted); }
+.due { display: flex; align-items: center; gap: 4px; font-size: 12.5px; color: var(--muted); }
+.due mat-icon { font-size: 16px; width: 16px; height: 16px; }
+.due.overdue { color: var(--red); font-weight: 600; }
+.prio { font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: var(--gray-soft); color: var(--muted); }
+.prio[data-p=Medium] { background: var(--blue-soft); color: var(--blue); }
+.prio[data-p=High] { background: var(--orange-soft); color: var(--orange); }
+.prio[data-p=Urgent] { background: var(--red-soft); color: var(--red); }
+
+@media (max-width: 640px) {
+  .cal-day { min-height: 70px; }
+  .cal-task { font-size: 10px; padding: 2px 3px; }
+}

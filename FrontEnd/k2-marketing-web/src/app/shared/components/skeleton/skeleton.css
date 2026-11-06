@@ -1,0 +1,6 @@
+.skeleton-wrap { display: flex; flex-direction: column; gap: 10px; padding: 8px 0; }
+.skeleton {
+  border-radius: 8px; background: linear-gradient(90deg, var(--gray-soft) 0%, var(--surface-2) 50%, var(--gray-soft) 100%);
+  background-size: 200% 100%; animation: skeleton-shimmer 1.2s infinite;
+}
+@keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

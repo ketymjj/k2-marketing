@@ -1,0 +1,104 @@
+<div class="shell" [class.collapsed]="collapsed()" [class.mobile]="mobile()" [class.mobile-open]="mobileOpen()">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-logo">K2</span>
+      <div class="brand-text">
+        <strong>K2 Marketing</strong>
+        <small>{{ agency.settings()?.agencyName ?? 'K2 Digital' }}</small>
+      </div>
+    </div>
+    <nav class="nav">
+      @for (group of nav(); track group.key) {
+        <div class="nav-group">
+          <span class="nav-group-label">{{ group.key | transloco }}</span>
+          @for (item of group.items; track item.route) {
+            <a class="nav-item" [routerLink]="item.route" routerLinkActive="active" (click)="mobileOpen.set(false)"
+               [matTooltip]="collapsed() && !mobile() ? (item.key | transloco) : ''" matTooltipPosition="right">
+              <mat-icon>{{ item.icon }}</mat-icon><span class="nav-label">{{ item.key | transloco }}</span>
+            </a>
+          }
+        </div>
+      }
+    </nav>
+    <button class="collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="'nav.toggle' | transloco">
+      <mat-icon>{{ collapsed() ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left' }}</mat-icon>
+      <span class="nav-label">{{ 'nav.collapse' | transloco }}</span>
+    </button>
+  </aside>
+  <div class="backdrop" (click)="mobileOpen.set(false)"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button mat-icon-button class="menu-btn" (click)="toggleSidebar()" [attr.aria-label]="'nav.toggle' | transloco"><mat-icon>menu</mat-icon></button>
+      <nav class="breadcrumbs" aria-label="breadcrumb">
+        <a routerLink="/dashboard"><mat-icon>home</mat-icon></a>
+        @for (c of crumbs(); track c.url; let last = $last) {
+          <mat-icon class="sep">chevron_right</mat-icon>
+          @if (last) { <span class="current">{{ c.raw ? c.label : (c.label | transloco) }}</span> }
+          @else { <a [routerLink]="c.url">{{ c.raw ? c.label : (c.label | transloco) }}</a> }
+        }
+      </nav>
+      <span class="spacer"></span>
+
+      <button class="beginner-switch" role="switch" [attr.aria-checked]="learning.beginner()" [class.on]="learning.beginner()"
+              (click)="learning.toggle()" [matTooltip]="'learn.beginner.hint' | transloco" data-testid="beginner-toggle">
+        <span aria-hidden="true">🎓</span>
+        <span class="bs-label">{{ 'learn.beginner.short' | transloco }}</span>
+        <span class="bs-state">{{ (learning.beginner() ? 'learn.beginner.on' : 'learn.beginner.off') | transloco }}</span>
+      </button>
+      <button mat-icon-button (click)="tour.start()" [matTooltip]="'tour.start' | transloco" [attr.aria-label]="'tour.start' | transloco" data-testid="tour-start">
+        <mat-icon>play_circle</mat-icon>
+      </button>
+
+      <div class="lang-switch" role="group" [attr.aria-label]="'settings.language' | transloco">
+        <button [class.active]="lang.lang() === 'pt-BR'" (click)="setLang('pt-BR')" title="Português">🇧🇷 <span>PT</span></button>
+        <button [class.active]="lang.lang() === 'en-US'" (click)="setLang('en-US')" title="English">🇺🇸 <span>EN</span></button>
+      </div>
+      <button mat-icon-button (click)="theme.toggle()" [matTooltip]="(theme.theme() === 'dark' ? 'theme.light' : 'theme.dark') | transloco"
+              [attr.aria-label]="(theme.theme() === 'dark' ? 'theme.light' : 'theme.dark') | transloco">
+        <mat-icon>{{ theme.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <button mat-icon-button [matMenuTriggerFor]="notifMenu" (menuOpened)="notifications.loadRecent()" [matTooltip]="'notifications.title' | transloco" [attr.aria-label]="'notifications.title' | transloco">
+        <mat-icon [matBadge]="notifications.unread() || null" matBadgeColor="warn" matBadgeSize="small" aria-hidden="false">notifications</mat-icon>
+      </button>
+      <mat-menu #notifMenu="matMenu" class="notif-menu" xPosition="before">
+        <div class="notif-head" (click)="$event.stopPropagation()">
+          <strong>{{ 'notifications.title' | transloco }}</strong>
+          <button mat-button (click)="notifications.markAllRead()" [disabled]="!notifications.unread()">{{ 'notifications.markAll' | transloco }}</button>
+        </div>
+        @for (n of notifications.recent(); track n.id) {
+          <button mat-menu-item class="notif-item" [class.unread]="!n.readAt" (click)="openNotification(n)">
+            <mat-icon [class]="'notif-ic notif-' + n.type">{{ notifIcon(n.type) }}</mat-icon>
+            <span class="notif-body">
+              <span class="notif-text">{{ n | notificationText }}</span>
+              <small>{{ n.createdAt | dt: 'datetime' }}</small>
+            </span>
+          </button>
+        } @empty {
+          <div class="notif-empty">{{ 'notifications.empty' | transloco }}</div>
+        }
+        <mat-divider />
+        <a mat-menu-item routerLink="/notifications"><mat-icon>list</mat-icon>{{ 'notifications.viewAll' | transloco }}</a>
+      </mat-menu>
+
+      <button class="user-btn" [matMenuTriggerFor]="userMenu" [attr.aria-label]="user()?.fullName">
+        <span class="avatar">{{ initials() }}</span>
+        <span class="user-info"><strong>{{ user()?.fullName }}</strong><small>{{ 'enums.role.' + user()?.role | transloco }}</small></span>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="menu-user" (click)="$event.stopPropagation()">
+          <strong>{{ user()?.fullName }}</strong><small>{{ user()?.email }}</small>
+          @if (user()?.clientName) { <small class="menu-client">{{ user()?.clientName }}</small> }
+        </div>
+        <mat-divider />
+        <a mat-menu-item routerLink="/settings"><mat-icon>person</mat-icon>{{ 'settings.profile' | transloco }}</a>
+        <button mat-menu-item (click)="auth.logout()"><mat-icon>logout</mat-icon>{{ 'auth.logout' | transloco }}</button>
+      </mat-menu>
+    </header>
+
+    <main class="content"><router-outlet /></main>
+    <k2-tour-overlay />
+  </div>
+</div>
