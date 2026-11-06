@@ -4,4 +4,4 @@
 tests/
 .config/
 *.user
-**/storage
+src/K2Marketing.Api/storage
